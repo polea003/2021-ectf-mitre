@@ -23,8 +23,8 @@ export SOCK_ROOT=$PWD/socks
 export SSS_SOCK=sss.sock
 export FAA_SOCK=faa.sock
 export MITM_SOCK=mitm.sock
-export START_ID=11
-export END_ID=14
+export START_ID=12
+export END_ID=13
 
 # create deployment
 make create_deployment
