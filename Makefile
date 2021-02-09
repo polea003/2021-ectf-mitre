@@ -101,6 +101,7 @@ launch_sed:
 	$(call check_defined, DEPLOYMENT SCEWL_ID NAME SOCK_ROOT)
 	GDB=$(GDB) SC=$(SC) CONT_DOCK_OPT=$(CONT_DOCK_OPT) CPU_DOCK_OPT=$(CPU_DOCK_OPT) ./tools/launch_sed.sh $(BG)
 
+launch_sed_d: GDB='-gdb unix:/socks/gdb.sock,server'
 launch_sed_d: BG=& 2>/dev/null >/dev/null
 launch_sed_d: launch_sed
 
