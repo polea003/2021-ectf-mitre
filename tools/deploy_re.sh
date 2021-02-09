@@ -24,7 +24,7 @@ export SSS_SOCK=sss.sock
 export FAA_SOCK=faa.sock
 export MITM_SOCK=mitm.sock
 export START_ID=11
-export END_ID=12
+export END_ID=14
 
 # create deployment
 make create_deployment
@@ -36,8 +36,9 @@ make deploy
 python3 tools/faa.py $SOCK_ROOT/$FAA_SOCK &
 
 # launch seds detatched
-make launch_sed_gdb NAME=challenge1 SCEWL_ID=11
-
+make launch_sed_d NAME=challenge1 SCEWL_ID=11
+make launch_sed_d NAME=challenge2 SCEWL_ID=12
+make launch_sed_d NAME=challenge3 SCEWL_ID=13
 
 # bring transceiver back into foreground
 fg
