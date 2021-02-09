@@ -36,9 +36,7 @@ make deploy
 python3 tools/faa.py $SOCK_ROOT/$FAA_SOCK &
 
 # launch seds detatched
-make launch_sed_gdb NAME=challenge1 SCEWL_ID=11
 make launch_sed_gdb NAME=challenge2 SCEWL_ID=12
-make launch_sed_gdb NAME=challenge3 SCEWL_ID=13
 
 # bring transceiver back into foreground
 fg
