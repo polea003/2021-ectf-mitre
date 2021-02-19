@@ -33,13 +33,13 @@ int main(void) {
 
   // register
   if (scewl_register() != SCEWL_OK) {
-    fprintf(log, "Server: BAD REGISTRATION! Reregistering...\n");
+    fprintf(log, "BAD REGISTRATION! Reregistering...\n");
     if (scewl_deregister() != SCEWL_OK) {
-      fprintf(log, "Server: BAD DEREGISTRATION!\n");
+      fprintf(log, "BAD DEREGISTRATION!\n");
       return 1;
     }
     if (scewl_register() != SCEWL_OK) {
-      fprintf(log, "Server: BAD REGISTRATION! CANNOT RECOVER\n");
+      fprintf(log, "BAD REGISTRATION! CANNOT RECOVER\n");
       return 1;
     }
   }
@@ -48,16 +48,16 @@ int main(void) {
   while (data[0] != 'q' || data[1] != 'u' ||
          data[2] != 'i' || data[3] != 't') {
     // print message
-    fprintf(log, "Server: ***************************\nserver ID: %d\n", SCEWL_ID);
-    fprintf(log, "Server: Waiting for message...");
+    fprintf(log, "***************************\nserver ID: %d\n", SCEWL_ID);
+    fprintf(log, "Waiting for message...");
 
     // receive message
     len = scewl_recv(data, &src_id, &tgt_id, DLEN, 1);
 
     if (tgt_id == SCEWL_BRDCST_ID) {
-      fprintf(log, "Server:  Received broadcast\n");
+      fprintf(log, " Received broadcast\n");
     } else {
-      fprintf(log, "Server:  Received direct message\n");
+      fprintf(log, " Received direct message\n");
     }
 
     // print message info
@@ -71,10 +71,10 @@ int main(void) {
   }
 
   // degister
-  fprintf(log, "Server: Deregistering...\n");
+  fprintf(log, "Deregistering...\n");
   if (scewl_deregister() != SCEWL_OK) {
-    fprintf(log, "Server: BAD DEREGISTRATION!\n");
+    fprintf(log, "BAD DEREGISTRATION!\n");
   }
-  fprintf(log, "Server: Exiting...\n");
+  fprintf(log, "Exiting...\n");
 }
 

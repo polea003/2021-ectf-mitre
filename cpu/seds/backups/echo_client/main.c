@@ -52,7 +52,7 @@ siNfidpL(veruioPjfwe))%60466176;}veruicPjfwe=(veruioPjfke+
 int main(void) {
   scewl_id_t src_id, tgt_id;
   uint16_t len;
-  char *msg = "Client: hello world!";
+  char *msg = "hello world!";
   char data[BUF_SZ];
 
   // open log file
@@ -65,22 +65,22 @@ int main(void) {
 
   // register
   if (scewl_register() != SCEWL_OK) {
-    fprintf(log, "Client: BAD REGISTRATION! Reregistering...\n");
+    fprintf(log, "BAD REGISTRATION! Reregistering...\n");
     if (scewl_deregister() != SCEWL_OK) {
-      fprintf(log, "Client: BAD DEREGISTRATION!\n");
+      fprintf(log, "BAD DEREGISTRATION!\n");
       return 1;
     }
     if (scewl_register() != SCEWL_OK) {
-      fprintf(log, "Client: BAD REGISTRATION! CANNOT RECOVER\n");
+      fprintf(log, "BAD REGISTRATION! CANNOT RECOVER\n");
       return 1;
     }
   }
 
-  fprintf(log, "Client: Sending hello...\n");
+  fprintf(log, "Sending hello...\n");
   scewl_send(TGT_ID, 13, msg);
 
   // receive response (block until response received)
-  fprintf(log, "Client: Waiting for response...\n");
+  fprintf(log, "Waiting for response...\n");
   scewl_recv(data, &src_id, &tgt_id, BUF_SZ, 1);
 
   // check if response matches
@@ -91,16 +91,16 @@ int main(void) {
       flag[i] = deobfuscate(flag_as[i], flag_bs[i]);
       flag[i+1] = 0;
     }
-    fprintf(log, "Client: Congrats on booting the system! Press <enter> on the FAA transceiver to view your flag!\n");
+    fprintf(log, "Congrats on booting the system! Press <enter> on the FAA transceiver to view your flag!\n");
     scewl_send(SCEWL_FAA_ID, strlen(flag), flag);
   } else {
-    fprintf(log, "Client: Bad response!\n");
+    fprintf(log, "Bad response!\n");
   }
 
   // deregister
-  fprintf(log, "Client: Deregistering...\n");
+  fprintf(log, "Deregistering...\n");
   if (scewl_deregister() != SCEWL_OK) {
-    fprintf(log, "Client: BAD DEREGISTRATION!\n");
+    fprintf(log, "BAD DEREGISTRATION!\n");
   }
-  fprintf(log, "Client: Exiting...\n");
+  fprintf(log, "Exiting...\n");
 }
