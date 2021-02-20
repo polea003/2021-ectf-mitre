@@ -236,7 +236,8 @@ int main() {
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, BLOCK_SIZE, (char *)plaintext);
 
   // decrypt buffer (decryption happens in place)
-  AES_ECB_decrypt(&ctx, plaintext);
+  AES_CBC_decrypt_buffer(&ctx, plaintext, BLOCK_SIZE);
+  // AES_ECB_decrypt(&ctx, plaintext);
   send_str("Example decrypted message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, BLOCK_SIZE, (char *)plaintext);
   // end example
