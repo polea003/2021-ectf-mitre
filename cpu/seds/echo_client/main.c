@@ -80,8 +80,9 @@ int main(void) {
   scewl_send(TGT_ID, 13, msg);
 
   // receive response (block until response received)
-  fprintf(log, "Client: Waiting for response...\n");
+  fprintf(log, "Client: Waiting for response...1\n");
   scewl_recv(data, &src_id, &tgt_id, BUF_SZ, 1);
+  printf("Client: Waiting for response...%d\n", src_id);
 
   // check if response matches
   if (!strcmp(msg, data)) {
