@@ -23,7 +23,7 @@ char int2char(uint8_t i) {
 #endif
 
 #define send_str(M) send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, strlen(M), M)
-#define BLOCK_SIZE 16
+#define BLOCK_SIZE 64
 
 // message buffer
 char buf[SCEWL_MAX_DATA_SZ];
