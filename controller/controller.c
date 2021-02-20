@@ -225,18 +225,19 @@ int main() {
   struct AES_ctx ctx;
   uint8_t key[16] = { 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf };
   uint8_t plaintext[16] = "0123456789abcdef";
+  uint8_t iv[]  = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f };
 
   // initialize context
-  AES_init_ctx(&ctx, key);
+//  AES_init_ctx(&ctx, key);
+      AES_init_ctx_iv(&ctx, key, iv);
 
   // encrypt buffer (encryption happens in place)
-  // AES_CBC_encrypt_buffer(&ctx, plaintext, BLOCK_SIZE);
-   AES_ECB_encrypt(&ctx, plaintext);
+   AES_CBC_encrypt_buffer(&ctx, plaintext, BLOCK_SIZE);
+  // AES_ECB_encrypt(&ctx, plaintext);
   send_str("Example encrypted message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, BLOCK_SIZE, (char *)plaintext);
-
   // decrypt buffer (decryption happens in place)
-  // AES_CBC_decrypt_buffer(&ctx, plaintext, BLOCK_SIZE);
+   AES_CBC_decrypt_buffer(&ctx, plaintext, BLOCK_SIZE);
    AES_ECB_decrypt(&ctx, plaintext);
   send_str("Example decrypted message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, BLOCK_SIZE, (char *)plaintext);
