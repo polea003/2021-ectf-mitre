@@ -233,13 +233,13 @@ int main() {
   // AES_CBC_encrypt_buffer(&ctx, plaintext, sizeof(plaintext));
   AES_ECB_encrypt(&ctx, plaintext);
   send_str("Example encrypted message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, BLOCK_SIZE, (char *)plaintext);
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32, (char *)plaintext);
 
   // decrypt buffer (decryption happens in place)
   // AES_CBC_decrypt_buffer(&ctx, plaintext, sizeof(plaintext));
   AES_ECB_decrypt(&ctx, plaintext);
   send_str("Example decrypted message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, BLOCK_SIZE, (char *)plaintext);
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32, (char *)plaintext);
   // end example
 #endif
 
