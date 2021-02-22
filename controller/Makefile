@@ -44,22 +44,25 @@ all: ${COMPILER}/interface.o
 EXAMPLE_AES=foo
 ifdef EXAMPLE_AES
 # path to crypto library
-CRYPTOPATH=./tiny-AES-c
+#CRYPTOPATH=./tiny-AES-c
+CRYPTOPATH=./tinycrypt-master
 
 # add path to crypto source files to source path
-VPATH+=${CRYPTOPATH}
+VPATH+=${CRYPTOPATH}/lib/source
 
 # add crypto library to includes path
-IPATH+=${CRYPTOPATH}
+IPATH+=${CRYPTOPATH}/lib/include/tinycrypt
 
 # add crypto object file to includes path
-LDFLAGS+=${COMPILER}/aes.o
+# LDFLAGS+=${COMPILER}/aes.o
+LDFLAGS+=${COMPILER}/cbc_mode.o
 
 # add compiler flag to enable example AES code 
 CFLAGS+=-DEXAMPLE_AES
 
 # add rule to build crypto library
-all: ${COMPILER}/aes.o
+# all: ${COMPILER}/aes.o
+all: ${COMPILER}/cbc_mode.o
 endif
 ################ end crypto example ################
 
