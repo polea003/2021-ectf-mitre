@@ -116,7 +116,8 @@ int test_1_and_2(void)
 	(void)memcpy(iv_buffer, iv, TC_AES_BLOCK_SIZE);
 
 	TC_PRINT("CBC test #1 (encryption SP 800-38a tests):\n");
-	printf("plaintext: %s\n",plaintext);
+	printf("plaintext: %x\n",plaintext);
+	printf("ciphertext: %x\n", ciphertext);
 	
 	if (tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + TC_AES_BLOCK_SIZE,
 				plaintext, sizeof(plaintext), iv_buffer, &a) == 0) {
@@ -125,7 +126,7 @@ int test_1_and_2(void)
 		result = TC_FAIL;
 		goto exitTest1;
 	}
-		printf("encrypted: %s\n", encrypted);
+		printf("encrypted: %x\n", encrypted);
 
 	result = check_result(1, ciphertext, sizeof(encrypted), encrypted,
 			      sizeof(encrypted));
