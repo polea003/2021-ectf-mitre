@@ -99,10 +99,10 @@ static inline void fatal(unsigned int testnum, const uint8_t *expected, size_t e
            const uint8_t *computed, size_t computedlen)
 {
 
-        TC_ERROR("\tTest #%d Failed!\n", testnum);
+        printf("\tTest #%d Failed!\n", testnum);
         show_str("\t\tExpected", expected, expectedlen);
         show_str("\t\tComputed  ", computed, computedlen);
-        TC_PRINT("\n");
+        printf("\n");
 }
 
 static inline unsigned int check_result(unsigned int testnum, const uint8_t*expected, size_t expectedlen,
