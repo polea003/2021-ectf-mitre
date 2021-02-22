@@ -88,11 +88,11 @@ static inline void show_str(const char *label, const uint8_t *s, size_t len)
 {
         unsigned int i;
 
-        TC_PRINT("%s = ", label);
+        printf("%s = ", label);
         for (i = 0; i < (unsigned int) len; ++i) {
-                TC_PRINT("%02x", s[i]);
+                printf("%02x", s[i]);
         }
-        TC_PRINT("\n");
+        printf("\n");
 }
 
 static inline void fatal(unsigned int testnum, const uint8_t *expected, size_t expectedlen,
