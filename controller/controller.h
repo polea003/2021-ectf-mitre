@@ -18,6 +18,8 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #define SCEWL_MAX_DATA_SZ 0x3fff
 
