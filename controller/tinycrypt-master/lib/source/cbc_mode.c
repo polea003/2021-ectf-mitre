@@ -33,7 +33,7 @@
 #include <tinycrypt/cbc_mode.h>
 #include <tinycrypt/constants.h>
 #include <tinycrypt/utils.h>
-#include <tinycrypt/test_utils.h>
+#include <test_utils.h>
 
 int tc_cbc_mode_encrypt(uint8_t *out, unsigned int outlen, const uint8_t *in,
 			    unsigned int inlen, const uint8_t *iv,
