@@ -117,6 +117,7 @@ int test_1_and_2(void)
 
 	TC_PRINT("CBC test #1 (encryption SP 800-38a tests):\n");
 	show_str("\t\tPlaintext = ", plaintext, 64);
+	show_str("\t\tciphertext = ", ciphertext, 80);
 	
 	if (tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + TC_AES_BLOCK_SIZE,
 				plaintext, sizeof(plaintext), iv_buffer, &a) == 0) {
@@ -125,6 +126,7 @@ int test_1_and_2(void)
 		result = TC_FAIL;
 		goto exitTest1;
 	}
+	show_str("\t\tencrypted = ", encrypted, 80);
 
 	result = check_result(1, ciphertext, sizeof(encrypted), encrypted,
 			      sizeof(encrypted));
