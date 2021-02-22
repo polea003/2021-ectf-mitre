@@ -125,6 +125,7 @@ int test_1_and_2(void)
 		result = TC_FAIL;
 		goto exitTest1;
 	}
+		printf("encrypted: %s\n", encrypted);
 
 	result = check_result(1, ciphertext, sizeof(encrypted), encrypted,
 			      sizeof(encrypted));
@@ -157,7 +158,6 @@ exitTest1:
 int main(void)
 {
 	int result = TC_PASS;
-	printf("ciphertext: %s\n", ciphertext);
 
 	TC_START("Performing AES128 tests:");
 
