@@ -79,7 +79,7 @@ const uint8_t iv[16] = {
 	0x0c, 0x0d, 0x0e, 0x0f
 };
 
-const uint8_t plaintext[64] = { "012345679abcdef012345679abcdef012345679abcdef012345679abcdef"
+const uint8_t plaintext[128] = { "012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef"
 };
 
 const uint8_t ciphertext[80] = {
@@ -99,8 +99,8 @@ int test_1_and_2(void)
 {
 	struct tc_aes_key_sched_struct a;
 	uint8_t iv_buffer[16];
-	uint8_t encrypted[80];
-	uint8_t decrypted[64];
+	uint8_t encrypted[144];
+	uint8_t decrypted[128];
 	uint8_t *p;
 	unsigned int length;
 	int result = TC_PASS;
@@ -111,8 +111,6 @@ int test_1_and_2(void)
 
 	TC_PRINT("CBC test #1 (encryption SP 800-38a tests):\n");
 	printf("\t\tPlaintext = %s\n", plaintext);
-	show_str("\t\tciphertext = ", ciphertext, 80);
-	
 	if (tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + TC_AES_BLOCK_SIZE,
 				plaintext, sizeof(plaintext), iv_buffer, &a) == 0) {
 		TC_ERROR("CBC test #1 (encryption SP 800-38a tests) failed in "
@@ -120,7 +118,7 @@ int test_1_and_2(void)
 		result = TC_FAIL;
 		goto exitTest1;
 	}
-	show_str("\t\tencrypted = ", encrypted, 80);
+	show_str("\t\tencrypted = ", encrypted, 144);
 	(void)tc_aes128_set_decrypt_key(&a, key);
 	p = &encrypted[TC_AES_BLOCK_SIZE];
 	length = ((unsigned int) sizeof(encrypted));
