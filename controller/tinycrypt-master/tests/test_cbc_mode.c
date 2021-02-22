@@ -110,7 +110,7 @@ int test_1_and_2(void)
 	(void)memcpy(iv_buffer, iv, TC_AES_BLOCK_SIZE);
 
 	TC_PRINT("CBC test #1 (encryption SP 800-38a tests):\n");
-	show_str("\t\tPlaintext = ", plaintext, 64);
+	printf("\t\tPlaintext = ", plaintext, 64);
 	show_str("\t\tciphertext = ", ciphertext, 80);
 	
 	if (tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + TC_AES_BLOCK_SIZE,
