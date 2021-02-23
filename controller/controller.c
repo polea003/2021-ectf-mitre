@@ -13,6 +13,31 @@
 #include "controller.h"
 
 // this will run if EXAMPLE_AES is defined in the Makefile (see line 54)
+const uint8_t key[16] = {
+	0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88,
+	0x09, 0xcf, 0x4f, 0x3c
+};
+
+const uint8_t iv[16] = {
+	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b,
+	0x0c, 0x0d, 0x0e, 0x0f
+};
+
+const uint8_t plaintext[128] = { "012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef"
+};
+
+static inline void show_str1(const char *label, const uint8_t *s, size_t len)
+{
+        unsigned int i;
+
+        printf("%s = ", label);
+        for (i = 0; i < (unsigned int) len; ++i) {
+                printf("%02x", s[i]);
+        }
+        printf("\n");
+}
+
+
 #ifdef EXAMPLE_AES
 #include "aes.h"
 
@@ -221,6 +246,7 @@ int main() {
   intf_init(RAD_INTF);
 
 #ifdef EXAMPLE_AES
+/*
   // example encryption using tiny-AES-c
   struct AES_ctx ctx;
   uint8_t key[16] = { 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf };
@@ -239,6 +265,27 @@ int main() {
   send_str("Example decrypted message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, BLOCK_SIZE, (char *)plaintext);
   // end example
+  */
+ struct tc_aes_key_sched_struct a;
+	uint8_t iv_buffer[16];
+	uint8_t encrypted[144];
+	uint8_t decrypted[128];
+	uint8_t *p;
+	unsigned int length;
+	int result = 0;
+	(void)tc_aes128_set_encrypt_key(&a, key);
+
+	(void)memcpy(iv_buffer, iv, 16);
+
+	printf("Plaintext = %s\n", plaintext);
+	tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + 16,
+				plaintext, sizeof(plaintext), iv_buffer, &a);
+	show_str1("encrypted = ", encrypted, 144);
+	(void)tc_aes128_set_decrypt_key(&a, key);
+	p = &encrypted[16];
+	length = ((unsigned int) sizeof(encrypted));
+	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
+	printf("Decrypted = %s\n", decrypted);
 #endif
 
   // serve forever
