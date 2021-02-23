@@ -263,7 +263,7 @@ const uint8_t iv[16] = {
 	0x0c, 0x0d, 0x0e, 0x0f
 };
 
-const uint8_t plaintext[128] = { "Hey guys I was able to get the encryption and the MAC working! So cool right?!?!?"
+const uint8_t plaintext[128] = { "The encryption algorithm processes the plaintext, and the MAC then hashes the encrypted message to authenticate. So cool right??"
 };
 
  struct tc_aes_key_sched_struct a;
