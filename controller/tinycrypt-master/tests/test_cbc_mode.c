@@ -111,7 +111,7 @@ int test1(void)
 	uint8_t *p;
 	unsigned int length;
 	int result = 0; // TC_PASS = 0
-	show_str1("Plaintext", plaintext, sizeof(plaintext));
+	printf("Plaintext = ", plaintext);
 	(void)tc_aes128_set_encrypt_key(&a, key);
 	(void)memcpy(iv_buffer, iv, TC_AES_BLOCK_SIZE_16); 
 	tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + TC_AES_BLOCK_SIZE_16, plaintext, sizeof(plaintext), iv_buffer, &a);
@@ -121,7 +121,7 @@ int test1(void)
 	p = &encrypted[TC_AES_BLOCK_SIZE_16];
 	length = ((unsigned int) sizeof(encrypted));
 	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
-	show_str1("Decrypted", decrypted, sizeof(decrypted));
+	printf("Decrypted = ", decrypted);
 	return result;
 }
 
