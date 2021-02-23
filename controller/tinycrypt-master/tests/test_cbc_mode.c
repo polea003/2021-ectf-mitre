@@ -80,10 +80,89 @@ const uint8_t ciphertext[80] = {
 // #include <tinycrypt/constants.h>
 // #include <test_utils.h>
 
-#include <tinycrypt/cbc_mode.h>
+//#include <tinycrypt/cbc_mode.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+#ifndef __TC_CBC_MODE_H__
+#define __TC_CBC_MODE_H__
+
+#include <tinycrypt/aes.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ *  @brief CBC encryption procedure
+ *  CBC encrypts inlen bytes of the in buffer into the out buffer
+ *  using the encryption key schedule provided, prepends iv to out
+ *  @return returns TC_CRYPTO_SUCCESS (1)
+ *          returns TC_CRYPTO_FAIL (0) if:
+ *                out == NULL or
+ *                in == NULL or
+ *                ctr == NULL or
+ *                sched == NULL or
+ *                inlen == 0 or
+ *                (inlen % TC_AES_BLOCK_SIZE) != 0 or
+ *                (outlen % TC_AES_BLOCK_SIZE) != 0 or
+ *                outlen != inlen + TC_AES_BLOCK_SIZE
+ *  @note Assumes: - sched has been configured by aes_set_encrypt_key
+ *              - iv contains a 16 byte random string
+ *              - out buffer is large enough to hold the ciphertext + iv
+ *              - out buffer is a contiguous buffer
+ *              - in holds the plaintext and is a contiguous buffer
+ *              - inlen gives the number of bytes in the in buffer
+ *  @param out IN/OUT -- buffer to receive the ciphertext
+ *  @param outlen IN -- length of ciphertext buffer in bytes
+ *  @param in IN -- plaintext to encrypt
+ *  @param inlen IN -- length of plaintext buffer in bytes
+ *  @param iv IN -- the IV for the this encrypt/decrypt
+ *  @param sched IN --  AES key schedule for this encrypt
+ */
+int tc_cbc_mode_encrypt(uint8_t *out, unsigned int outlen, const uint8_t *in,
+			unsigned int inlen, const uint8_t *iv,
+			const TCAesKeySched_t sched);
+
+/**
+ * @brief CBC decryption procedure
+ * CBC decrypts inlen bytes of the in buffer into the out buffer
+ * using the provided encryption key schedule
+ * @return returns TC_CRYPTO_SUCCESS (1)
+ *         returns TC_CRYPTO_FAIL (0) if:
+ *                out == NULL or
+ *                in == NULL or
+ *                sched == NULL or
+ *                inlen == 0 or
+ *                outlen == 0 or
+ *                (inlen % TC_AES_BLOCK_SIZE) != 0 or
+ *                (outlen % TC_AES_BLOCK_SIZE) != 0 or
+ *                outlen != inlen + TC_AES_BLOCK_SIZE
+ * @note Assumes:- in == iv + ciphertext, i.e. the iv and the ciphertext are
+ *                contiguous. This allows for a very efficient decryption
+ *                algorithm that would not otherwise be possible
+ *              - sched was configured by aes_set_decrypt_key
+ *              - out buffer is large enough to hold the decrypted plaintext
+ *              and is a contiguous buffer
+ *              - inlen gives the number of bytes in the in buffer
+ * @param out IN/OUT -- buffer to receive decrypted data
+ * @param outlen IN -- length of plaintext buffer in bytes
+ * @param in IN -- ciphertext to decrypt, including IV
+ * @param inlen IN -- length of ciphertext buffer in bytes
+ * @param iv IN -- the IV for the this encrypt/decrypt
+ * @param sched IN --  AES key schedule for this decrypt
+ *
+ */
+int tc_cbc_mode_decrypt(uint8_t *out, unsigned int outlen, const uint8_t *in,
+			unsigned int inlen, const uint8_t *iv,
+			const TCAesKeySched_t sched);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __TC_CBC_MODE_H__ */
 
 const uint8_t key[16] = {
 	0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88,
