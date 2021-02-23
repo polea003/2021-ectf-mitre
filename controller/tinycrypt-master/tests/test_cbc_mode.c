@@ -121,7 +121,6 @@ int test_1_and_2(void)
 	length = ((unsigned int) sizeof(encrypted));
 	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
 	show_str("\t\tDecrypted", decrypted, sizeof(decrypted));
-	TC_END_RESULT(result);
 	return result;
 }
 
@@ -131,13 +130,10 @@ int test_1_and_2(void)
 int main(void)
 {
 	int result = TC_PASS;
-
 	TC_START("Performing AES128 tests:");
-
 	TC_PRINT("Performing CBC tests:\n");
 	result = test_1_and_2();
 	TC_END_RESULT(result);
 	TC_END_REPORT(result);
-
 	return result;
 }
