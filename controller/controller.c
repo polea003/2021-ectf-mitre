@@ -287,7 +287,7 @@ int main() {
 
 	//printf("Plaintext = %s\n", plaintext);
   send_str("Plaintext message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, BLOCK_SIZE, (char *)plaintext);
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(plaintext), (char *)plaintext);
 	tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + 16,
 				plaintext, sizeof(plaintext), iv_buffer, &a);
     send_str("Example encrypted message:");
