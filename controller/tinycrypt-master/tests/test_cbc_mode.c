@@ -77,8 +77,8 @@ const uint8_t ciphertext[80] = {
 };
 */
 
- #include <tinycrypt/constants.h>
- #include <test_utils.h>
+// #include <tinycrypt/constants.h>
+// #include <test_utils.h>
 
 #include <tinycrypt/cbc_mode.h>
 #include <stdlib.h>
@@ -109,7 +109,7 @@ static inline void show_str1(const char *label, const uint8_t *s, size_t len)
         printf("\n");
 }
 
-int test_1_and_2(void)
+int test_1(void)
 {
 	struct tc_aes_key_sched_struct a;
 	uint8_t iv_buffer[16];
@@ -147,7 +147,7 @@ int main(void)
 {
 	int result = TC_PASS;
 
-	result = test_1_and_2();
+	result = test_1();
 
 	return result;
 }
