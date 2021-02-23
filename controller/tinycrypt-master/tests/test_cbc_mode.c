@@ -113,18 +113,13 @@ int test_1_and_2(void)
 	show_str("\t\tPlaintext", plaintext, sizeof(plaintext));
 	(void)tc_aes128_set_encrypt_key(&a, key);
 	(void)memcpy(iv_buffer, iv, TC_AES_BLOCK_SIZE);
-	tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + TC_AES_BLOCK_SIZE,
-				plaintext, sizeof(plaintext), iv_buffer, &a);
+	tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + TC_AES_BLOCK_SIZE, plaintext, sizeof(plaintext), iv_buffer, &a);
 	show_str("\t\tEncrypted", encrypted, sizeof(encrypted));
 
-	//result = check_result(1, ciphertext, sizeof(encrypted), encrypted, sizeof(encrypted));
-	//TC_END_RESULT(result);
 	(void)tc_aes128_set_decrypt_key(&a, key);
 	p = &encrypted[TC_AES_BLOCK_SIZE];
 	length = ((unsigned int) sizeof(encrypted));
 	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
-
-	//result = check_result(2, plaintext, sizeof(decrypted), decrypted,sizeof(decrypted));
 	show_str("\t\tDecrypted", decrypted, sizeof(decrypted));
 	TC_END_RESULT(result);
 	return result;
@@ -141,15 +136,6 @@ int main(void)
 
 	TC_PRINT("Performing CBC tests:\n");
 	result = test_1_and_2();
-	if (result == TC_FAIL) {
-		/* terminate test */
-		TC_ERROR("CBC test #1 failed.\n");
-		goto exitTest;
-	}
-
-	TC_PRINT("All CBC tests succeeded!\n");
-
-exitTest:
 	TC_END_RESULT(result);
 	TC_END_REPORT(result);
 
