@@ -12,7 +12,7 @@
 
 #include "controller.h"
 #include <tinycrypt/constants.h>
-#include <test_utils.h>
+//#include <test_utils.h>
 
 #include <tinycrypt/cbc_mode.h>
 #include <stdlib.h>
