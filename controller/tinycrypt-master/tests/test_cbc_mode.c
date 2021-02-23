@@ -110,17 +110,17 @@ int test_1_and_2(void)
 	uint8_t *p;
 	unsigned int length;
 	int result = TC_PASS;
-	show_str("\t\tPlaintext", plaintext, sizeof(plaintext));
+	show_str("Plaintext", plaintext, sizeof(plaintext));
 	(void)tc_aes128_set_encrypt_key(&a, key);
 	(void)memcpy(iv_buffer, iv, TC_AES_BLOCK_SIZE);
 	tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + TC_AES_BLOCK_SIZE, plaintext, sizeof(plaintext), iv_buffer, &a);
-	show_str("\t\tEncrypted", encrypted, sizeof(encrypted));
+	show_str("Encrypted", encrypted, sizeof(encrypted));
 
 	(void)tc_aes128_set_decrypt_key(&a, key);
 	p = &encrypted[TC_AES_BLOCK_SIZE];
 	length = ((unsigned int) sizeof(encrypted));
 	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
-	show_str("\t\tDecrypted", decrypted, sizeof(decrypted));
+	show_str("Decrypted", decrypted, sizeof(decrypted));
 	return result;
 }
 
@@ -133,7 +133,5 @@ int main(void)
 	TC_START("Performing AES128 tests:");
 	TC_PRINT("Performing CBC tests:\n");
 	result = test_1_and_2();
-	TC_END_RESULT(result);
-	TC_END_REPORT(result);
 	return result;
 }
