@@ -41,25 +41,34 @@ all: ${COMPILER}/interface.o
 # example AES rules to build in tiny-AES-c: https://github.com/kokke/tiny-AES-c
 # make sure submodule has been pulled (run `git submodule update --init`)
 # uncomment next line to activate
-# EXAMPLE_AES=foo
+EXAMPLE_AES=foo
 ifdef EXAMPLE_AES
 # path to crypto library
-CRYPTOPATH=./tiny-AES-c
+# CRYPTOPATH=./tiny-AES-c
+CRYPTOPATH=./tinycrypt-master/lib
 
 # add path to crypto source files to source path
-VPATH+=${CRYPTOPATH}
+VPATH+=${CRYPTOPATH}/source
 
 # add crypto library to includes path
-IPATH+=${CRYPTOPATH}
+IPATH+=${CRYPTOPATH}/include/tinycrypt
 
 # add crypto object file to includes path
-LDFLAGS+=${COMPILER}/aes.o
+# LDFLAGS+=${COMPILER}/aes.o
+LDFLAGS+=${COMPILER}/aes_decrypt.o
+LDFLAGS+=${COMPILER}/aes_encrypt.o
+LDFLAGS+=${COMPILER}/cbc_mode.o
+LDFLAGS+=${COMPILER}/utils.o
 
 # add compiler flag to enable example AES code 
 CFLAGS+=-DEXAMPLE_AES
 
 # add rule to build crypto library
-all: ${COMPILER}/aes.o
+# all: ${COMPILER}/aes.o
+all: ${COMPILER}/aes_decrypt.o
+all: ${COMPILER}/aes_encrypt.o
+all: ${COMPILER}/cbc_mode.o
+all: ${COMPILER}/utils.o
 endif
 ################ end crypto example ################
 
