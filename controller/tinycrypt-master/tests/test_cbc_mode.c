@@ -76,7 +76,7 @@ const uint8_t ciphertext[80] = {
 	0x12, 0x0e, 0xca, 0x30, 0x75, 0x86, 0xe1, 0xa7
 };
 */
-
+/*
  #include <tinycrypt/constants.h>
  #include <test_utils.h>
 
@@ -101,10 +101,11 @@ const uint8_t plaintext[64] = "0123456789abcdef0123456789abcdef0123456789abcdef0
 
 // TC_AES_BLOCK_SIZE = 16
 
+
 int test1(void)
 {
 	struct tc_aes_key_sched_struct a;
-	uint8_t TC_AES_BLOCK_SIZE_16 = 16;
+	//uint8_t TC_AES_BLOCK_SIZE_16 = 16;
 	uint8_t iv_buffer[16];
 	uint8_t msgLen = sizeof(plaintext);
 	uint8_t encrypted[80];
@@ -152,3 +153,4 @@ static inline void show_str1(const char *label, const uint8_t *s, size_t len)
 //result = check_result(1, ciphertext, sizeof(encrypted), encrypted, sizeof(encrypted));
 //result = check_result(2, plaintext, sizeof(decrypted), decrypted, sizeof(decrypted));
 
+*/
