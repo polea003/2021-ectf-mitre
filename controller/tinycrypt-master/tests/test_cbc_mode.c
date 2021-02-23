@@ -112,11 +112,9 @@ static inline void show_str1(const char *label, const uint8_t *s, size_t len)
 int test_1(void)
 {
 	struct tc_aes_key_sched_struct a;
-	unsigned int msgLen = sizeof(plaintext);
-	uint8_t offset = 16 - (msgLen % 16); 
 	uint8_t iv_buffer[16];
-	uint8_t encrypted[msgLen + 16 - offset];
-	uint8_t decrypted[msgLen];
+	uint8_t encrypted[144];
+	uint8_t decrypted[128];
 	uint8_t *p;
 	unsigned int length;
 	int result = 0;
