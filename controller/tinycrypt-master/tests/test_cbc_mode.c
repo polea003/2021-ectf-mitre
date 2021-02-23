@@ -97,7 +97,14 @@ const uint8_t iv[16] = {
 	0x0c, 0x0d, 0x0e, 0x0f
 };
 
-const uint8_t plaintext[16] = "0123456789abcdef";
+const uint8_t plaintext[64] = {
+	0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11,
+	0x73, 0x93, 0x17, 0x2a, 0xae, 0x2d, 0x8a, 0x57, 0x1e, 0x03, 0xac, 0x9c,
+	0x9e, 0xb7, 0x6f, 0xac, 0x45, 0xaf, 0x8e, 0x51, 0x30, 0xc8, 0x1c, 0x46,
+	0xa3, 0x5c, 0xe4, 0x11, 0xe5, 0xfb, 0xc1, 0x19, 0x1a, 0x0a, 0x52, 0xef,
+	0xf6, 0x9f, 0x24, 0x45, 0xdf, 0x4f, 0x9b, 0x17, 0xad, 0x2b, 0x41, 0x7b,
+	0xe6, 0x6c, 0x37, 0x10
+};
 
 // TC_AES_BLOCK_SIZE = 16
 
@@ -112,7 +119,8 @@ int test1(void)
 	uint8_t *p;
 	unsigned int length;
 	int result = 0; // TC_PASS = 0
-	printf("Plaintext = %s\n", plaintext);
+	//printf("Plaintext = %s\n", plaintext);
+	show_str1("Plaintext", plaintext, sizeof(plaintext));
 	(void)tc_aes128_set_encrypt_key(&a, key);
 	(void)memcpy(iv_buffer, iv, TC_AES_BLOCK_SIZE); 
 	tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + TC_AES_BLOCK_SIZE, plaintext, sizeof(plaintext), iv_buffer, &a);
@@ -122,7 +130,8 @@ int test1(void)
 	p = &encrypted[TC_AES_BLOCK_SIZE];
 	length = ((unsigned int) sizeof(encrypted));
 	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
-	printf("Decrypted = %s\n", decrypted);
+	//printf("Decrypted = %s\n", decrypted);
+	show_str1("Decrypted", decrypted, sizeof(decrypted));
 	return result;
 }
 
