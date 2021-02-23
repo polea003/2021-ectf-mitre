@@ -235,7 +235,7 @@ int tc_aes128_set_decrypt_key(TCAesKeySched_t s, const uint8_t *k)
 #define multd(a)(mult8(a)^_double_byte(_double_byte(a))^(a))
 #define multe(a)(mult8(a)^_double_byte(_double_byte(a))^_double_byte(a))
 
-static inline void mult_row_column(uint8_t *out, const uint8_t *in)
+static inline void mult_row_column_decrypt(uint8_t *out, const uint8_t *in)
 {
 	out[0] = multe(in[0]) ^ multb(in[1]) ^ multd(in[2]) ^ mult9(in[3]);
 	out[1] = mult9(in[0]) ^ multe(in[1]) ^ multb(in[2]) ^ multd(in[3]);
@@ -247,10 +247,10 @@ static inline void inv_mix_columns(uint8_t *s)
 {
 	uint8_t t[Nb*Nk];
 
-	mult_row_column(t, s);
-	mult_row_column(&t[Nb], s+Nb);
-	mult_row_column(&t[2*Nb], s+(2*Nb));
-	mult_row_column(&t[3*Nb], s+(3*Nb));
+	mult_row_column_decrypt(t, s);
+	mult_row_column_decrypt(&t[Nb], s+Nb);
+	mult_row_column_decrypt(&t[2*Nb], s+(2*Nb));
+	mult_row_column_decrypt(&t[3*Nb], s+(3*Nb));
 	(void)_copy(s, sizeof(t), t, sizeof(t));
 }
 
