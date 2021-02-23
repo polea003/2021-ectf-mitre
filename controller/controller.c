@@ -285,15 +285,15 @@ int main() {
 
 	(void)memcpy(iv_buffer, iv, 16);
 
-	printf("Plaintext = %s\n", plaintext);
+	//printf("Plaintext = %s\n", plaintext);
 	tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + 16,
 				plaintext, sizeof(plaintext), iv_buffer, &a);
-	show_str1("encrypted = ", encrypted, 144);
+	//show_str1("encrypted = ", encrypted, 144);
 	(void)tc_aes128_set_decrypt_key(&a, key);
 	p = &encrypted[16];
 	length = ((unsigned int) sizeof(encrypted));
 	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
-	printf("Decrypted = %s\n", decrypted);
+	//printf("Decrypted = %s\n", decrypted);
 #endif
 
   // serve forever
