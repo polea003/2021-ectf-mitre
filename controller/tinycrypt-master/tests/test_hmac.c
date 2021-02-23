@@ -354,7 +354,7 @@ int main(void)
 
         show_str1("Digest", digest, sizeof(digest));
 
-        const uint8_t data1[] = "helloooo";
+        const uint8_t data1[8] = "helloooo";
 
         (void)memset(&h, 0x00, sizeof(h));
         (void)tc_hmac_set_key(&h, key, sizeof(key));
