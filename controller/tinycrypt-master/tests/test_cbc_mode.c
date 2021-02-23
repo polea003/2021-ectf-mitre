@@ -84,6 +84,84 @@ const uint8_t ciphertext[80] = {
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+const uint8_t key[16] = {
+	0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88,
+	0x09, 0xcf, 0x4f, 0x3c
+};
+
+const uint8_t iv[16] = {
+	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b,
+	0x0c, 0x0d, 0x0e, 0x0f
+};
+
+const uint8_t plaintext[128] = { "012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef"
+};
+
+const uint8_t ciphertext[80] = {
+	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b,
+	0x0c, 0x0d, 0x0e, 0x0f, 0x76, 0x49, 0xab, 0xac, 0x81, 0x19, 0xb2, 0x46,
+	0xce, 0xe9, 0x8e, 0x9b, 0x12, 0xe9, 0x19, 0x7d, 0x50, 0x86, 0xcb, 0x9b,
+	0x50, 0x72, 0x19, 0xee, 0x95, 0xdb, 0x11, 0x3a, 0x91, 0x76, 0x78, 0xb2,
+	0x73, 0xbe, 0xd6, 0xb8, 0xe3, 0xc1, 0x74, 0x3b, 0x71, 0x16, 0xe6, 0x9e,
+	0x22, 0x22, 0x95, 0x16, 0x3f, 0xf1, 0xca, 0xa1, 0x68, 0x1f, 0xac, 0x09,
+	0x12, 0x0e, 0xca, 0x30, 0x75, 0x86, 0xe1, 0xa7
+};
+
+static inline void show_str1(const char *label, const uint8_t *s, size_t len)
+{
+        unsigned int i;
+
+        printf("%s = ", label);
+        for (i = 0; i < (unsigned int) len; ++i) {
+                printf("%02x", s[i]);
+        }
+        printf("\n");
+}
+
+int test_1_and_2(void)
+{
+	struct tc_aes_key_sched_struct a;
+	uint8_t iv_buffer[16];
+	uint8_t encrypted[144];
+	uint8_t decrypted[128];
+	uint8_t *p;
+	unsigned int length;
+	int result = 0;
+	(void)tc_aes128_set_encrypt_key(&a, key);
+
+	(void)memcpy(iv_buffer, iv, TC_AES_BLOCK_SIZE);
+
+	printf("Plaintext = %s\n", plaintext);
+	tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + TC_AES_BLOCK_SIZE,
+				plaintext, sizeof(plaintext), iv_buffer, &a);
+	show_str1("encrypted = ", encrypted, 144);
+	(void)tc_aes128_set_decrypt_key(&a, key);
+	p = &encrypted[TC_AES_BLOCK_SIZE];
+	length = ((unsigned int) sizeof(encrypted));
+	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
+	printf("Decrypted = %s\n", decrypted);
+
+	(void)tc_aes128_set_decrypt_key(&a, key);
+
+	p = &encrypted[TC_AES_BLOCK_SIZE];
+	length = ((unsigned int) sizeof(encrypted));
+	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
+	return result;
+}
+
+/*
+ * Main task to test AES
+ */
+int main(void)
+{
+	int result = TC_PASS;
+
+	result = test_1_and_2();
+
+	return result;
+}
+
 /*
 static inline void show_str1(const char *label, const uint8_t *s, size_t len);
 
@@ -154,71 +232,3 @@ static inline void show_str1(const char *label, const uint8_t *s, size_t len)
 //result = check_result(2, plaintext, sizeof(decrypted), decrypted, sizeof(decrypted));
 
 */
-const uint8_t key[16] = {
-	0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88,
-	0x09, 0xcf, 0x4f, 0x3c
-};
-
-const uint8_t iv[16] = {
-	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b,
-	0x0c, 0x0d, 0x0e, 0x0f
-};
-
-const uint8_t plaintext[128] = { "012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef"
-};
-
-const uint8_t ciphertext[80] = {
-	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b,
-	0x0c, 0x0d, 0x0e, 0x0f, 0x76, 0x49, 0xab, 0xac, 0x81, 0x19, 0xb2, 0x46,
-	0xce, 0xe9, 0x8e, 0x9b, 0x12, 0xe9, 0x19, 0x7d, 0x50, 0x86, 0xcb, 0x9b,
-	0x50, 0x72, 0x19, 0xee, 0x95, 0xdb, 0x11, 0x3a, 0x91, 0x76, 0x78, 0xb2,
-	0x73, 0xbe, 0xd6, 0xb8, 0xe3, 0xc1, 0x74, 0x3b, 0x71, 0x16, 0xe6, 0x9e,
-	0x22, 0x22, 0x95, 0x16, 0x3f, 0xf1, 0xca, 0xa1, 0x68, 0x1f, 0xac, 0x09,
-	0x12, 0x0e, 0xca, 0x30, 0x75, 0x86, 0xe1, 0xa7
-};
-
-/*
- * NIST SP 800-38a CBC Test for encryption and decryption.
- */
-int test_1_and_2(void)
-{
-	struct tc_aes_key_sched_struct a;
-	uint8_t iv_buffer[16];
-	uint8_t encrypted[144];
-	uint8_t decrypted[128];
-	uint8_t *p;
-	unsigned int length;
-	int result = 0;
-	(void)tc_aes128_set_encrypt_key(&a, key);
-
-	(void)memcpy(iv_buffer, iv, TC_AES_BLOCK_SIZE);
-
-	printf("\t\tPlaintext = %s\n", plaintext);
-	tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + TC_AES_BLOCK_SIZE,
-				plaintext, sizeof(plaintext), iv_buffer, &a);
-	show_str("\t\tencrypted = ", encrypted, 144);
-	(void)tc_aes128_set_decrypt_key(&a, key);
-	p = &encrypted[TC_AES_BLOCK_SIZE];
-	length = ((unsigned int) sizeof(encrypted));
-	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
-	printf("\t\tDecrypted = %s\n", decrypted);
-
-	(void)tc_aes128_set_decrypt_key(&a, key);
-
-	p = &encrypted[TC_AES_BLOCK_SIZE];
-	length = ((unsigned int) sizeof(encrypted));
-	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
-	return result;
-}
-
-/*
- * Main task to test AES
- */
-int main(void)
-{
-	int result = TC_PASS;
-
-	result = test_1_and_2();
-
-	return result;
-}
