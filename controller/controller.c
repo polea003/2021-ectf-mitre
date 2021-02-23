@@ -18,7 +18,20 @@
 
 // this will run if EXAMPLE_AES is defined in the Makefile (see line 54)
 #ifdef EXAMPLE_AES
-#include "aes.h"
+#include "aes_tc.h"
+#include "cbc_mode.h"
+#include "constants.h"
+
+static inline void show_str1(const char *label, const uint8_t *s, size_t len)
+{
+        unsigned int i;
+
+        printf("%s = ", label);
+        for (i = 0; i < (unsigned int) len; ++i) {
+                printf("%02x", s[i]);
+        }
+        printf("\n");
+}
 
 char int2char(uint8_t i) {
   char *hex = "0123456789abcdef";
@@ -256,17 +269,6 @@ const uint8_t iv[16] = {
 
 const uint8_t plaintext[128] = { "012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef012345679abcdef"
 };
-
-static inline void show_str1(const char *label, const uint8_t *s, size_t len)
-{
-        unsigned int i;
-
-        printf("%s = ", label);
-        for (i = 0; i < (unsigned int) len; ++i) {
-                printf("%02x", s[i]);
-        }
-        printf("\n");
-}
 
 struct tc_aes_key_sched_struct a;
 	uint8_t iv_buffer[16];
