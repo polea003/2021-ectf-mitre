@@ -37,14 +37,6 @@
  * - AES128 CBC mode encryption SP 800-38a tests
  */
 
-#include <tinycrypt/cbc_mode.h>
-#include <tinycrypt/constants.h>
-#include <test_utils.h>
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
 /*
  * NIST test vectors from SP 800-38a:
  *
@@ -69,6 +61,19 @@
  * Output Block 3ff1caa1681fac09120eca307586e1a7
  * Ciphertext 3ff1caa1681fac09120eca307586e1a7
  */
+
+/*
+ * NIST SP 800-38a CBC Test for encryption and decryption.
+ */
+
+#include <tinycrypt/cbc_mode.h>
+#include <tinycrypt/constants.h>
+#include <test_utils.h>
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
 const uint8_t key[16] = {
 	0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88,
 	0x09, 0xcf, 0x4f, 0x3c
@@ -98,9 +103,6 @@ const uint8_t ciphertext[80] = {
 	0x12, 0x0e, 0xca, 0x30, 0x75, 0x86, 0xe1, 0xa7
 };
 
-/*
- * NIST SP 800-38a CBC Test for encryption and decryption.
- */
 int test_1_and_2(void)
 {
 	struct tc_aes_key_sched_struct a;
@@ -115,7 +117,7 @@ int test_1_and_2(void)
 	(void)memcpy(iv_buffer, iv, TC_AES_BLOCK_SIZE);
 	tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + TC_AES_BLOCK_SIZE, plaintext, sizeof(plaintext), iv_buffer, &a);
 	show_str("Encrypted", encrypted, sizeof(encrypted));
-
+	printf("block size: %d", TC_AES_BLOCK_SIZE);
 	(void)tc_aes128_set_decrypt_key(&a, key);
 	p = &encrypted[TC_AES_BLOCK_SIZE];
 	length = ((unsigned int) sizeof(encrypted));
@@ -124,9 +126,6 @@ int test_1_and_2(void)
 	return result;
 }
 
-/*
- * Main task to test AES
- */
 int main(void)
 {
 	int result = TC_PASS;
