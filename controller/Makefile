@@ -45,7 +45,7 @@ EXAMPLE_AES=foo
 ifdef EXAMPLE_AES
 # path to crypto library
 # CRYPTOPATH=./tiny-AES-c
-CRYPTOPATH=./tiny-AES-c-copy
+CRYPTOPATH=./tiny-AES-c-cop
 
 # add path to crypto source files to source path
 VPATH+=${CRYPTOPATH}
