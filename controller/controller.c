@@ -300,7 +300,7 @@ int main() {
         (void)memset(&h, 0x00, sizeof(h));
         (void)tc_hmac_set_key(&h, key, sizeof(key));
         (void)tc_hmac_init(&h);
-        (void)tc_hmac_update(&h, plaintext, sizeof(data));
+        (void)tc_hmac_update(&h, plaintext, sizeof(plaintext));
         (void)tc_hmac_final(digest, 32, &h);
   send_str("MAC message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
