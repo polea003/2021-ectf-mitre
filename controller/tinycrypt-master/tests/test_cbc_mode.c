@@ -107,7 +107,7 @@ int test1(void)
 	uint8_t TC_AES_BLOCK_SIZE_16 = 16;
 	uint8_t iv_buffer[16];
 	uint8_t msgLen = sizeof(plaintext);
-	uint8_t encrypted[msgLen + (16 - (msgLen % 16))];
+	uint8_t encrypted[msgLen + 16];
 	uint8_t decrypted[msgLen];
 	uint8_t *p;
 	unsigned int length;
