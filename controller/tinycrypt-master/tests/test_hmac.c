@@ -47,6 +47,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+/*
+ * NIST test vectors for encryption.
+ */
+/*
 
 unsigned int do_hmac_test(TCHmacState_t h, unsigned int testnum, const uint8_t *data,
 		          size_t datalen, const uint8_t *expected,
@@ -63,12 +67,10 @@ unsigned int do_hmac_test(TCHmacState_t h, unsigned int testnum, const uint8_t *
         return result;
 }
 
-/*
- * NIST test vectors for encryption.
- */
+
 unsigned int test_1(void)
 {
-    /*
+    
         const uint8_t expected[32] = {
 		0xb0, 0x34, 0x4c, 0x61, 0xd8, 0xdb, 0x38, 0x53, 0x5c, 0xa8, 0xaf, 0xce,
 		0xaf, 0x0b, 0xf1, 0x2b, 0x88, 0x1d, 0xc2, 0x00, 0xc9, 0x83, 0x3d, 0xa7,
@@ -79,7 +81,7 @@ unsigned int test_1(void)
 		0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
 		0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b
         };
-        */
+        
         //result = check_result(testnum, expected, expectedlen, digest, sizeof(digest));
         //result = do_hmac_test(&h, 1, data, sizeof(data),expected, sizeof(expected));
         unsigned int result = TC_PASS;
@@ -107,6 +109,7 @@ unsigned int test_1(void)
 
         return result;
 }
+*/
 /*
 unsigned int test_2(void)
 {
