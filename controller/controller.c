@@ -18,10 +18,10 @@
 
 // this will run if EXAMPLE_AES is defined in the Makefile (see line 54)
 #ifdef EXAMPLE_AES
-#include "aes_tc.h"
+//#include "aes_tc.h"
 #include "cbc_mode.h"
 #include "constants.h"
-#include "utils.h"
+//#include "utils.h"
 //#include "aes_decrypt.c"
 //#include "aes_encrypt.c"
 //#include "cbc_mode.c"
@@ -97,17 +97,6 @@ int tc_aes128_set_encrypt_key(TCAesKeySched_t s, const uint8_t *k)
 	return TC_CRYPTO_SUCCESS;
 }
 
-static inline void add_round_key(uint8_t *s, const unsigned int *k)
-{
-	s[0] ^= (uint8_t)(k[0] >> 24); s[1] ^= (uint8_t)(k[0] >> 16);
-	s[2] ^= (uint8_t)(k[0] >> 8); s[3] ^= (uint8_t)(k[0]);
-	s[4] ^= (uint8_t)(k[1] >> 24); s[5] ^= (uint8_t)(k[1] >> 16);
-	s[6] ^= (uint8_t)(k[1] >> 8); s[7] ^= (uint8_t)(k[1]);
-	s[8] ^= (uint8_t)(k[2] >> 24); s[9] ^= (uint8_t)(k[2] >> 16);
-	s[10] ^= (uint8_t)(k[2] >> 8); s[11] ^= (uint8_t)(k[2]);
-	s[12] ^= (uint8_t)(k[3] >> 24); s[13] ^= (uint8_t)(k[3] >> 16);
-	s[14] ^= (uint8_t)(k[3] >> 8); s[15] ^= (uint8_t)(k[3]);
-}
 
 static inline void sub_bytes(uint8_t *s)
 {
@@ -120,14 +109,14 @@ static inline void sub_bytes(uint8_t *s)
 
 #define triple(a)(_double_byte(a)^(a))
 
-static inline void mult_row_column(uint8_t *out, const uint8_t *in)
+/*static inline void mult_row_column(uint8_t *out, const uint8_t *in)
 {
 	out[0] = _double_byte(in[0]) ^ triple(in[1]) ^ in[2] ^ in[3];
 	out[1] = in[0] ^ _double_byte(in[1]) ^ triple(in[2]) ^ in[3];
 	out[2] = in[0] ^ in[1] ^ _double_byte(in[2]) ^ triple(in[3]);
 	out[3] = triple(in[0]) ^ in[1] ^ in[2] ^ _double_byte(in[3]);
 }
-
+*/
 static inline void mix_columns(uint8_t *s)
 {
 	uint8_t t[Nb*Nk];
@@ -329,9 +318,9 @@ int tc_aes_decrypt(uint8_t *out, const uint8_t *in, const TCAesKeySched_t s)
 //aes decrypt end
 
 //cbc_mode file
-#include <tinycrypt/cbc_mode.h>
-#include <tinycrypt/constants.h>
-#include <tinycrypt/utils.h>
+//#include <tinycrypt/cbc_mode.h>
+//#include <tinycrypt/constants.h>
+//#include <tinycrypt/utils.h>
 
 int tc_cbc_mode_encrypt(uint8_t *out, unsigned int outlen, const uint8_t *in,
 			    unsigned int inlen, const uint8_t *iv,
