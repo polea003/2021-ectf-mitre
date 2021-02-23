@@ -96,7 +96,7 @@ unsigned int test_1(void)
         (void)tc_hmac_final(digest, 32, &h); // TC_SHA256_DIGEST_SIZE = 32
         //result = check_result(testnum, expected, expectedlen, digest, sizeof(digest));
         //result = do_hmac_test(&h, 1, data, sizeof(data),expected, sizeof(expected));
-        printf("Digest: ", digest);
+        printf("Digest: %s", digest);
         TC_END_RESULT(result);
         return result;
 }
