@@ -336,19 +336,15 @@ static inline void show_str1(const char *label, const uint8_t *s, size_t len)
 
 int main(void)
 {
-        unsigned int result = 0;
+        
 
-        printf("Performing HMAC tests (RFC4231 test vectors):");
-
-        uint8_t digest[32];
         const uint8_t key[16] = {
         0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88,
         0x09, 0xcf, 0x4f, 0x3c
-       };
-
-        const uint8_t data[8] = "hellooo1";
-
+        };
         struct tc_hmac_state_struct h;
+        uint8_t digest[32];
+        const uint8_t data[8] = "hellooo1";
 
         (void)memset(&h, 0x00, sizeof(h));
         (void)tc_hmac_set_key(&h, key, sizeof(key));
@@ -358,7 +354,15 @@ int main(void)
 
         show_str1("Digest", digest, sizeof(digest));
 
-        printf("All HMAC tests succeeded!\n");
+        data = "helloooo";
 
-        return result;
+        (void)memset(&h, 0x00, sizeof(h));
+        (void)tc_hmac_set_key(&h, key, sizeof(key));
+        (void)tc_hmac_init(&h);
+        (void)tc_hmac_update(&h, data, sizeof(data));
+        (void)tc_hmac_final(digest, 32, &h); // TC_SHA256_DIGEST_SIZE = 32
+
+        show_str1("Digest", digest, sizeof(digest));
+
+        return 0;
 }
