@@ -77,8 +77,8 @@ const uint8_t ciphertext[80] = {
 };
 */
 
-// #include <tinycrypt/constants.h>
-// #include <test_utils.h>
+ #include <tinycrypt/constants.h>
+ #include <test_utils.h>
 
 #include <tinycrypt/cbc_mode.h>
 #include <stdlib.h>
@@ -112,6 +112,7 @@ int test1(void)
 	uint8_t *p;
 	unsigned int length;
 	int result = 0; // TC_PASS = 0
+	TC_PRINT("CBC test #1 (encryption SP 800-38a tests):\n");
 	printf("Plaintext = %s\n", plaintext);
 	show_str1("Plaintext", plaintext, sizeof(plaintext));
 	(void)tc_aes128_set_encrypt_key(&a, key);
