@@ -11,6 +11,14 @@
  */
 
 #include "controller.h"
+#include <tinycrypt/constants.h>
+#include <test_utils.h>
+
+#include <tinycrypt/cbc_mode.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdint.h>
 
 // this will run if EXAMPLE_AES is defined in the Makefile (see line 54)
 const uint8_t key[16] = {
