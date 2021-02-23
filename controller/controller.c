@@ -280,19 +280,25 @@ int main() {
 	uint8_t decrypted[128];
 	uint8_t *p;
 	unsigned int length;
-	int result = 0;
+	//int result = 0;
 	(void)tc_aes128_set_encrypt_key(&a, key);
 
 	(void)memcpy(iv_buffer, iv, 16);
 
 	//printf("Plaintext = %s\n", plaintext);
+  send_str("Plaintext message:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, BLOCK_SIZE, (char *)plaintext);
 	tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + 16,
 				plaintext, sizeof(plaintext), iv_buffer, &a);
+    send_str("Example encrypted message:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, BLOCK_SIZE, (char *)encrypted);
 	//show_str1("encrypted = ", encrypted, 144);
 	(void)tc_aes128_set_decrypt_key(&a, key);
 	p = &encrypted[16];
 	length = ((unsigned int) sizeof(encrypted));
 	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
+    send_str("Example decrypted message:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, BLOCK_SIZE, (char *)decrypted);
 	//printf("Decrypted = %s\n", decrypted);
 #endif
 
