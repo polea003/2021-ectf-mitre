@@ -322,5 +322,6 @@ int main(void)
         result = test_1();
 
         TC_PRINT("All HMAC tests succeeded!\n");
-
+        
+        return result;
 }
