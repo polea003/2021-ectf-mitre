@@ -74,16 +74,24 @@ unsigned int test_1(void)
 		0xaf, 0x0b, 0xf1, 0x2b, 0x88, 0x1d, 0xc2, 0x00, 0xc9, 0x83, 0x3d, 0xa7,
 		0x26, 0xe9, 0x37, 0x6c, 0x2e, 0x32, 0xcf, 0xf7
         };
-        */
-        unsigned int result = TC_PASS;
-        uint8_t digest[32];
-
-        TC_PRINT("HMAC %s:\n", __func__);
 
         const uint8_t key[20] = {
 		0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
 		0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b
         };
+        */
+        //result = check_result(testnum, expected, expectedlen, digest, sizeof(digest));
+        //result = do_hmac_test(&h, 1, data, sizeof(data),expected, sizeof(expected));
+        unsigned int result = TC_PASS;
+        uint8_t digest[32];
+
+        TC_PRINT("HMAC %s:\n", __func__);
+
+        const uint8_t key[16] = {
+        0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88,
+        0x09, 0xcf, 0x4f, 0x3c
+       };
+
         const uint8_t data[8] = "hellooo1";
 
         struct tc_hmac_state_struct h;
@@ -94,8 +102,7 @@ unsigned int test_1(void)
         (void)tc_hmac_init(&h);
         (void)tc_hmac_update(&h, data, sizeof(data));
         (void)tc_hmac_final(digest, 32, &h); // TC_SHA256_DIGEST_SIZE = 32
-        //result = check_result(testnum, expected, expectedlen, digest, sizeof(digest));
-        //result = do_hmac_test(&h, 1, data, sizeof(data),expected, sizeof(expected));
+
         show_str("Digest", digest, sizeof(digest));
         TC_END_RESULT(result);
         return result;
