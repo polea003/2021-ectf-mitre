@@ -103,34 +103,52 @@ const uint8_t ciphertext[80] = {
 	0x12, 0x0e, 0xca, 0x30, 0x75, 0x86, 0xe1, 0xa7
 };
 
+// TC_AES_BLOCK_SIZE = 16
+
 int test_1_and_2(void)
 {
 	struct tc_aes_key_sched_struct a;
+	uint8_t TC_AES_BLOCK_SIZE_16 = 16;
 	uint8_t iv_buffer[16];
 	uint8_t encrypted[80];
 	uint8_t decrypted[64];
 	uint8_t *p;
 	unsigned int length;
-	int result = TC_PASS;
-	show_str("Plaintext", plaintext, sizeof(plaintext));
+	int result = 0; // TC_PASS = 0
+	show_str1("Plaintext", plaintext, sizeof(plaintext));
 	(void)tc_aes128_set_encrypt_key(&a, key);
-	(void)memcpy(iv_buffer, iv, TC_AES_BLOCK_SIZE);
-	tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + TC_AES_BLOCK_SIZE, plaintext, sizeof(plaintext), iv_buffer, &a);
-	show_str("Encrypted", encrypted, sizeof(encrypted));
-	printf("block size: %d", TC_AES_BLOCK_SIZE);
+	(void)memcpy(iv_buffer, iv, TC_AES_BLOCK_SIZE_16); 
+	tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + TC_AES_BLOCK_SIZE_16, plaintext, sizeof(plaintext), iv_buffer, &a);
+	show_str1("Encrypted", encrypted, sizeof(encrypted));
+
 	(void)tc_aes128_set_decrypt_key(&a, key);
-	p = &encrypted[TC_AES_BLOCK_SIZE];
+	p = &encrypted[TC_AES_BLOCK_SIZE_16];
 	length = ((unsigned int) sizeof(encrypted));
 	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
-	show_str("Decrypted", decrypted, sizeof(decrypted));
+	show_str1("Decrypted", decrypted, sizeof(decrypted));
 	return result;
 }
 
 int main(void)
 {
-	int result = TC_PASS;
-	TC_START("Performing AES128 tests:");
-	TC_PRINT("Performing CBC tests:\n");
+	int result = 0; // TC_PASS = 0
+	printf("Performing AES128 tests:\n");
+	printf("Performing CBC tests:\n");
 	result = test_1_and_2();
 	return result;
 }
+
+static inline void show_str1(const char *label, const uint8_t *s, size_t len)
+{
+        unsigned int i;
+
+        printf("%s = ", label);
+        for (i = 0; i < (unsigned int) len; ++i) {
+                printf("%02x", s[i]);
+        }
+        printf("\n");
+}
+
+//result = check_result(1, ciphertext, sizeof(encrypted), encrypted, sizeof(encrypted));
+//result = check_result(2, plaintext, sizeof(decrypted), decrypted, sizeof(decrypted));
+
