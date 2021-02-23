@@ -97,7 +97,7 @@ const uint8_t iv[16] = {
 	0x0c, 0x0d, 0x0e, 0x0f
 };
 
-const uint8_t plaintext[32] = { "0123456789abcdef0123456789abcdef" };
+const uint8_t plaintext[32] = "0123456789abcdef 123456789abcdef";
 
 // TC_AES_BLOCK_SIZE = 16
 
@@ -107,7 +107,7 @@ int test1(void)
 	uint8_t TC_AES_BLOCK_SIZE_16 = 16;
 	uint8_t iv_buffer[16];
 	uint8_t msgLen = sizeof(plaintext);
-	uint8_t encrypted[msgLen + 16];
+	uint8_t encrypted[msgLen + (16 - (msgLen % 16))];
 	uint8_t decrypted[msgLen];
 	uint8_t *p;
 	unsigned int length;
