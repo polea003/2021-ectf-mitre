@@ -344,7 +344,7 @@ int main(void)
         };
         struct tc_hmac_state_struct h;
         uint8_t digest[32];
-        const uint8_t data[8] = "hellooo1";
+        const uint8_t data[] = "hellooo1";
 
         (void)memset(&h, 0x00, sizeof(h));
         (void)tc_hmac_set_key(&h, key, sizeof(key));
@@ -354,12 +354,12 @@ int main(void)
 
         show_str1("Digest", digest, sizeof(digest));
 
-        data[] = "helloooo";
+        const uint8_t data1[] = "hellooo1";
 
         (void)memset(&h, 0x00, sizeof(h));
         (void)tc_hmac_set_key(&h, key, sizeof(key));
         (void)tc_hmac_init(&h);
-        (void)tc_hmac_update(&h, data, sizeof(data));
+        (void)tc_hmac_update(&h, data1, sizeof(data1));
         (void)tc_hmac_final(digest, 32, &h); // TC_SHA256_DIGEST_SIZE = 32
 
         show_str1("Digest", digest, sizeof(digest));
