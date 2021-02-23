@@ -74,7 +74,8 @@
 #ifndef __TC_CBC_MODE_H__
 #define __TC_CBC_MODE_H__
 
-#include <tinycrypt/aes.h>
+//#include <tinycrypt/aes.h>
+#include <aes_tc.h>
 
 #ifdef __cplusplus
 extern "C" {
