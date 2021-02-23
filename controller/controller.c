@@ -26,6 +26,145 @@
 //#include "aes_encrypt.c"
 //#include "cbc_mode.c"
 
+int tc_aes128_set_encrypt_key(TCAesKeySched_t s, const uint8_t *k)
+{
+	const unsigned int rconst[11] = {
+		0x00000000, 0x01000000, 0x02000000, 0x04000000, 0x08000000, 0x10000000,
+		0x20000000, 0x40000000, 0x80000000, 0x1b000000, 0x36000000
+	};
+	unsigned int i;
+	unsigned int t;
+
+	if (s == (TCAesKeySched_t) 0) {
+		return TC_CRYPTO_FAIL;
+	} else if (k == (const uint8_t *) 0) {
+		return TC_CRYPTO_FAIL;
+	}
+
+	for (i = 0; i < Nk; ++i) {
+		s->words[i] = (k[Nb*i]<<24) | (k[Nb*i+1]<<16) |
+			      (k[Nb*i+2]<<8) | (k[Nb*i+3]);
+	}
+
+	for (; i < (Nb * (Nr + 1)); ++i) {
+		t = s->words[i-1];
+		if ((i % Nk) == 0) {
+			t = subword(rotword(t)) ^ rconst[i/Nk];
+		}
+		s->words[i] = s->words[i-Nk] ^ t;
+	}
+
+	return TC_CRYPTO_SUCCESS;
+}
+
+int tc_cbc_mode_encrypt(uint8_t *out, unsigned int outlen, const uint8_t *in,
+			    unsigned int inlen, const uint8_t *iv,
+			    const TCAesKeySched_t sched)
+{
+
+	uint8_t buffer[TC_AES_BLOCK_SIZE];
+	unsigned int n, m;
+
+	/* input sanity check: */
+	if (out == (uint8_t *) 0 ||
+	    in == (const uint8_t *) 0 ||
+	    sched == (TCAesKeySched_t) 0 ||
+	    inlen == 0 ||
+	    outlen == 0 ||
+	    (inlen % TC_AES_BLOCK_SIZE) != 0 ||
+	    (outlen % TC_AES_BLOCK_SIZE) != 0 ||
+	    outlen != inlen + TC_AES_BLOCK_SIZE) {
+		return TC_CRYPTO_FAIL;
+	}
+
+int tc_aes128_set_decrypt_key(TCAesKeySched_t s, const uint8_t *k)
+{
+	return tc_aes128_set_encrypt_key(s, k);
+}
+
+int tc_cbc_mode_decrypt(uint8_t *out, unsigned int outlen, const uint8_t *in,
+			    unsigned int inlen, const uint8_t *iv,
+			    const TCAesKeySched_t sched)
+{
+
+	uint8_t buffer[TC_AES_BLOCK_SIZE];
+	const uint8_t *p;
+	unsigned int n, m;
+
+	/* sanity check the inputs */
+	if (out == (uint8_t *) 0 ||
+	    in == (const uint8_t *) 0 ||
+	    sched == (TCAesKeySched_t) 0 ||
+	    inlen == 0 ||
+	    outlen == 0 ||
+	    (inlen % TC_AES_BLOCK_SIZE) != 0 ||
+	    (outlen % TC_AES_BLOCK_SIZE) != 0 ||
+	    outlen != inlen) {
+		return TC_CRYPTO_FAIL;
+	}
+
+	/*
+	 * Note that in == iv + ciphertext, i.e. the iv and the ciphertext are
+	 * contiguous. This allows for a very efficient decryption algorithm
+	 * that would not otherwise be possible.
+	 */
+	p = iv;
+	for (n = m = 0; n < outlen; ++n) {
+		if ((n % TC_AES_BLOCK_SIZE) == 0) {
+			(void)tc_aes_decrypt(buffer, in, sched);
+			in += TC_AES_BLOCK_SIZE;
+			m = 0;
+		}
+		*out++ = buffer[m++] ^ *p++;
+	}
+
+	return TC_CRYPTO_SUCCESS;
+}
+
+int tc_aes128_set_decrypt_key(TCAesKeySched_t s, const uint8_t *k)
+{
+	return tc_aes128_set_encrypt_key(s, k);
+}
+
+int tc_cbc_mode_decrypt(uint8_t *out, unsigned int outlen, const uint8_t *in,
+			    unsigned int inlen, const uint8_t *iv,
+			    const TCAesKeySched_t sched)
+{
+
+	uint8_t buffer[TC_AES_BLOCK_SIZE];
+	const uint8_t *p;
+	unsigned int n, m;
+
+	/* sanity check the inputs */
+	if (out == (uint8_t *) 0 ||
+	    in == (const uint8_t *) 0 ||
+	    sched == (TCAesKeySched_t) 0 ||
+	    inlen == 0 ||
+	    outlen == 0 ||
+	    (inlen % TC_AES_BLOCK_SIZE) != 0 ||
+	    (outlen % TC_AES_BLOCK_SIZE) != 0 ||
+	    outlen != inlen) {
+		return TC_CRYPTO_FAIL;
+	}
+
+	/*
+	 * Note that in == iv + ciphertext, i.e. the iv and the ciphertext are
+	 * contiguous. This allows for a very efficient decryption algorithm
+	 * that would not otherwise be possible.
+	 */
+	p = iv;
+	for (n = m = 0; n < outlen; ++n) {
+		if ((n % TC_AES_BLOCK_SIZE) == 0) {
+			(void)tc_aes_decrypt(buffer, in, sched);
+			in += TC_AES_BLOCK_SIZE;
+			m = 0;
+		}
+		*out++ = buffer[m++] ^ *p++;
+	}
+
+	return TC_CRYPTO_SUCCESS;
+}
+
 static inline void show_str1(const char *label, const uint8_t *s, size_t len)
 {
         unsigned int i;
@@ -280,7 +419,7 @@ struct tc_aes_key_sched_struct a;
 	uint8_t decrypted[128];
 	uint8_t *p;
 	unsigned int length;
-	int result = 0;
+
 	(void)tc_aes128_set_encrypt_key(&a, key);
 
 	(void)memcpy(iv_buffer, iv, 16);
