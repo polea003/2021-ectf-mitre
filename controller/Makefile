@@ -59,6 +59,8 @@ LDFLAGS+=${COMPILER}/aes_decrypt.o
 LDFLAGS+=${COMPILER}/aes_encrypt.o
 LDFLAGS+=${COMPILER}/cbc_mode.o
 LDFLAGS+=${COMPILER}/utils.o
+LDFLAGS+=${COMPILER}/hmac.o
+LDFLAGS+=${COMPILER}/sha256.o
 
 # add compiler flag to enable example AES code 
 CFLAGS+=-DEXAMPLE_AES
@@ -69,6 +71,8 @@ all: ${COMPILER}/aes_decrypt.o
 all: ${COMPILER}/aes_encrypt.o
 all: ${COMPILER}/cbc_mode.o
 all: ${COMPILER}/utils.o
+all: ${COMPILER}/hmac.o
+all: ${COMPILER}/sha256.o
 endif
 ################ end crypto example ################
 

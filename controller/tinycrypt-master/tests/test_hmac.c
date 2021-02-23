@@ -494,9 +494,11 @@ int main(void)
         0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88,
         0x09, 0xcf, 0x4f, 0x3c
         };
+
+        const uint8_t data[8] = "hellooo1";
+
         struct tc_hmac_state_struct h;
         uint8_t digest[32];
-        const uint8_t data[8] = "hellooo1";
 
         (void)memset(&h, 0x00, sizeof(h));
         (void)tc_hmac_set_key(&h, key, sizeof(key));

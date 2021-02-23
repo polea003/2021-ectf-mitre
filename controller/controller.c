@@ -15,6 +15,8 @@
 //#include <test_utils.h>
 
 #include <tinycrypt/cbc_mode.h>
+#include <tinycrypt/hmac.h>
+#include <tinycrypt/sha256.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -280,6 +282,8 @@ int main() {
 	uint8_t decrypted[128];
 	uint8_t *p;
 	unsigned int length;
+  struct tc_hmac_state_struct h;
+        uint8_t digest[32];
 	//int result = 0;
 	(void)tc_aes128_set_encrypt_key(&a, key);
 
@@ -293,6 +297,14 @@ int main() {
     send_str("Example encrypted message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(plaintext), (char *)encrypted);
 	//show_str1("encrypted = ", encrypted, 144);
+        (void)memset(&h, 0x00, sizeof(h));
+        (void)tc_hmac_set_key(&h, key, sizeof(key));
+        (void)tc_hmac_init(&h);
+        (void)tc_hmac_update(&h, data, sizeof(data));
+        (void)tc_hmac_final(digest, 32, &h);
+  send_str("MAC message:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
+
 	(void)tc_aes128_set_decrypt_key(&a, key);
 	p = &encrypted[16];
 	length = ((unsigned int) sizeof(encrypted));
