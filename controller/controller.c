@@ -21,6 +21,9 @@
 #include "aes_tc.h"
 #include "cbc_mode.h"
 #include "constants.h"
+#include "aes_decrypt.c"
+#include "aes_encrypt.c"
+#include "cbc_mode.c"
 
 static inline void show_str1(const char *label, const uint8_t *s, size_t len)
 {
