@@ -67,8 +67,8 @@
  */
 
 #include <tinycrypt/cbc_mode.h>
-#include <tinycrypt/constants.h>
-#include <test_utils.h>
+// #include <tinycrypt/constants.h>
+// #include <test_utils.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -107,7 +107,7 @@ const uint8_t ciphertext[80] = {
 
 // TC_AES_BLOCK_SIZE = 16
 
-int test_1_and_2(void)
+int test1(void)
 {
 	struct tc_aes_key_sched_struct a;
 	uint8_t TC_AES_BLOCK_SIZE_16 = 16;
@@ -136,7 +136,7 @@ int main(void)
 	int result = 0; // TC_PASS = 0
 	printf("Performing AES128 tests:\n");
 	printf("Performing CBC tests:\n");
-	result = test_1_and_2();
+	result = test1();
 	return result;
 }
 
