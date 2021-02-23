@@ -35,7 +35,7 @@ test.o : test.c aes.h aes.o
 	echo [CC] $@ $(CFLAGS)
 	$(CC) $(CFLAGS) -o  $@ $<
 
-aes.o : aes_tc.h aes_decrypt.c aes_encrypt.c cbc_mode.c cbc_mode.h constants.h utils.c
+aes.o : aes_tc.h aes_decrypt.c aes_encrypt.c cbc_mode.c cbc_mode.h constants.h utils.c utils.h
 	echo [CC] $@ $(CFLAGS)
 	$(CC) $(CFLAGS) -o $@ $<
 
