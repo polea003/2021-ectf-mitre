@@ -40,8 +40,8 @@
 
 #include <tinycrypt/hmac.h>
 #include <tinycrypt/sha256.h>
-#include <tinycrypt/constants.h>
-#include <test_utils.h>
+//#include <tinycrypt/constants.h>
+// #include <test_utils.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -83,10 +83,11 @@ unsigned int test_1(void)
         //result = check_result(testnum, expected, expectedlen, digest, sizeof(digest));
         //result = do_hmac_test(&h, 1, data, sizeof(data),expected, sizeof(expected));
         unsigned int result = TC_PASS;
-        uint8_t digest[32];
+
 
         TC_PRINT("HMAC %s:\n", __func__);
-
+        
+        uint8_t digest[32];
         const uint8_t key[16] = {
         0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88,
         0x09, 0xcf, 0x4f, 0x3c
@@ -98,13 +99,12 @@ unsigned int test_1(void)
 
         (void)memset(&h, 0x00, sizeof(h));
         (void)tc_hmac_set_key(&h, key, sizeof(key));
-
         (void)tc_hmac_init(&h);
         (void)tc_hmac_update(&h, data, sizeof(data));
         (void)tc_hmac_final(digest, 32, &h); // TC_SHA256_DIGEST_SIZE = 32
 
         show_str("Digest", digest, sizeof(digest));
-        TC_END_RESULT(result);
+
         return result;
 }
 /*
@@ -320,13 +320,40 @@ unsigned int test_7(void)
  * Main task to test AES
  */
 
+static inline void show_str1(const char *label, const uint8_t *s, size_t len)
+{
+        unsigned int i;
+
+        printf("%s = ", label);
+        for (i = 0; i < (unsigned int) len; ++i) {
+                printf("%02x", s[i]);
+        }
+        printf("\n");
+}
+
 int main(void)
 {
         unsigned int result = TC_PASS;
 
         TC_START("Performing HMAC tests (RFC4231 test vectors):");
 
-        result = test_1();
+        uint8_t digest[32];
+        const uint8_t key[16] = {
+        0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88,
+        0x09, 0xcf, 0x4f, 0x3c
+       };
+
+        const uint8_t data[8] = "hellooo1";
+
+        struct tc_hmac_state_struct h;
+
+        (void)memset(&h, 0x00, sizeof(h));
+        (void)tc_hmac_set_key(&h, key, sizeof(key));
+        (void)tc_hmac_init(&h);
+        (void)tc_hmac_update(&h, data, sizeof(data));
+        (void)tc_hmac_final(digest, 32, &h); // TC_SHA256_DIGEST_SIZE = 32
+
+        show_str1("Digest", digest, sizeof(digest));
 
         TC_PRINT("All HMAC tests succeeded!\n");
 
