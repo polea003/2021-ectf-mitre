@@ -146,9 +146,7 @@ int test_1(void)
 int main(void)
 {
 	int result = 0;
-
 	result = test_1();
-
 	return result;
 }
 
