@@ -109,14 +109,14 @@ static inline void sub_bytes(uint8_t *s)
 
 #define triple(a)(_double_byte(a)^(a))
 
-/*static inline void mult_row_column(uint8_t *out, const uint8_t *in)
+static inline void mult_row_column(uint8_t *out, const uint8_t *in)
 {
 	out[0] = _double_byte(in[0]) ^ triple(in[1]) ^ in[2] ^ in[3];
 	out[1] = in[0] ^ _double_byte(in[1]) ^ triple(in[2]) ^ in[3];
 	out[2] = in[0] ^ in[1] ^ _double_byte(in[2]) ^ triple(in[3]);
 	out[3] = triple(in[0]) ^ in[1] ^ in[2] ^ _double_byte(in[3]);
 }
-*/
+
 static inline void mix_columns(uint8_t *s)
 {
 	uint8_t t[Nb*Nk];
