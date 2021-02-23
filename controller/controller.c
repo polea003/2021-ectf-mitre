@@ -294,22 +294,22 @@ int main() {
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(plaintext) - 16, (char *)plaintext);
 	tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + 16,
 				plaintext, sizeof(plaintext), iv_buffer, &a);
-    send_str("Example encrypted message:");
+    send_str("Encrypted message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(plaintext), (char *)encrypted);
 	//show_str1("encrypted = ", encrypted, 144);
         (void)memset(&h, 0x00, sizeof(h));
         (void)tc_hmac_set_key(&h, key, sizeof(key));
         (void)tc_hmac_init(&h);
-        (void)tc_hmac_update(&h, plaintext, sizeof(plaintext));
+        (void)tc_hmac_update(&h, plaintext, sizeof(plaintext) - 16);
         (void)tc_hmac_final(digest, 32, &h);
   send_str("MAC message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
-
+//b'>/2\xc7\xa2\xc1$\xf8\xc4P\x15+\xacP\xa78\xadRU\x9c\xb4sG\x84\xef\x18T&\xb9N\x030'
 	(void)tc_aes128_set_decrypt_key(&a, key);
 	p = &encrypted[16];
 	length = ((unsigned int) sizeof(encrypted));
 	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
-    send_str("Example decrypted message:");
+    send_str("Decrypted message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(plaintext) - 16, (char *)decrypted);
 	//printf("Decrypted = %s\n", decrypted);
 #endif
