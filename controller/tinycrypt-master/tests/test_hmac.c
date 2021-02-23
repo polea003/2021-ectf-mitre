@@ -333,9 +333,9 @@ static inline void show_str1(const char *label, const uint8_t *s, size_t len)
 
 int main(void)
 {
-        unsigned int result = TC_PASS;
+        unsigned int result = 0;
 
-        TC_START("Performing HMAC tests (RFC4231 test vectors):");
+        printf("Performing HMAC tests (RFC4231 test vectors):");
 
         uint8_t digest[32];
         const uint8_t key[16] = {
@@ -355,7 +355,7 @@ int main(void)
 
         show_str1("Digest", digest, sizeof(digest));
 
-        TC_PRINT("All HMAC tests succeeded!\n");
+        printf("All HMAC tests succeeded!\n");
 
         return result;
 }
