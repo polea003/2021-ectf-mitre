@@ -84,11 +84,92 @@ const uint8_t ciphertext[80] = {
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
 #ifndef __TC_CBC_MODE_H__
 #define __TC_CBC_MODE_H__
 
-#include <tinycrypt/aes.h>
+//#include <tinycrypt/aes.h>
+#ifndef __TC_AES_H__
+#define __TC_AES_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define Nb (4)  /* number of columns (32-bit words) comprising the state */
+#define Nk (4)  /* number of 32-bit words comprising the key */
+#define Nr (10) /* number of rounds */
+#define TC_AES_BLOCK_SIZE (Nb*Nk)
+#define TC_AES_KEY_SIZE (Nb*Nk)
+
+typedef struct tc_aes_key_sched_struct {
+	unsigned int words[Nb*(Nr+1)];
+} *TCAesKeySched_t;
+
+/**
+ *  @brief Set AES-128 encryption key
+ *  Uses key k to initialize s
+ *  @return  returns TC_CRYPTO_SUCCESS (1)
+ *           returns TC_CRYPTO_FAIL (0) if: s == NULL or k == NULL
+ *  @note       This implementation skips the additional steps required for keys
+ *              larger than 128 bits, and must not be used for AES-192 or
+ *              AES-256 key schedule -- see FIPS 197 for details
+ *  @param      s IN/OUT -- initialized struct tc_aes_key_sched_struct
+ *  @param      k IN -- points to the AES key
+ */
+int tc_aes128_set_encrypt_key(TCAesKeySched_t s, const uint8_t *k);
+
+/**
+ *  @brief AES-128 Encryption procedure
+ *  Encrypts contents of in buffer into out buffer under key;
+ *              schedule s
+ *  @note Assumes s was initialized by aes_set_encrypt_key;
+ *              out and in point to 16 byte buffers
+ *  @return  returns TC_CRYPTO_SUCCESS (1)
+ *           returns TC_CRYPTO_FAIL (0) if: out == NULL or in == NULL or s == NULL
+ *  @param out IN/OUT -- buffer to receive ciphertext block
+ *  @param in IN -- a plaintext block to encrypt
+ *  @param s IN -- initialized AES key schedule
+ */
+int tc_aes_encrypt(uint8_t *out, const uint8_t *in, 
+		   const TCAesKeySched_t s);
+
+/**
+ *  @brief Set the AES-128 decryption key
+ *  Uses key k to initialize s
+ *  @return returns TC_CRYPTO_SUCCESS (1)
+ *          returns TC_CRYPTO_FAIL (0) if: s == NULL or k == NULL
+ *  @note       This is the implementation of the straightforward inverse cipher
+ *              using the cipher documented in FIPS-197 figure 12, not the
+ *              equivalent inverse cipher presented in Figure 15
+ *  @warning    This routine skips the additional steps required for keys larger
+ *              than 128, and must not be used for AES-192 or AES-256 key
+ *              schedule -- see FIPS 197 for details
+ *  @param s  IN/OUT -- initialized struct tc_aes_key_sched_struct
+ *  @param k  IN -- points to the AES key
+ */
+int tc_aes128_set_decrypt_key(TCAesKeySched_t s, const uint8_t *k);
+
+/**
+ *  @brief AES-128 Encryption procedure
+ *  Decrypts in buffer into out buffer under key schedule s
+ *  @return returns TC_CRYPTO_SUCCESS (1)
+ *          returns TC_CRYPTO_FAIL (0) if: out is NULL or in is NULL or s is NULL
+ *  @note   Assumes s was initialized by aes_set_encrypt_key
+ *          out and in point to 16 byte buffers
+ *  @param out IN/OUT -- buffer to receive ciphertext block
+ *  @param in IN -- a plaintext block to encrypt
+ *  @param s IN -- initialized AES key schedule
+ */
+int tc_aes_decrypt(uint8_t *out, const uint8_t *in, 
+		   const TCAesKeySched_t s);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __TC_AES_H__ */
 
 #ifdef __cplusplus
 extern "C" {
