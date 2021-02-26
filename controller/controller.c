@@ -108,7 +108,7 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 
   // pack header
   hdr.magicS  = 'S';
-  hdr.magicC  = 'C';
+  hdr.magicC  = 'G';
   hdr.src_id = src_id;
   hdr.tgt_id = tgt_id;
   hdr.len    = len;
