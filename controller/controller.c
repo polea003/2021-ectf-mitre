@@ -142,7 +142,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   tc_cbc_mode_encrypt(encrypted, len + 16,
 		(uint8_t *)data, len , iv_buffer, &a);
 
-  return send_msg(RAD_INTF, SCEWL_ID, tgt_id, len, data);
+  return send_msg(RAD_INTF, SCEWL_ID, tgt_id, len, (char *)encrypted);
 }
 
 
