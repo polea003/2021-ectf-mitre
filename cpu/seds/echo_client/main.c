@@ -52,7 +52,7 @@ siNfidpL(veruioPjfwe))%60466176;}veruicPjfwe=(veruioPjfke+
 int main(void) {
   scewl_id_t src_id, tgt_id;
   uint16_t len;
-  char *msg = "hello world!";
+  char *msg = "The encryption algorithm processes the plaintext, and the MAC then hashes the encrypted message to authenticate. So cool right??";
   char data[BUF_SZ];
 
   // open log file
@@ -76,8 +76,8 @@ int main(void) {
     }
   }
 
-  fprintf(log, "Sending hello...\n");
-  scewl_send(TGT_ID, 13, msg);
+  fprintf(log, "Client SED: Sending message...\n");
+  scewl_send(TGT_ID, sizeof(msg), msg);
 
   // receive response (block until response received)
   fprintf(log, "Waiting for response...\n");
