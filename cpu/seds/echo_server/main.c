@@ -11,6 +11,7 @@
  */
 
 #include "scewl_bus_driver/scewl_bus.h"
+#include "controller.h"
 
 #include <stdio.h>
 
