@@ -130,15 +130,15 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   struct tc_aes_key_sched_struct a;
   uint8_t decrypted[128];
-  uint8_t *p;
+  char *p;
 	unsigned int length;
   (void)tc_aes128_set_decrypt_key(&a, key);
 	p = &data[16];
 	length = ((unsigned int) sizeof(data));
-	tc_cbc_mode_decrypt(decrypted, length, p, length, data, &a);
+	tc_cbc_mode_decrypt(decrypted, length, p, length, (uint8_t *)data, &a);
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, (char *)decrypted);
 
-  return send_msg(CPU_INTF, src_id, SCEWL_ID, len, decrypted);
+  return send_msg(CPU_INTF, src_id, SCEWL_ID, len, (char *)decrypted);
 }
 
 
