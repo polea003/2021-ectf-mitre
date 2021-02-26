@@ -140,15 +140,15 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 	//length = ((unsigned int) sizeof(data));
 	tc_cbc_mode_decrypt(decrypted, len, (uint8_t *)p, len, (uint8_t *)data, &a);
   send_str("decrypted message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, (char *)decrypted);
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len - 16, (char *)decrypted);
 
-  return send_msg(CPU_INTF, src_id, SCEWL_ID, len, data);
+  return send_msg(CPU_INTF, src_id, SCEWL_ID, len - 16, data);
 }
 
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
-     send_str("origional message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, data);
+  send_str("origional message:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len - 16, data);
   struct tc_aes_key_sched_struct a;
 	uint8_t iv_buffer[16];
 	uint8_t encrypted[144];
