@@ -110,6 +110,8 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
   hdr.tgt_id = tgt_id;
   hdr.len    = len;
 
+  //validate data is proper length 
+
   // send header
   intf_write(intf, (char *)&hdr, sizeof(scewl_hdr_t));
 
@@ -281,7 +283,7 @@ const uint8_t plaintext[128] = { "The encryption algorithm processes the plainte
 
 	//printf("Plaintext = %s\n", plaintext);
   send_str("Plaintext message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(plaintext) - 16, (char *)plaintext);
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(plaintext), (char *)plaintext);
 	tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + 16,
 				plaintext, sizeof(plaintext), iv_buffer, &a);
     send_str("Encrypted message:");
@@ -300,7 +302,7 @@ const uint8_t plaintext[128] = { "The encryption algorithm processes the plainte
 	length = ((unsigned int) sizeof(encrypted));
 	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
     send_str("Decrypted message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(plaintext) - 16, (char *)decrypted);
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(plaintext), (char *)decrypted);
 	//printf("Decrypted = %s\n", decrypted);
 #endif
 
@@ -351,3 +353,27 @@ const uint8_t plaintext[128] = { "The encryption algorithm processes the plainte
     }
   }
 }
+//Zero Proof for authenication
+//OAUTH (initial password, then server challenges drones)
+//strncpy over strcpy - explicity define num of characters to prevent overflow
+/*
+Response/challenge means of authentication
+
+To Do:
+-Check authenticity of drone in supply chain before distributing key
+-Proper comparing of MACs
+-Random key generation in SSS post prossessing and distributing key
+to drones on registration
+-counter or timer (timestamp included in message, only approved in small time window)
+
+-Address buffer overflow attacks (check the size of any input read, 
+reject any message too large) *memset *memcpy
+-Address side-chain attacks
+-Address FAA attacks, must be passed directly to the CPU
+
+-dynamic or static memory for message buffer
+-validate data before putting in buffer
+-UNIX Sockets - how does our communications/exchange of communications work?
+
+-potenitally modifying build process to address vulnerabilities (safegaurds to gcc compiler)
+*/
