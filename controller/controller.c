@@ -169,7 +169,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_str("HMAC:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
 
-  uint8_t msg[sizeof(encrypted) + 32] = {encrypted , digest};
+  uint8_t msg[sizeof(encrypted) + 32] = {*encrypted , *digest};
   send_str("combined:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(msg), msg);
 
