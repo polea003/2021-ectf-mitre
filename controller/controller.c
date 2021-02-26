@@ -142,7 +142,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   send_str("decrypted message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len - 16, (char *)decrypted);
 
-  return send_msg(CPU_INTF, src_id, SCEWL_ID, len - 16, data);
+  return send_msg(CPU_INTF, src_id, SCEWL_ID, len - 16, (char *)decrypted);
 }
 
 
