@@ -133,7 +133,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 	unsigned int length;
 struct tc_aes_key_sched_struct a;
 	(void)tc_aes128_set_decrypt_key(&a, key);
-	p = &data[16];
+	p = data[16];
 	length = ((unsigned int) len);
 	tc_cbc_mode_decrypt(decrypted, length, p, length, data, &a);
 
@@ -142,7 +142,7 @@ struct tc_aes_key_sched_struct a;
 
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
-    struct tc_aes_key_sched_struct a;
+  struct tc_aes_key_sched_struct a;
 	uint8_t iv_buffer[16];
 	uint8_t encrypted[len];
   (void)tc_aes128_set_encrypt_key(&a, key);
