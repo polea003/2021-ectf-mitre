@@ -170,7 +170,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
 
   uint8_t* msg = malloc((sizeof(encrypted) + 32) * sizeof(uint8_t));
-  memcpy(msg, encrypted, (sizeof(encrypted) * sizeof(uint8_t));
+  memcpy(msg, encrypted, sizeof(encrypted) * sizeof(uint8_t));
   memcpy(msg + sizeof(encrypted), digest, 32 * sizeof(uint8_t));
 
 
