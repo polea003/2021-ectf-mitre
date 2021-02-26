@@ -130,6 +130,23 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   send_str("recieved message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, data);
+
+  uint8_t encrypted[sizeof(data) - 32] = {0};
+  int i;
+  for (i = 0; i < sizeof(encrypted); i++) encrypted[i] = data[i];
+
+  struct tc_hmac_state_struct h;
+  uint8_t digest[32];
+  (void)memset(&h, 0x00, sizeof(h));
+  (void)tc_hmac_set_key(&h, key, sizeof(key));
+  (void)tc_hmac_init(&h);
+  (void)tc_hmac_update(&h, (char *)encrypted, sizeof(encrypted));
+  (void)tc_hmac_final(digest, 32, &h);
+
+  send_str("recieved HMAC:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
+
+
   
   struct tc_aes_key_sched_struct a;
   uint8_t decrypted[128];
@@ -188,7 +205,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
 	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
   //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, (char *)decrypted);
 */
-  return send_msg(RAD_INTF, SCEWL_ID, tgt_id, sizeof(encrypted), (char *)encrypted);
+  return send_msg(RAD_INTF, SCEWL_ID, tgt_id, sizeof(encrypted), (char *)msg);
 }
 
 
