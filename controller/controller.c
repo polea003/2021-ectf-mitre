@@ -170,8 +170,8 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
 
   char msg[sizeof(encrypted) + 32] = {0};
+  strcpy(msg, (char*)encrypted);
   strcat(msg, (char*)digest);
-  strcat(msg, (char*)encrypted);
   send_str("combined:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(msg), (char *)msg);
 
