@@ -128,6 +128,8 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 
 
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
+  send_str("recieved message:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, data);
   
   struct tc_aes_key_sched_struct a;
   uint8_t decrypted[128];
@@ -137,6 +139,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 	p = &data[16];
 	//length = ((unsigned int) sizeof(data));
 	tc_cbc_mode_decrypt(decrypted, len, (uint8_t *)p, len, (uint8_t *)data, &a);
+  send_str("decrypted message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, (char *)decrypted);
 
   return send_msg(CPU_INTF, src_id, SCEWL_ID, len, data);
@@ -144,6 +147,8 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
+     send_str("origional message:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, data);
   struct tc_aes_key_sched_struct a;
 	uint8_t iv_buffer[16];
 	uint8_t encrypted[144];
@@ -151,7 +156,8 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
 	(void)memcpy(iv_buffer, iv, 16);
   tc_cbc_mode_encrypt(encrypted, len + 16,
 		(uint8_t *)data, len , iv_buffer, &a);
-  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, (char *)encrypted);
+    send_str("encrypted message:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, (char *)encrypted);
 /*
   uint8_t decrypted[128];
   uint8_t *p;
@@ -298,7 +304,7 @@ const uint8_t iv[16] = {
 	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b,
 	0x0c, 0x0d, 0x0e, 0x0f
 };
-*/
+
 const uint8_t plaintext[128] = { "The encryption algorithm processes the plaintext, and the MAC then hashes the encrypted message to authenticate. So cool right??"
 };
 
@@ -338,6 +344,7 @@ const uint8_t plaintext[128] = { "The encryption algorithm processes the plainte
     send_str("Decrypted message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(plaintext), (char *)decrypted);
 	//printf("Decrypted = %s\n", decrypted);
+  */
 #endif
 
   // serve forever
