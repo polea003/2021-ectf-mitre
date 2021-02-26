@@ -155,9 +155,24 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   (void)tc_aes128_set_encrypt_key(&a, key);
 	(void)memcpy(iv_buffer, iv, 16);
   tc_cbc_mode_encrypt(encrypted, len + 16,
-		(uint8_t *)data, len , iv_buffer, &a);
-    send_str("encrypted message:");
+	(uint8_t *)data, len , iv_buffer, &a);
+  send_str("encrypted message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(encrypted), (char *)encrypted);
+
+  struct tc_hmac_state_struct h;
+  uint8_t digest[32];
+  (void)memset(&h, 0x00, sizeof(h));
+  (void)tc_hmac_set_key(&h, key, sizeof(key));
+  (void)tc_hmac_init(&h);
+  (void)tc_hmac_update(&h, (char *)encrypted, sizeof(encrypted));
+  (void)tc_hmac_final(digest, 32, &h);
+  send_str("HMAC:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
+
+  char msg[sizeof(encrypted) + 32] = {(char*)encrypted , (char*)digest};
+  send_str("combined:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(msg), msg);
+
 /*
   uint8_t decrypted[128];
   uint8_t *p;
