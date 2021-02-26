@@ -169,9 +169,11 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_str("HMAC:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
 
-  char msg[sizeof(encrypted) + 32] = {0};
-  strcat(msg, (char*)encrypted);
- // strcat(msg, (char*)digest);
+  uint8_t* msg = malloc((sizeof(encrypted) + 32) * sizeof(uint8_t));
+  memcpy(msg, encrypted, (sizeof(encrypted) * sizeof(uint8_t));
+  memcpy(msg + sizeof(encrypted), digest, 32 * sizeof(uint8_t));
+
+
   send_str("combined:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(msg), (char *)msg);
 
