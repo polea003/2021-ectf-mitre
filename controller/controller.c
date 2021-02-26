@@ -105,7 +105,7 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
 
 int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, char *data) {
   scewl_hdr_t hdr;
-
+/*
   // pack header
   hdr.magicS  = 'S';
   hdr.magicC  = 'C';
@@ -114,6 +114,7 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
   hdr.len    = len;
 
   //validate data is proper length 
+  */
 
   // send header
   intf_write(intf, (char *)&hdr, sizeof(scewl_hdr_t));
