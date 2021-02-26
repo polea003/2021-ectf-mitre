@@ -128,17 +128,17 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 
 
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
-  /*
+  
   struct tc_aes_key_sched_struct a;
   uint8_t decrypted[128];
   char *p;
 	unsigned int length;
   (void)tc_aes128_set_decrypt_key(&a, key);
 	p = &data[16];
-	length = ((unsigned int) sizeof(data));
-	tc_cbc_mode_decrypt(decrypted, length, (uint8_t *)p, length, (uint8_t *)data, &a);
+	//length = ((unsigned int) sizeof(data));
+	tc_cbc_mode_decrypt(decrypted, len, (uint8_t *)p, len, (uint8_t *)data, &a);
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, (char *)decrypted);
-*/
+
   return send_msg(CPU_INTF, src_id, SCEWL_ID, len, data);
 }
 
@@ -151,8 +151,8 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
 	(void)memcpy(iv_buffer, iv, 16);
   tc_cbc_mode_encrypt(encrypted, len + 16,
 		(uint8_t *)data, len , iv_buffer, &a);
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, (char *)encrypted);
-
+  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, (char *)encrypted);
+/*
   uint8_t decrypted[128];
   uint8_t *p;
 	unsigned int length;
@@ -160,9 +160,9 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
 	p = &encrypted[16];
 	length = ((unsigned int) sizeof(encrypted));
 	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, (char *)decrypted);
-
-  return send_msg(RAD_INTF, SCEWL_ID, tgt_id, len, (char *)decrypted);
+  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, (char *)decrypted);
+*/
+  return send_msg(RAD_INTF, SCEWL_ID, tgt_id, sizeof(encrypted), (char *)encrypted);
 }
 
 
