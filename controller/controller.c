@@ -146,22 +146,33 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   send_str("recieved HMAC:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
 
-  if (_compare(digest, &data[144], 32)) send_str("SDALKSDJFHASKLDJFHALKSDJFHAS");
+  if (_compare(digest, &data[144], 32))
+  {
+      send_str("HMAC matches, message authentic. Decrypting");
+
+      struct tc_aes_key_sched_struct a;
+      uint8_t decrypted[128];
+      char *p;
+      unsigned int length;
+      (void)tc_aes128_set_decrypt_key(&a, key);
+      p = &data[16];
+      //length = ((unsigned int) sizeof(data));
+      tc_cbc_mode_decrypt(decrypted, len, (uint8_t *)p, len, (uint8_t *)data, &a);
+      send_str("decrypted message:");
+      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len - 16, (char *)decrypted);
+
+      return send_msg(CPU_INTF, src_id, SCEWL_ID, len - 16, (char *)decrypted);
+  }
+  else
+  {
+    send_str("HMAC did not match, message not authentic. Not decrypting");
+    return 0;
+  }  
+    
 
 
   
-  struct tc_aes_key_sched_struct a;
-  uint8_t decrypted[128];
-  char *p;
-	unsigned int length;
-  (void)tc_aes128_set_decrypt_key(&a, key);
-	p = &data[16];
-	//length = ((unsigned int) sizeof(data));
-	tc_cbc_mode_decrypt(decrypted, len, (uint8_t *)p, len, (uint8_t *)data, &a);
-  send_str("decrypted message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len - 16, (char *)decrypted);
 
-  return send_msg(CPU_INTF, src_id, SCEWL_ID, len - 16, (char *)decrypted);
 }
 
 
