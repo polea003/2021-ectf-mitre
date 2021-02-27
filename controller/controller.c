@@ -310,7 +310,7 @@ int main() {
   intf_init(SSS_INTF);
   intf_init(RAD_INTF);
 
-#ifdef EXAMPLE_AES
+//#ifdef EXAMPLE_AES
 /*
   // example encryption using tiny-AES-c
   struct AES_ctx ctx;
@@ -382,7 +382,7 @@ const uint8_t plaintext[128] = { "The encryption algorithm processes the plainte
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(plaintext), (char *)decrypted);
 	//printf("Decrypted = %s\n", decrypted);
   */
-#endif
+//#endif
 
   // serve forever
   while (1) {
