@@ -137,6 +137,9 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   for (i = 0; i < sizeof(encrypted); i++) encrypted[i] = data[i];
   for (i = sizeof(encrypted); i < sizeof(encrypted) + 32; i++) hmac[i - sizeof(encrypted)] = data[i];
 
+  send_str("recieved HMAC:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(hmac), (char *)hmac);
+
   struct tc_hmac_state_struct h;
   uint8_t digest[32];
   (void)memset(&h, 0x00, sizeof(h));
@@ -145,7 +148,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   (void)tc_hmac_update(&h, (char *)encrypted, sizeof(encrypted));
   (void)tc_hmac_final(digest, 32, &h);
 
-  send_str("recieved HMAC:");
+  send_str("calulated HMAC:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
 
   if (_compare(digest, hmac, 32))
