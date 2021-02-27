@@ -77,7 +77,7 @@ int main(void) {
   }
 
   fprintf(log, "Client SED: Sending message...\n");
-  scewl_send(TGT_ID, sizeof(*msg) , msg);
+  scewl_send(TGT_ID, 128 , msg);
 
   // receive response (block until response received)
   fprintf(log, "Waiting for response...\n");
