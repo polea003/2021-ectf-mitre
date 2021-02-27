@@ -129,7 +129,7 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   send_str("recieved message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, data);
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
   uint8_t n = len - 32;
   uint8_t encrypted[144];
   int i;
@@ -218,7 +218,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
 	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
   //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, (char *)decrypted);
 */
-  return send_msg(RAD_INTF, SCEWL_ID, tgt_id, sizeof(encrypted), (char *)msg);
+  return send_msg(RAD_INTF, SCEWL_ID, tgt_id, sizeof(msg), (char *)msg);
 }
 
 
