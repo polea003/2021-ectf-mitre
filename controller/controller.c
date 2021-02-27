@@ -131,7 +131,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   send_str("recieved message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, data);
   uint8_t n = len - 32;
-  uint8_t encrypted[n];
+  uint8_t encrypted[144];
   int i;
   for (i = 0; i < sizeof(encrypted); i++) encrypted[i] = data[i];
 
