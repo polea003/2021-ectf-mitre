@@ -132,8 +132,10 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
   uint8_t n = len - 32;
   uint8_t encrypted[144];
+  uint8_t hmac[32];
   int i;
   for (i = 0; i < sizeof(encrypted); i++) encrypted[i] = data[i];
+  for (i = sizeof(encrypted); i < sizeof(encrypted) + 32; i++) hmac[i - sizeof(encrypted)] = data[i];
 
   struct tc_hmac_state_struct h;
   uint8_t digest[32];
@@ -146,7 +148,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   send_str("recieved HMAC:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
 
-  if (_compare(digest, (uint8_t *)&data[144], 32))
+  if (_compare(digest, hmac, 32))
   {
       send_str("HMAC matches, message authentic. Decrypting");
 
