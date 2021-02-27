@@ -312,26 +312,6 @@ int main() {
 
 //#ifdef EXAMPLE_AES
 /*
-  // example encryption using tiny-AES-c
-  struct AES_ctx ctx;
-  uint8_t key[16] = { 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf };
-  uint8_t plaintext[16] = "0123456789abcdef";
-
-  // initialize context
-  AES_init_ctx(&ctx, key);
-
-  // encrypt buffer (encryption happens in place)
-  AES_ECB_encrypt(&ctx, plaintext);
-  send_str("Example encrypted message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, BLOCK_SIZE, (char *)plaintext);
-
-  // decrypt buffer (decryption happens in place)
-  AES_ECB_decrypt(&ctx, plaintext);
-  send_str("Example decrypted message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, BLOCK_SIZE, (char *)plaintext);
-  // end example
-  */
-/*
  const uint8_t key[16] = {
 	0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88,
 	0x09, 0xcf, 0x4f, 0x3c
