@@ -146,7 +146,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   send_str("recieved HMAC:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
 
-  if (_compare(digest, &data[144], 32))
+  if (_compare(digest, (uint8_t *)&data[144], 32))
   {
       send_str("HMAC matches, message authentic. Decrypting");
 
