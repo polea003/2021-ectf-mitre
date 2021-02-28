@@ -179,7 +179,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
   if (len % 16 != 0) 
   {
-       for (int i = len; i < len + (16 - (len % 16)); i++) data[i] = '!';
+       for (int i = len; i < len + (16 - (len % 16)); i++) data[i] = '\0';
        len = strlen(data);
         send_str("modified message:");
       send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
