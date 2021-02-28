@@ -126,33 +126,33 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   send_str("recieved message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
-  //uint8_t n = len - 32;
-  uint8_t encrypted[144];
+  int n = len - 32;
+  uint8_t encrypted[n];
   uint8_t hmac[32];
   int i;
-  for (i = 0; i < sizeof(encrypted); i++) encrypted[i] = data[i];
-  for (i = sizeof(encrypted); i < sizeof(encrypted) + 32; i++) hmac[i - sizeof(encrypted)] = data[i];
+  for (i = 0; i < n; i++) encrypted[i] = data[i];
+  for (i = n; i < n + 32; i++) hmac[i - n] = data[i];
 
   send_str("recieved HMAC:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(hmac), (char *)hmac);
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32, (char *)hmac);
 
   struct tc_hmac_state_struct h;
   uint8_t digest[32];
   (void)memset(&h, 0x00, sizeof(h));
   (void)tc_hmac_set_key(&h, key, sizeof(key));
   (void)tc_hmac_init(&h);
-  (void)tc_hmac_update(&h, (char *)encrypted, sizeof(encrypted));
+  (void)tc_hmac_update(&h, (char *)encrypted, n);
   (void)tc_hmac_final(digest, 32, &h);
 
   send_str("calulated HMAC:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32, (char *)digest);
 
   if (!_compare(digest, hmac, 32))
   {
       send_str("HMAC matches, message authentic. Decrypting");
 
       struct tc_aes_key_sched_struct a;
-      uint8_t decrypted[128];
+      uint8_t decrypted[n - 16];
       char *p;
       //unsigned int length;
       (void)tc_aes128_set_decrypt_key(&a, key);
@@ -160,9 +160,9 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
       //length = ((unsigned int) sizeof(data));
       tc_cbc_mode_decrypt(decrypted, len, (uint8_t *)p, len, (uint8_t *)data, &a);
       send_str("decrypted message:");
-      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(decrypted), (char *)decrypted);
+      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, n - 16, (char *)decrypted);
 
-      return send_msg(CPU_INTF, src_id, SCEWL_ID, sizeof(decrypted), (char *)decrypted);
+      return send_msg(CPU_INTF, src_id, SCEWL_ID, n - 16, (char *)decrypted);
   }
   else
   {
