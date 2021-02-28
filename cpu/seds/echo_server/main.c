@@ -67,7 +67,7 @@ int main(void) {
     fprintf(log, "data:   \"%s\"\n\n", data);
 
     // echo message
-    scewl_send(src_id, len, data);
+   // scewl_send(src_id, len, data);
   }
 
   // degister
