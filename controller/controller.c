@@ -296,7 +296,7 @@ send_str("recieved message:");
 
 int handle_brdcst_send(char *data, uint16_t len) {
   send_str("time message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 12 , (char*)t); 
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 12 , (char)t); 
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
   if (len % 16 != 0) 
