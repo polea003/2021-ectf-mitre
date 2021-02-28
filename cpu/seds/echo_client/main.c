@@ -52,7 +52,7 @@ siNfidpL(veruioPjfwe))%60466176;}veruicPjfwe=(veruioPjfke+
 int main(void) {
   scewl_id_t src_id, tgt_id;
   uint16_t len;
-  char *msg = "The encryption algorithm processes the plaintext, and the MAC then hashes the encrypted message to authenticate. So cool right?? What happens ifi";
+  char *msg = "I can chnage this to whatever I want and the encryption will always work";
   char data[BUF_SZ];
 
   // open log file
