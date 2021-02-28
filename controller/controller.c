@@ -126,7 +126,7 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   send_str("recieved message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
-  uint8_t n = len - 32;
+  //uint8_t n = len - 32;
   uint8_t encrypted[144];
   uint8_t hmac[32];
   int i;
@@ -154,7 +154,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
       struct tc_aes_key_sched_struct a;
       uint8_t decrypted[128];
       char *p;
-      unsigned int length;
+      //unsigned int length;
       (void)tc_aes128_set_decrypt_key(&a, key);
       p = &data[16];
       //length = ((unsigned int) sizeof(data));
@@ -202,7 +202,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
 
 
-  uint8_t msg[sizeofEnc + 32] = {0};
+  uint8_t msg[sizeofEnc + 32];
   int i;
   for (i = 0; i < sizeofEnc; i++) msg[i] = encrypted[i];
   for (i = sizeofEnc; i < sizeofEnc + 32; i++) msg[i] = digest[i - sizeofEnc];
