@@ -127,6 +127,7 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   send_str("recieved message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
+  
   int n = len - 32;
   uint8_t encrypted[n];
   uint8_t hmac[32];
@@ -153,7 +154,8 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
       send_str("HMAC matches, message authentic. Decrypting");
 
       struct tc_aes_key_sched_struct a;
-      uint8_t decrypted[n - 16];
+      int sizeofDec = n - 16;
+      uint8_t decrypted[sizeofDec];
       char *p;
       //unsigned int length;
       (void)tc_aes128_set_decrypt_key(&a, key);
@@ -161,9 +163,17 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
       //length = ((unsigned int) sizeof(data));
       tc_cbc_mode_decrypt(decrypted, len, (uint8_t *)p, len, (uint8_t *)data, &a);
       send_str("decrypted message:");
-      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, n - 16, (char *)decrypted);
+      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec, (char *)decrypted);
 
-      return send_msg(CPU_INTF, src_id, SCEWL_ID, n - 16, (char *)decrypted);
+      if (sizeofDec % 16 != 0) 
+  {
+       for (int i = sizeofDec - 1; i <= sizeofDec - (16 - (sizeofDec % 16)); i++) decrypted[i] = '\0';
+       sizeofDec = strlen(decrypted);
+        send_str("Unpadded message:");
+      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted);     
+  }
+
+      return send_msg(CPU_INTF, src_id, SCEWL_ID, sizeofDec, (char *)decrypted);
   }
   else
   {
@@ -182,8 +192,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
        for (int i = len; i < len + (16 - (len % 16)); i++) data[i] = ' ';
        len = strlen(data);
         send_str("padded message:");
-      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
-       
+      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);     
   }
   
 
