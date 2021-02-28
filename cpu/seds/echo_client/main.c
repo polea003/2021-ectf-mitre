@@ -79,11 +79,13 @@ int main(void) {
   fprintf(log, "Client SED: Sending message...\n");
   scewl_send(SCEWL_BRDCST_ID, strlen(msg) , msg);
 
+/*
   // receive response (block until response received)
   fprintf(log, "Waiting for response...\n");
   scewl_recv(data, &src_id, &tgt_id, BUF_SZ, 1);
 
   // check if response matches
+  
   if (!strcmp(msg, data)) {
     // decode and print flag
     uint8_t flag[32] = {0};
@@ -96,6 +98,7 @@ int main(void) {
   } else {
     fprintf(log, "Bad response!\n");
   }
+  */
 
   // deregister
   fprintf(log, "Deregistering...\n");
