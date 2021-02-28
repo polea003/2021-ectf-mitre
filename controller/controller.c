@@ -173,6 +173,10 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
       send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted);     
   }
 
+  for (i = sizeofDec - 1; (char *)decrypted[i] == ' '; i--,sizeofDec--) (char *)decrypted[i] = '\0';
+  send_str("Unpadded message:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted); 
+
       return send_msg(CPU_INTF, src_id, SCEWL_ID, sizeofDec, (char *)decrypted);
   }
   else
