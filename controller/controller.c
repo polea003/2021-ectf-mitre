@@ -123,6 +123,7 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 }
 
 
+
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   send_str("recieved message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
@@ -176,6 +177,17 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
+  if (len % 16 != 0) 
+  {
+       for (int i = len; i < len + (16 - (len % 16)); i++) data[i] = '!';
+       len = strlen(data);
+        send_str("modified message:");
+      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
+       
+  }
+  
+
+
   struct tc_aes_key_sched_struct a;
 	uint8_t iv_buffer[16];
 	uint8_t encrypted[len + 16];
