@@ -165,15 +165,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
       send_str("decrypted message:");
       send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec, (char *)decrypted);
 
-      if (sizeofDec % 16 != 0) 
-  {
-       for (int i = sizeofDec - 1; i <= sizeofDec - (16 - (sizeofDec % 16)); i++) decrypted[i] = '\0';
-       sizeofDec = strlen((char *)decrypted);
-        send_str("Unpadded message:");
-      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted);     
-  }
-
-  for (i = sizeofDec - 1; decrypted[i] == ' '; i--,sizeofDec--) decrypted[i] = '\0';
+  for (i = sizeofDec - 1; decrypted[i] == '#'; i--,sizeofDec--) decrypted[i] = '\0';
   send_str("Unpadded message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted); 
 
@@ -193,7 +185,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
   if (len % 16 != 0) 
   {
-       for (int i = len; i < len + (16 - (len % 16)); i++) data[i] = ' ';
+       for (int i = len; i < len + (16 - (len % 16)); i++) data[i] = '#';
        len = strlen(data);
         send_str("padded message:");
       send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);     
