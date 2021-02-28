@@ -22,9 +22,10 @@
 #include <string.h>
 #include <stdint.h>
 
- const uint8_t key[16] = {
-	0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88,
+ const uint8_t key[16] = { "0123456789abcdef"
+/*	0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88,
 	0x09, 0xcf, 0x4f, 0x3c
+  */
 };
 
 const uint8_t iv[16] = {
@@ -190,8 +191,6 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
         send_str("padded message:");
       send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);     
   }
-  
-
 
   struct tc_aes_key_sched_struct a;
 	uint8_t iv_buffer[16];
@@ -302,8 +301,6 @@ int handle_brdcst_send(char *data, uint16_t len) {
         send_str("padded message:");
       send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);     
   }
-  
-
 
   struct tc_aes_key_sched_struct a;
 	uint8_t iv_buffer[16];
