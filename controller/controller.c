@@ -21,6 +21,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <time.h>
+
+time_t t;
 
  const uint8_t key[16] = { "0123456789abcdef"
 /*	0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88,
@@ -292,6 +295,8 @@ send_str("recieved message:");
 
 
 int handle_brdcst_send(char *data, uint16_t len) {
+  send_str("time message:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 12 , (char*)t); 
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
   if (len % 16 != 0) 
@@ -542,15 +547,17 @@ Response/challenge means of authentication
 
 To Do:
 -Check authenticity of drone in supply chain before distributing key
--Proper comparing of MACs
+
 -Random key generation in SSS post prossessing and distributing key
 to drones on registration
 -counter or timer (timestamp included in message, only approved in small time window)
 
+-Proper comparing of MACs (done)
+
 -Address buffer overflow attacks (check the size of any input read, 
 reject any message too large) *memset *memcpy
 -Address side-chain attacks
--Address FAA attacks, must be passed directly to the CPU
+-Address FAA attacks, must be passed directly to the CPU (nothing to do)
 
 -dynamic or static memory for message buffer
 -validate data before putting in buffer
