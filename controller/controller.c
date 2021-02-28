@@ -168,7 +168,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
       if (sizeofDec % 16 != 0) 
   {
        for (int i = sizeofDec - 1; i <= sizeofDec - (16 - (sizeofDec % 16)); i++) decrypted[i] = '\0';
-       sizeofDec = strlen(decrypted);
+       sizeofDec = strlen((char *)decrypted);
         send_str("Unpadded message:");
       send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted);     
   }
