@@ -52,7 +52,7 @@ siNfidpL(veruioPjfwe))%60466176;}veruicPjfwe=(veruioPjfke+
 int main(void) {
   scewl_id_t src_id, tgt_id;
   uint16_t len;
-  char *msg = "Encryption, HMAC, Padding all working for direct transmission. Needs to be implemented for broadcast, but that should be straightforward and look very much like direct transmission.";
+  char *msg = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Aliquam ut porttitor leo a diam sollicitudin tempor id. Commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec. Potenti nullam ac tortor vitae purus faucibus ornare suspendisse. Ut placerat orci nulla pellentesque dignissim enim sit amet. Nec feugiat in fermentum posuere urna. Ac odio tempor orci dapibus ultrices. Aliquam faucibus purus in massa tempor. Id semper risus in hendrerit gravida rutrum. Fusce ut placerat orci nulla. Eleifend mi in nulla posuere sollicitudin. Nec tincidunt praesent semper feugiat. Nibh sit amet commodo nulla facilisi nullam vehicula.";
   char data[BUF_SZ];
 
   // open log file
