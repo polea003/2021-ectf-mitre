@@ -32,14 +32,14 @@ const uint8_t iv[16] = {
 	0x0c, 0x0d, 0x0e, 0x0f
 };
 
-#ifdef EXAMPLE_AES
+/* #ifdef EXAMPLE_AES
 #include "aes.h"
 
 char int2char(uint8_t i) {
   char *hex = "0123456789abcdef";
   return hex[i & 0xf];
 }
-#endif
+#endif */
 
 #define send_str(M) send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, strlen(M), M)
 #define BLOCK_SIZE 16
@@ -169,10 +169,6 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
     send_str("HMAC did not match, message not authentic. Not decrypting");
     return 0;
   }  
-    
-
-
-  
 
 }
 
