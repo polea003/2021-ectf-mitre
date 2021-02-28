@@ -128,7 +128,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   send_str("recieved message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
   
-  int n = len - 32;
+  uint16_t n = len - 32;
   uint8_t encrypted[n];
   uint8_t hmac[32];
   int i;
@@ -154,7 +154,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
       send_str("HMAC matches, message authentic. Decrypting");
 
       struct tc_aes_key_sched_struct a;
-      int sizeofDec = n - 16;
+      uint16_t sizeofDec = n - 16;
       uint8_t decrypted[sizeofDec];
       char *p;
       //unsigned int length;
@@ -195,11 +195,11 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
 
   struct tc_aes_key_sched_struct a;
 	uint8_t iv_buffer[16];
-	uint8_t encrypted[len + 16];
-  int sizeofEnc = sizeof(encrypted);
+  uint16_t sizeofEnc = len + 16;
+	uint8_t encrypted[sizeofEnc];
   (void)tc_aes128_set_encrypt_key(&a, key);
 	(void)memcpy(iv_buffer, iv, 16);
-  tc_cbc_mode_encrypt(encrypted, len + 16,
+  tc_cbc_mode_encrypt(encrypted, sizeofEnc,
 	(uint8_t *)data, len , iv_buffer, &a);
   send_str("encrypted message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofEnc, (char *)encrypted);
