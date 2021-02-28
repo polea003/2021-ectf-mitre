@@ -23,7 +23,7 @@
 #include <stdint.h>
 #include <time.h>
 
-time_t t;
+//time_t t;
 
  const uint8_t key[16] = { "0123456789abcdef"
 /*	0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88,
@@ -187,6 +187,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
+
   if (len % 16 != 0) 
   {
        for (int i = len; i < len + (16 - (len % 16)); i++) data[i] = '#';
@@ -225,22 +226,12 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_str("combined:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(msg), (char *)msg);
 
-/*
-  uint8_t decrypted[128];
-  uint8_t *p;
-	unsigned int length;
-  (void)tc_aes128_set_decrypt_key(&a, key);
-	p = &encrypted[16];
-	length = ((unsigned int) sizeof(encrypted));
-	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
-  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, (char *)decrypted);
-*/
   return send_msg(RAD_INTF, SCEWL_ID, tgt_id, sizeof(msg), (char *)msg);
 }
 
 
 int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
-send_str("recieved message:");
+  send_str("recieved message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
   
   uint16_t n = len - 32;
@@ -272,17 +263,15 @@ send_str("recieved message:");
       uint16_t sizeofDec = n - 16;
       uint8_t decrypted[sizeofDec];
       char *p;
-      //unsigned int length;
       (void)tc_aes128_set_decrypt_key(&a, key);
       p = &data[16];
-      //length = ((unsigned int) sizeof(data));
       tc_cbc_mode_decrypt(decrypted, len, (uint8_t *)p, len, (uint8_t *)data, &a);
       send_str("decrypted message:");
       send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec, (char *)decrypted);
 
-  for (i = sizeofDec - 1; decrypted[i] == '#'; i--,sizeofDec--) decrypted[i] = '\0';
-  send_str("Unpadded message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted); 
+      for (i = sizeofDec - 1; decrypted[i] == '#'; i--,sizeofDec--) decrypted[i] = '\0';
+      send_str("Unpadded message:");
+      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted); 
 
       return send_msg(CPU_INTF, src_id, SCEWL_BRDCST_ID, sizeofDec, (char *)decrypted);
   }
@@ -295,10 +284,9 @@ send_str("recieved message:");
 
 
 int handle_brdcst_send(char *data, uint16_t len) {
-  send_str("time message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 12 , (char)t); 
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
+
   if (len % 16 != 0) 
   {
        for (int i = len; i < len + (16 - (len % 16)); i++) data[i] = '#';
@@ -327,7 +315,6 @@ int handle_brdcst_send(char *data, uint16_t len) {
   (void)tc_hmac_final(digest, 32, &h);
   send_str("HMAC:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
-
 
   uint8_t msg[sizeofEnc + 32];
   int i;
