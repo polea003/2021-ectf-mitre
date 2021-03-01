@@ -10,6 +10,7 @@
 # This code is being provided only for educational purposes for the 2021 MITRE eCTF competition,
 # and may not meet MITRE standards for quality. Use this code at your own risk!
 
+import secrets
 import socket
 import select
 import struct
@@ -29,6 +30,7 @@ logging.basicConfig(level=logging.INFO)
 
 Device = NamedTuple('Device', [('id', int), ('status', int), ('csock', socket.socket)])
 
+key = secrets.token_bytes(16)
 
 class SSS:
     def __init__(self, sockf):
@@ -73,7 +75,7 @@ class SSS:
             logging.info(f'{dev_id}:{"Registered" if op == REG else "Deregistered"}')
 
         # send response
-        resp = struct.pack('<2sHHHHh', b'SC', dev_id, SSS_ID, 4, dev_id, resp_op)
+        resp = struct.pack('<2sHHHHh8H', b'SC', dev_id, SSS_ID, 4, dev_id, resp_op, key)
         logging.debug(f'Sending response {repr(data)}')
         csock.send(resp)
 
