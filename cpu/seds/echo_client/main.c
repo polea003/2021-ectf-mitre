@@ -60,7 +60,7 @@ int main(void) {
   // NOTE: you can write to a file inside the Docker container instead:
   // FILE *log = fopen("cpu.log", "a");
 
-  // initialize SCEWL
+  // /initialize SCEWL
   scewl_init();
 
   // register
