@@ -373,7 +373,7 @@ int sss_register() {
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(msg2), msg2);
 
   // notify CPU of response
-  status = send_msg(CPU_INTF, src_id, tgt_id, len, (char *)&msg);
+  status = send_msg(CPU_INTF, src_id, tgt_id, len, msg2);
   if (status == SCEWL_ERR) {
     return 0;
   }
