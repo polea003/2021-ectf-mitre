@@ -352,7 +352,7 @@ int handle_registration(char* msg) {
 
 
 int sss_register() {
-  char msg2[sizeof(scewl_sss_msg_t)];
+  char msg2[sizeof(scewl_sss_msg_t) + 16];
   scewl_sss_msg_t msg;
   scewl_id_t src_id, tgt_id;
   int status, len;
