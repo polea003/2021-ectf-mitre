@@ -362,7 +362,7 @@ int sss_register() {
   msg.op = SCEWL_SSS_REG;
   
   // send registration
-  status = send_msg(SSS_INTF, SCEWL_ID, SCEWL_SSS_ID, sizeof(registrationMsg), registrationMsg;
+  status = send_msg(SSS_INTF, SCEWL_ID, SCEWL_SSS_ID, sizeof(registrationMsg), registrationMsg);
   if (status == SCEWL_ERR) {
     return 0;
   }
