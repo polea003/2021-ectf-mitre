@@ -30,7 +30,8 @@ logging.basicConfig(level=logging.INFO)
 
 Device = NamedTuple('Device', [('id', int), ('status', int), ('csock', socket.socket)])
 
-key = secrets.token_bytes(16)
+# key = secrets.token_bytes(16)
+key = "0123456789abcdef"
 
 class SSS:
     def __init__(self, sockf):
@@ -75,7 +76,7 @@ class SSS:
             logging.info(f'{dev_id}:{"Registered" if op == REG else "Deregistered"}')
 
         # send response
-        resp = struct.pack('<2sHHHHh8H', b'SC', dev_id, SSS_ID, 4, dev_id, resp_op, key)
+        resp = struct.pack('<2sHHHHh16s', b'SC', dev_id, SSS_ID, 4, dev_id, resp_op, key)
         logging.debug(f'Sending response {repr(data)}')
         csock.send(resp)
 
