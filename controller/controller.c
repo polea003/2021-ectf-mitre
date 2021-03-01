@@ -367,7 +367,7 @@ int sss_register() {
   }
 
   // receive response
-  len = read_msg(SSS_INTF, (char *)&msg, &src_id, &tgt_id, sizeof(scewl_sss_msg_t), 1);
+  len = read_msg(SSS_INTF, (char *)&msg, &src_id, &tgt_id, sizeof(scewl_sss_msg_t) + 16, 1);
   send_str("SSS registration message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(msg), (char *)&msg);
 
