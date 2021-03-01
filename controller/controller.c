@@ -352,7 +352,7 @@ int handle_registration(char* msg) {
 
 
 int sss_register() {
-  char registrationMsg[sizeof(scewl_sss_msg_t)];
+  char msg2[sizeof(scewl_sss_msg_t)];
   scewl_sss_msg_t msg;
   scewl_id_t src_id, tgt_id;
   int status, len;
@@ -362,15 +362,15 @@ int sss_register() {
   msg.op = SCEWL_SSS_REG;
   
   // send registration
-  status = send_msg(SSS_INTF, SCEWL_ID, SCEWL_SSS_ID, sizeof(registrationMsg), registrationMsg);
+  status = send_msg(SSS_INTF, SCEWL_ID, SCEWL_SSS_ID, sizeof(msg), (char *)&msg);
   if (status == SCEWL_ERR) {
     return 0;
   }
 
   // receive response
-  len = read_msg(SSS_INTF, (char *)&msg, &src_id, &tgt_id, sizeof(scewl_sss_msg_t) , 1);
+  len = read_msg(SSS_INTF, msg2, &src_id, &tgt_id, sizeof(msg2) , 1);
   send_str("SSS registration message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(registrationMsg), registrationMsg);
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(msg2), msg2);
 
   // notify CPU of response
   status = send_msg(CPU_INTF, src_id, tgt_id, len, (char *)&msg);
