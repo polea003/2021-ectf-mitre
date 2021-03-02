@@ -76,7 +76,7 @@ class SSS:
             logging.info(f'{dev_id}:{"Registered" if op == REG else "Deregistered"}')
 
         # send response
-        resp = struct.pack('<10s', b'SC', b'01234567')
+        resp = struct.pack('<2sHHHHh8s', b'SC', dev_id, SSS_ID, 12, dev_id, resp_op, b'01234567')
         logging.debug(f'Sending response {repr(data)}')
         csock.send(resp)
 
