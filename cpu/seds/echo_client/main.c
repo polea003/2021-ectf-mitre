@@ -78,7 +78,7 @@ int main(void) {
       return 1;
     }
   }
-  fprintf(log, "XXXXXXXXX...: 0x%x\n");
+  fprintf(log, "XXXXXXXXX...: 0x%s\n", address);
   fprintf(log, "Client SED: Sending message...\n");
   scewl_send(TGT_ID, strlen(msg) , msg);
 
