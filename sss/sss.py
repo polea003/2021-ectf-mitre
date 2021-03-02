@@ -31,7 +31,6 @@ logging.basicConfig(level=logging.INFO)
 Device = NamedTuple('Device', [('id', int), ('status', int), ('csock', socket.socket)])
 
 key = secrets.token_bytes(16)
-# key = "0123456789abcdef"
 
 class SSS:
     def __init__(self, sockf):
