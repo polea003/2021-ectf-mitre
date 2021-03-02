@@ -25,7 +25,7 @@
 
 //time_t t;
 
- const uint8_t key[16];
+uint8_t key[16];
  // = { "0123456789abcdef"
 /*	0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88,
 	0x09, 0xcf, 0x4f, 0x3c
@@ -371,9 +371,9 @@ int sss_register() {
 
   // receive response
   len = read_msg(SSS_INTF, msg2, &src_id, &tgt_id, sizeof(msg2) , 1);
-  for (int i = 0; i < 16; i++) test[i] = msg2[sizeof(msg2) - 16 + i];
-  send_str("SSS registration message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(test), test);
+  for (int i = 0; i < 16; i++) key[i] = msg2[sizeof(msg2) - 16 + i];
+  send_str("SSS registration complete, Recieved secret key:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(key), (char *)key);
 
   // notify CPU of response
   status = send_msg(CPU_INTF, src_id, tgt_id, len, msg2);
