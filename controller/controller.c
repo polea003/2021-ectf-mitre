@@ -353,7 +353,7 @@ int handle_registration(char* msg) {
 
 int sss_register() {
   char test[8];
-  char msg2[sizeof(scewl_sss_msg_t) + 16];
+  char msg2[sizeof(scewl_sss_msg_t) + 8;
   scewl_sss_msg_t msg;
   scewl_id_t src_id, tgt_id;
   int status, len;
@@ -370,7 +370,7 @@ int sss_register() {
 
   // receive response
   len = read_msg(SSS_INTF, msg2, &src_id, &tgt_id, sizeof(msg2) , 1);
-  for (int i = 0; i < 8; i++) test[i] = msg2[sizeof(msg) - 9 + i];
+  for (int i = 0; i < 8; i++) test[i] = msg2[sizeof(msg2) - 9 + i];
   send_str("SSS registration message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(test), test);
 
