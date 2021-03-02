@@ -79,7 +79,6 @@ class SSS:
         resp = struct.pack('<2sHHHHh8s', b'SC', dev_id, SSS_ID, 4, dev_id, resp_op, b'01234567')
         print("XXXXXXXXXXXXXXXX")
         print(resp)
-        print(unpack('<2sHHHHh8s', b'\n\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'))
         logging.debug(f'Sending response {repr(data)}')
         csock.send(resp)
 
