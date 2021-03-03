@@ -542,8 +542,10 @@ To Do:
 
 -only send key to drones on proper registration, not on degistration or if already registered.
 currently sends to all.
--need different key for HMAC and AES?
--does iv need to be secret?
+
+-different key for HMAC and AES
+-Random IV
+-Add random first block to encryption
 
 -Check authenticity of drone in supply chain before distributing key
 -counter or timer (timestamp included in message, only approved in small time window)
