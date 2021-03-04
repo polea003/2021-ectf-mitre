@@ -374,9 +374,9 @@ int sss_register() {
   for (int i = 0; i < 16; i++) key[i] = msg2[sizeof(msg2) - 16 + i];
   send_str("SSS registration complete, Recieved secret key:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(key), (char *)key);
-  t= time(NULL);
+  clock_t clok = clock();
   send_str("SSS registration time:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 16, (char *)t);
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 16, (char *)&clok);
 
   // notify CPU of response
   status = send_msg(CPU_INTF, src_id, tgt_id, len, msg2);
