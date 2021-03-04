@@ -370,12 +370,11 @@ int sss_register() {
   }
 
   // receive response
-  char timeSec[9];
   len = read_msg(SSS_INTF, msg2, &src_id, &tgt_id, sizeof(msg2) , 1);
   for (int i = 0; i < 16; i++) key[i] = msg2[sizeof(msg2) - 16 + i];
   send_str("SSS registration complete, Recieved secret key:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(key), (char *)key);
-  t = CLOCKS_PER_SEC;
+  t= time(NULL);
   send_str("SSS registration time:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 16, (char *)t);
 
