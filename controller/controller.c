@@ -377,7 +377,7 @@ int sss_register() {
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(key), (char *)key);
   t = time(NULL);
   send_str("SSS registration time:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 9, ultoa( t, time, 10));
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 8, ltoa( t, time, 10));
 
   // notify CPU of response
   status = send_msg(CPU_INTF, src_id, tgt_id, len, msg2);
