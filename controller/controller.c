@@ -315,16 +315,16 @@ int handle_brdcst_send(char *data, uint16_t len) {
   (void)tc_hmac_init(&h);
   (void)tc_hmac_update(&h, (char *)encrypted, sizeofEnc);
   (void)tc_hmac_final(digest, 32, &h);
-  send_str("HMAC:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
+  //send_str("HMAC:");
+  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
 
   uint8_t msg[sizeofEnc + 32];
   int i;
   for (i = 0; i < sizeofEnc; i++) msg[i] = encrypted[i];
   for (i = sizeofEnc; i < sizeofEnc + 32; i++) msg[i] = digest[i - sizeofEnc];
 
-  send_str("combined:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(msg), (char *)msg);
+  //send_str("combined:");
+  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(msg), (char *)msg);
 
   return send_msg(RAD_INTF, SCEWL_ID, SCEWL_BRDCST_ID, sizeof(msg), (char *)msg);
 }   
@@ -355,7 +355,6 @@ int handle_registration(char* msg) {
 
 
 int sss_register() {
-  char test[16];
   char msg2[sizeof(scewl_sss_msg_t) + 16];
   scewl_sss_msg_t msg;
   scewl_id_t src_id, tgt_id;
