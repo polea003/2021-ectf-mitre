@@ -5,7 +5,7 @@
 # (c) 2021 The MITRE Corporation
 
 ARG DEPLOYMENT
-ARG SCEWL_ID
+
 
 ###################################################################
 # if you want to copy files from the sss container,               #
@@ -34,6 +34,7 @@ COPY --from=sss /secrets/data.txt /sed/sed.secret
 ###################################################################
 
 # generate any other secrets and build controller
+ARG SCEWL_ID
 WORKDIR /sed
 RUN make SCEWL_ID=${SCEWL_ID} 
 RUN mv /sed/gcc/controller.bin /controller
