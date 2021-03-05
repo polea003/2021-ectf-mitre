@@ -360,6 +360,9 @@ int sss_register() {
   scewl_id_t src_id, tgt_id;
   int status, len;
 
+  send_str("SECRET LINE: ");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(LINE), (char *)LINE);
+
   // fill registration message
   msg.dev_id = SCEWL_ID;
   msg.op = SCEWL_SSS_REG;

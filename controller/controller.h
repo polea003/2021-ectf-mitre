@@ -30,6 +30,11 @@ typedef uint16_t scewl_id_t;
 #define SCEWL_ID 0
 #endif
 
+#ifndef LINE
+#warning LINE not defined, using bad default of 16
+#define LINE 16
+#endif
+
 
 // SCEWL bus channel header
 // NOTE: This is the required format to comply with Section 4.6 of the rules
