@@ -18,11 +18,12 @@
 #define BUF_SZ 0x2000
 
 // SCEWL_ID and TGT_ID need to be defined at compile
+/*
 #ifndef TGT_ID
 #warning TGT_ID not defined, using bad default of 0xffff
 #define TGT_ID ((scewl_id_t)0xffff)
 #endif
-
+*/
 
 // trust me, it's easier to get the boot reference flag by
 // following the instructions than to try to untangle this
