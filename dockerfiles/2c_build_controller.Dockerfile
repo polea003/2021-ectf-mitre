@@ -26,7 +26,7 @@ ADD . /sed
 ###################################################################
 # Copy files from the SSS container                               #
 #                                                                 #
-COPY --from=sss /secrets/${SCEWL_ID}.secrets /sed/sed.secret     
+COPY --from=sss /secrets/data.txt /sed/sed.secret     
 #                                                                 #
 ###################################################################
 # IT IS NOT RECOMMENDED TO KEEP DEPLOYMENT-WIDE SECRETS IN THE    #
