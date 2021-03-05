@@ -36,9 +36,8 @@ COPY --from=sss /secrets/data.txt /sed/sed.secret
 # generate any other secrets and build controller
 ARG SCEWL_ID
 ARG LINE
-WORKDIR /sed/sed.secret 
-RUN while read LINE; done < data.txt
-WORKDIR /..
+WORKDIR /sed
+RUN while read LINE; done < sed.secret
 RUN make SCEWL_ID=${SCEWL_ID} SECRET=${LINE}
 RUN mv /sed/gcc/controller.bin /controller
 
