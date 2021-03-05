@@ -32,7 +32,7 @@ typedef uint16_t scewl_id_t;
 
 #ifndef SECRET
 #warning SECRET not defined, using bad default of 16
-#define SECRET "0123456789abcdef"
+#define SECRET 25
 #endif
 
 
