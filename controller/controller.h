@@ -30,9 +30,9 @@ typedef uint16_t scewl_id_t;
 #define SCEWL_ID 0
 #endif
 
-#ifndef LINE
-#warning LINE not defined, using bad default of 16
-#define LINE 16
+#ifndef SECRET
+#warning SECRET not defined, using bad default of 16
+#define SECRET 16
 #endif
 
 
