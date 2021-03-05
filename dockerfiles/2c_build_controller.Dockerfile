@@ -10,7 +10,7 @@ ARG DEPLOYMENT
 # if you want to copy files from the sss container,               #
 # first create an intermediate stage:                             #
 #                                                                 #
-# FROM ${DEPLOYMENT}:sss as sss                                   #
+FROM ${DEPLOYMENT}:sss as sss                                   #
 #                                                                 #
 # Then see box below                                              #
 ###################################################################
@@ -25,7 +25,7 @@ ADD . /sed
 ###################################################################
 # Copy files from the SSS container                               #
 #                                                                 #
-# COPY --from=sss /secrets/${SCEWL_ID}.secret /sed/sed.secret     #
+COPY --from=sss /secrets/${SCEWL_ID}.secret /sed/sed.secret     #
 #                                                                 #
 ###################################################################
 # IT IS NOT RECOMMENDED TO KEEP DEPLOYMENT-WIDE SECRETS IN THE    #
@@ -35,7 +35,7 @@ ADD . /sed
 # generate any other secrets and build controller
 WORKDIR /sed
 ARG SCEWL_ID
-RUN make SCEWL_ID=${SCEWL_ID}
+RUN make SCEWL_ID=${SCEWL_ID} 
 RUN mv /sed/gcc/controller.bin /controller
 
 # NOTE: If you want to use the debugger with the scripts we provide, 

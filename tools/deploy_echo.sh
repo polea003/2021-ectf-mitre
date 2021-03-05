@@ -31,7 +31,7 @@ export SC_RECVR_SOCK=sc_recvr.sock
 # create deployment
 make create_deployment
 make add_sed SED=echo_server SCEWL_ID=10 NAME=echo_server
-make add_sed SED=echo_client SCEWL_ID=11 NAME=echo_client CUSTOM='TGT_ID=10'
+make add_sed SED=echo_client SCEWL_ID=11 NAME=echo_client
 
 # launch deployment
 make deploy

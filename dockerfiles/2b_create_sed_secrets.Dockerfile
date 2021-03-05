@@ -16,8 +16,6 @@ ARG SCEWL_ID
 
 # do here whatever you need here to create secrets for the new SED that the SSS needs access to
 
-#RUN mkdir ${SCEWL_ID}.secret
-
 WORKDIR /secrets
 
 RUN mkdir ${SCEWL_ID}.secret
