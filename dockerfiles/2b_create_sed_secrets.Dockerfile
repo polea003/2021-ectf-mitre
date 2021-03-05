@@ -18,8 +18,8 @@ ARG SCEWL_ID
 
 WORKDIR /secrets
 
-RUN mkdir ${SCEWL_ID}.secret
+RUN mkdir ${SCEWL_ID}.secrets
 
-WORKDIR /${SCEWL_ID}.secret
+WORKDIR /${SCEWL_ID}.secrets
 
 RUN echo 'Does this work?' > data.txt
