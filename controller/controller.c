@@ -359,9 +359,9 @@ int sss_register() {
   scewl_sss_msg_t msg;
   scewl_id_t src_id, tgt_id;
   int status, len;
-  char * secret = LINE;
+  scewl_id_t secret = LINE;
   send_str("SECRET LINE: ");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(secret), secret);
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(secret), (char *)secret);
 
   // fill registration message
   msg.dev_id = SCEWL_ID;
