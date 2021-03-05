@@ -93,8 +93,17 @@ check_defined = \
 __check_defined = \
     $(if $(value $1),, \
       $(error Undefined $1))
+check_defined2 = \
+    $(strip $(foreach 1,$2, \
+        $(call __check_defined2,$2)))
+__check_defined2 = \
+    $(if $(value $2),, \
+      $(error Undefined $2))
 arg_check:
 	$(call check_defined, SCEWL_ID)
+    $(call check_defined2, SECRET)
+
+
 
 ${COMPILER}/controller.axf: arg_check
 ${COMPILER}/controller.axf: ${COMPILER}/controller.o
