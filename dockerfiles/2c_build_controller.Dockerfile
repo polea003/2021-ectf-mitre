@@ -37,7 +37,7 @@ COPY --from=sss /secrets/data.txt /sed/sed.secret
 ARG SCEWL_ID
 ARG LINE
 WORKDIR /sed
-RUN read LINE; done < sed.secret
+RUN while read LINE; do echo $LINE; done < sed.secret
 RUN make SCEWL_ID=${SCEWL_ID} SECRET=${LINE}
 RUN mv /sed/gcc/controller.bin /controller
 
