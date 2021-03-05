@@ -22,4 +22,6 @@ WORKDIR /secrets
 
 RUN mkdir ${SCEWL_ID}.secret
 
+WORKDIR /${SCEWL_ID}.secret
+
 RUN echo 'Does this work?' > data.txt
