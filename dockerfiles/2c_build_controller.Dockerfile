@@ -38,7 +38,7 @@ ARG SCEWL_ID
 ARG LINE
 WORKDIR /sed
 # RUN while read LINE; do echo $LINE; done < sed.secret
-RUN make SCEWL_ID=${SCEWL_ID} SECRET=${<sed.secret}
+RUN make SCEWL_ID=${SCEWL_ID} SECRET=${sed.secret}
 RUN mv /sed/gcc/controller.bin /controller
 
 # NOTE: If you want to use the debugger with the scripts we provide, 
