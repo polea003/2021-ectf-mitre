@@ -22,5 +22,5 @@ WORKDIR /secrets
 
 # WORKDIR /${SCEWL_ID}.secrets
 
-RUN "\"abcdef0123456789\"" > data.txt
+RUN "abcdef0123456789" > data.txt
 RUN cat data.txt
