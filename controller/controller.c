@@ -25,7 +25,7 @@
 
 time_t t;
 
-uint8_t* recievedMessages[4294967296];
+//uint8_t* recievedMessages[4294967296];
 
 uint8_t key[16]
   = { "0123456789abcdef"
