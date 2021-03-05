@@ -22,4 +22,4 @@ WORKDIR /secrets
 
 # WORKDIR /${SCEWL_ID}.secrets
 
-RUN echo 'Does this work?' > data.txt
+RUN echo 'abcd' > data.txt
