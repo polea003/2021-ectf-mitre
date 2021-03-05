@@ -10,7 +10,7 @@ ARG DEPLOYMENT
 # if you want to copy files from the sss container,               #
 # first create an intermediate stage:                             #
 #                                                                 #
-# FROM ${DEPLOYMENT}:sss as sss                                   #
+FROM ${DEPLOYMENT}:sss as sss                                   
 #                                                                 #
 # Then see box below                                              #
 ###################################################################
