@@ -18,7 +18,7 @@ ARG SCEWL_ID
 
 #RUN mkdir ${SCEWL_ID}.secret
 
-WORKDIR /sss/secrets
+WORKDIR /secrets
 
 RUN mkdir ${SCEWL_ID}.secret
 
