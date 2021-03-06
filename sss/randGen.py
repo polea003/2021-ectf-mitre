@@ -13,7 +13,7 @@
 import secrets
 
 
-a = str(randbelow(255))
+a = str(secrets.randbelow(255))
 f = open("/secrets/data.txt", "w")
 f.write(a)
 f.close()
