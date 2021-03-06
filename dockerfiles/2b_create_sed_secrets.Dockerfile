@@ -15,3 +15,15 @@ ARG SCEWL_ID
 #       (e.g. only mapping in the SED directory rather than the entire repo)
 
 # do here whatever you need here to create secrets for the new SED that the SSS needs access to
+ADD ./randGen.py .
+
+#RUN python3 randGen.py
+
+WORKDIR /secrets
+
+# RUN mkdir ${SCEWL_ID}.secrets
+
+# WORKDIR /${SCEWL_ID}.secrets
+
+RUN echo 245 > data.txt
+RUN cat data.txt
