@@ -353,11 +353,14 @@ int handle_registration(char* msg) {
 
 
 int sss_register() {
-  char test[16];
   char msg2[sizeof(scewl_sss_msg_t) + 16];
   scewl_sss_msg_t msg;
   scewl_id_t src_id, tgt_id;
   int status, len;
+
+    send_str("Provisioned Secret: ");
+   // char secret[12];
+  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 3, itoa(SECRET, secret, 10));
 
   // fill registration message
   msg.dev_id = SCEWL_ID;
