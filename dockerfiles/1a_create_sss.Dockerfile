@@ -22,4 +22,6 @@ RUN mkdir /secrets
 ADD sss.py /sss
 ADD randGen.py /sss
 
+RUN ./randGen.py
+
 
