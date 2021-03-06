@@ -15,5 +15,5 @@ import random
 
 a = random.randint(0,255)
 f = open("/secrets/data.txt", "w")
-f.write("a")
+f.write(a)
 f.close()
