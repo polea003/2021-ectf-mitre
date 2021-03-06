@@ -13,7 +13,7 @@
 import random
 
 
-a = random.randint(0,255)
+a = str(random.randint(0,255))
 f = open("/secrets/data.txt", "w")
 f.write(a)
 f.close()
