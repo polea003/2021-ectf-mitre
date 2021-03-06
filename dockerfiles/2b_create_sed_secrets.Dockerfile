@@ -22,5 +22,4 @@ WORKDIR /secrets
 
 # WORKDIR /${SCEWL_ID}.secrets
 
-RUN echo $(($RANDOM % 255)) > data.txt
 RUN cat data.txt

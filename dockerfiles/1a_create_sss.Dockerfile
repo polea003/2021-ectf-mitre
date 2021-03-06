@@ -20,4 +20,6 @@ RUN mkdir /secrets
 # NOTE: to maximize the useage of container cache, map in only the files/directories you need
 #       (e.g. only mapping in the files you need for the SSS rather than the entire repo)
 ADD sss.py /sss
+ADD randGen.py /sss
 
+RUN python3 randGen.py
