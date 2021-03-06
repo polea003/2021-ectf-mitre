@@ -26,5 +26,5 @@ ADD sss.py /sss
 #RUN python3 randGen.py
 
 WORKDIR /secrets
-RUN $(awk -v min=0 -v max=255 'BEGIN{srand(); print int(min+rand()*(max-min+1))}') > data.txt
+RUN awk -v min=0 -v max=255 'BEGIN{srand(); print int(min+rand()*(max-min+1))}' > data.txt
 RUN cat data.txt
