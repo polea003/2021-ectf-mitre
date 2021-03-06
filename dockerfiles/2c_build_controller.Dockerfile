@@ -38,7 +38,7 @@ COPY --from=sss /secrets/data.txt /sed/sed.secret
 ARG SCEWL_ID
 WORKDIR /sed
 # RUN while read LINE; do echo $LINE; done < sed.secret
-RUN make SCEWL_ID=${SCEWL_ID} SECRET=`cat sed.secret`
+RUN make SCEWL_ID=${SCEWL_ID} SECRET=$(awk -v min=0 -v max=255 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')
 RUN mv /sed/gcc/controller.bin /controller
 
 # NOTE: If you want to use the debugger with the scripts we provide, 
