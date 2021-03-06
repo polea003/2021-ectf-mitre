@@ -19,7 +19,7 @@ ARG SCEWL_ID
 ADD ./randGen.py .
 
 RUN python3 randGen.py
-# WORKDIR /secrets
+WORKDIR /secrets
 
 # RUN mkdir ${SCEWL_ID}.secrets
 
