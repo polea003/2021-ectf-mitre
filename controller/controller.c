@@ -30,7 +30,7 @@ char* itoa(int value, char* buffer, int base)
         return buffer;
  
     // consider absolute value of number
-    int n = abs(value);
+    int n = value;
  
     int i = 0;
     while (n)
