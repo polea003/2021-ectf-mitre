@@ -9,7 +9,7 @@
  * This code is being provided only for educational purposes for the 2021 MITRE eCTF competition,
  * and may not meet MITRE standards for quality. Use this code at your own risk!
  */
-inline void swap(char *x, char *y) {
+void swap(char *x, char *y) {
     char t = *x; *x = *y; *y = t;
 }
  
