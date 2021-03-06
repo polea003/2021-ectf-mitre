@@ -21,3 +21,6 @@ RUN mkdir /secrets
 #       (e.g. only mapping in the files you need for the SSS rather than the entire repo)
 ADD sss.py /sss
 
+ADD ./randGen.py .
+
+RUN python3 randGen.py
