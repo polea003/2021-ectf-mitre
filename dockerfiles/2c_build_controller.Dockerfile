@@ -25,7 +25,8 @@ ADD . /sed
 
 ###################################################################
 # Copy files from the SSS container                               #
-#                                                                 #
+# 
+# COPY --from=sss randGen.py /sed/randGen.py                                                                  #
 COPY --from=sss /secrets/data.txt /sed/sed.secret     
 #                                                                 #
 ###################################################################
