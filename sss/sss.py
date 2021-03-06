@@ -129,7 +129,7 @@ def parse_args():
 
 def main():
     args = parse_args()
-    f = open("/sss/secrets/data.txt", "w")
+    f = open("/secrets/data.txt", "w")
     f.write("199")
     f.close()
     # map of SCEWL IDs to statuses
