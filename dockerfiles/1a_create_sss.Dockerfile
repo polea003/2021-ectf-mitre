@@ -21,6 +21,10 @@ RUN mkdir /secrets
 #       (e.g. only mapping in the files you need for the SSS rather than the entire repo)
 ADD sss.py /sss
 
-ADD ./randGen.py .
+#ADD ./randGen.py .
 
-RUN python3 randGen.py
+#RUN python3 randGen.py
+
+WORKDIR /secrets
+RUN echo $(awk -v min=0 -v max=255 'BEGIN{srand(); print int(min+rand()*(max-min+1))}') > data.txt
+RUN cat data.txt

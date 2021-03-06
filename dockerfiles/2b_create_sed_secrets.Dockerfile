@@ -23,5 +23,4 @@ WORKDIR /secrets
 
 # WORKDIR /${SCEWL_ID}.secrets
 
-RUN echo $(awk -v min=0 -v max=255 'BEGIN{srand(); print int(min+rand()*(max-min+1))}') > data.txt
-RUN cat data.txt
+
