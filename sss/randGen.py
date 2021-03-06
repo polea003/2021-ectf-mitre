@@ -10,10 +10,10 @@
 # This code is being provided only for educational purposes for the 2021 MITRE eCTF competition,
 # and may not meet MITRE standards for quality. Use this code at your own risk!
 
-import random
+import secrets
 
 
-a = str(random.randint(0,255))
+a = str(randbelow(255))
 f = open("/secrets/data.txt", "w")
 f.write(a)
 f.close()

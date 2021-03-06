@@ -16,11 +16,11 @@ ARG SCEWL_ID
 
 # do here whatever you need here to create secrets for the new SED that the SSS needs access to
 
-WORKDIR /secrets
+# WORKDIR /secrets
 
 # RUN mkdir ${SCEWL_ID}.secrets
 
 # WORKDIR /${SCEWL_ID}.secrets
 
 # RUN echo 245 > data.txt
-RUN cat data.txt
+# RUN cat data.txt
