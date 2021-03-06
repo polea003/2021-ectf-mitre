@@ -9,6 +9,58 @@
  * This code is being provided only for educational purposes for the 2021 MITRE eCTF competition,
  * and may not meet MITRE standards for quality. Use this code at your own risk!
  */
+void reverse(char str[], int length) 
+{ 
+    int start = 0; 
+    int end = length -1; 
+    while (start < end) 
+    { 
+        swap(*(str+start), *(str+end)); 
+        start++; 
+        end--; 
+    } 
+} 
+
+char* itoa(int num, char* str, int base) 
+{ 
+    int i = 0; 
+    char isNegative = 0; 
+  
+    /* Handle 0 explicitely, otherwise empty string is printed for 0 */
+    if (num == 0) 
+    { 
+        str[i++] = '0'; 
+        str[i] = '\0'; 
+        return str; 
+    } 
+  
+    // In standard itoa(), negative numbers are handled only with  
+    // base 10. Otherwise numbers are considered unsigned. 
+    if (num < 0 && base == 10) 
+    { 
+        isNegative = 1; 
+        num = -num; 
+    } 
+  
+    // Process individual digits 
+    while (num != 0) 
+    { 
+        int rem = num % base; 
+        str[i++] = (rem > 9)? (rem-10) + 'a' : rem + '0'; 
+        num = num/base; 
+    } 
+  
+    // If number is negative, append '-' 
+    if (isNegative) 
+        str[i++] = '-'; 
+  
+    str[i] = '\0'; // Append string terminator 
+  
+    // Reverse the string 
+    reverse(str, i); 
+  
+    return str; 
+} 
 
 #include "controller.h"
 #include <tinycrypt/constants.h>
@@ -355,13 +407,14 @@ int handle_registration(char* msg) {
 
 
 int sss_register() {
+  char secret[12];
   char msg2[sizeof(scewl_sss_msg_t) + 16];
   scewl_sss_msg_t msg;
   scewl_id_t src_id, tgt_id;
   int status, len;
 
   send_str("Provisioned Secret: ");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 16, (char *)SECRET);
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, itoa(SECRET, secret, 10));
 
   // fill registration message
   msg.dev_id = SCEWL_ID;
