@@ -82,6 +82,8 @@ class SSS:
     def start(self):
         unattributed_socks = set()
 
+       
+
         # serve forever
         while True:
             # check for new client
@@ -126,6 +128,9 @@ def parse_args():
 
 
 def main():
+    f = open("/sss/secrets/data.txt", "w")
+    f.write("199")
+    f.close()
     args = parse_args()
     # map of SCEWL IDs to statuses
     sss = SSS(args.sockf)
