@@ -595,6 +595,7 @@ Response/challenge means of authentication
 
 To Do:
 -pull in new changes from mitre server
+-spamed if could not find header
 
 -only send key to drones on proper registration, not on degistration or if already registered.
 currently sends to all.
