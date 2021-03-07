@@ -23,14 +23,14 @@ char* reverse(char *buffer, int i, int j)
 }
  
 // Iterative function to implement itoa() function in C
-char* itoa(int value, char* buffer, int base)
+char* itoa(long long value, char* buffer, int base)
 {
     // invalid input
     if (base < 2 || base > 32)
         return buffer;
  
     // consider absolute value of number
-    int n = value;
+    long long n = value;
  
     int i = 0;
     while (n)
@@ -410,16 +410,10 @@ int sss_register() {
   int status, len;
 
     send_str("Provisioned Secret: ");
-   char secret[3];
+   char secret[20];
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 3, itoa(SECRET, secret, 10));
       send_str("DATA 1: ");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 3, itoa(DATA1, secret, 10));
-        send_str("DATA 2: ");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 3, itoa(DATA1, secret, 10));
-        send_str("DATA 3: ");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 3, itoa(DATA1, secret, 10));
-        send_str("DATA 4: ");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 3, itoa(DATA1, secret, 10));
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 18, itoa(DATA1, secret, 10));
 
   // fill registration message
   msg.dev_id = SCEWL_ID;
