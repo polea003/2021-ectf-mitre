@@ -31,11 +31,11 @@ RUN python3 randGenSED.py
 
 RUN mv data1 ${SCEWL_ID}.data1
 
-RUN mv data1 ${SCEWL_ID}.data2
+RUN mv data2 ${SCEWL_ID}.data2
 
-RUN mv data1 ${SCEWL_ID}.data3
+RUN mv data3 ${SCEWL_ID}.data3
 
-RUN mv data1 ${SCEWL_ID}.data4
+RUN mv data4 ${SCEWL_ID}.data4
 
 
 
