@@ -69,10 +69,12 @@ class SSS:
         logging.debug(f'Received buffer: {repr(data)}')
         _, _, _, _, dev_id, op, passcode, regNum = struct.unpack('<HHHHHHLL', data)
 
-
+        f = open("/secrets/data.txt", "r")
+        if passcode == int(f.read(), 10):
+            regKey = key
 
         # requesting repeat transaction
-        if dev_id in self.devs and self.devs[dev_id] == op:
+        if dev_id in self.devs and self.devs[dev_id] == op: 
             resp_op = ALREADY
             logging.info(f'{dev_id}:already {"Registered" if op == REG else "Deregistered"}')
         # record transaction
@@ -82,27 +84,12 @@ class SSS:
             logging.info(f'{dev_id}:{"Registered" if op == REG else "Deregistered"}')
 
         # send response
-        resp = struct.pack('<2sHHHHh16s', b'SC', dev_id, SSS_ID, 20, dev_id, resp_op, key)
+        resp = struct.pack('<2sHHHHh16s', b'SC', dev_id, SSS_ID, 20, dev_id, resp_op, regKey)
         logging.debug(f'Sending response {repr(data)}')
         csock.send(resp)
 
     def start(self):
         unattributed_socks = set()
-
-        logger = logging.getLogger('spam_application')
-        logger.setLevel(logging.DEBUG)
-        fh = logging.FileHandler('spam.log')
-        fh.setLevel(logging.DEBUG)
-        # create console handler with a higher log level
-        ch = logging.StreamHandler()
-        ch.setLevel(logging.ERROR)
-        # create formatter and add it to the handlers
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        fh.setFormatter(formatter)
-        ch.setFormatter(formatter)
-        # add the handlers to the logger
-        logger.addHandler(fh)
-        logger.addHandler(ch)
 
         # serve forever
         while True:
