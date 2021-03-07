@@ -69,8 +69,7 @@ class SSS:
         logging.debug(f'Received buffer: {repr(data)}')
         _, _, _, _, dev_id, op, passcode, regNum = struct.unpack('<HHHHHHLL', data)
 
-        f = open("data.txt", "r")
-        if (f.read()
+
 
         # requesting repeat transaction
         if dev_id in self.devs and self.devs[dev_id] == op:
