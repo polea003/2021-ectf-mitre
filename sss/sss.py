@@ -70,7 +70,10 @@ class SSS:
         _, _, _, _, dev_id, op, passcode, regNum = struct.unpack('<HHHHHHLL', data)
 
         regKey = key
-
+        f = open("/secrets/data.txt", "r")
+        if passcode == int(f.read(), 10):
+            regKey = badKey
+        f.close()
 
         # requesting repeat transaction
         if dev_id in self.devs and self.devs[dev_id] == op: 
