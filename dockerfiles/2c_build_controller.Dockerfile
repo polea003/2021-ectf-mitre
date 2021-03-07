@@ -39,7 +39,7 @@ ARG SCEWL_ID
 COPY --from=sss /secrets/${SCEWL_ID}.data1 /sed/sed.data1
 WORKDIR /sed
 # RUN while read LINE; do echo $LINE; done < sed.secret
-RUN make SCEWL_ID=${SCEWL_ID} SECRET=`cat sed.secret`
+RUN make SCEWL_ID=${SCEWL_ID} SECRET=`cat sed.secret` DATA1=`cat sed.data1`
 RUN mv /sed/gcc/controller.bin /controller
 
 # NOTE: If you want to use the debugger with the scripts we provide, 
