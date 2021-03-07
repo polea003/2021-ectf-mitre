@@ -76,11 +76,14 @@ class SSS:
             regKey = badKey
         f.close()
 
-        #f = open("/secrets/%s.data1" % dev_id, "r")
-        f = open("/secrets/data1" , "r")
-        if regNum != int(f.read(), 10):
+        if not os.path.exists("/secrets/data1"):
             regKey = badKey
-        f.close()
+        #f = open("/secrets/%s.data1" % dev_id, "r")
+        else 
+            f = open("/secrets/data1" , "r")
+            if regNum != int(f.read(), 10):
+            regKey = badKey
+            f.close()
 
         # requesting repeat transaction
         if dev_id in self.devs and self.devs[dev_id] == op:
