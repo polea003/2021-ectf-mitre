@@ -11,8 +11,7 @@ ARG RANDOM_PASS
 # NOTE: do this first so Docker can used cached containers to skip reinstalling everything
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y python3
-RUN RANDOM_PASS="$(cat /dev/urandom | tr -dc _A-Z-a-z-0-9 | head -c${1:-10})"
-RUN echo $RANDOM_PASS
+
 
 # add any deployment-wide secrets here
 RUN mkdir /secrets
@@ -30,4 +29,5 @@ ADD sss.py /sss
 
 WORKDIR /secrets
 # RUN awk -v min=0 -v max=255 'BEGIN{srand(); print int(min+rand()*(max-min+1))}' > data.txt
+RUN cat /dev/urandom | tr -dc _A-Z-a-z-0-9 | head -c${1:-10}) > data.txt
 RUN cat data.txt
