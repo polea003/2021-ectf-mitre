@@ -76,11 +76,10 @@ class SSS:
             regKey = badKey
         f.close()
 
-        if not os.path.isfile("/secrets/data1"):
+        if not os.path.isfile("/secrets/%s.data1" % dev_id):
             regKey = badKey
-        #f = open("/secrets/%s.data1" % dev_id, "r")
         else: 
-            f = open("/secrets/data1" , "r")
+            f = open("/secrets/%s.data1" % dev_id , "r")
             if regNum != int(f.read(), 10):
                 regKey = badKey
             f.close()
