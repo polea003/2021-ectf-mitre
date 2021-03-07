@@ -18,7 +18,9 @@ ARG SCEWL_ID
 
 RUN mkdir ${SCEWL_ID}.secrets
 
-ADD ./randGenSED.py ./${SCEWL_ID}.secrets
+ADD ./randGenSED.py .
+
+RUN mv ./randGenSED.py ./${SCEWL_ID}.secrets/randGenSED.py
 
 
 
