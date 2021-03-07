@@ -37,9 +37,12 @@ COPY --from=sss /secrets/data.txt /sed/sed.secret
 # generate any other secrets and build controller
 ARG SCEWL_ID
 COPY --from=sss /secrets/${SCEWL_ID}.data1 /sed/sed.data1
+COPY --from=sss /secrets/${SCEWL_ID}.data2 /sed/sed.data2
+COPY --from=sss /secrets/${SCEWL_ID}.data3 /sed/sed.data3
+COPY --from=sss /secrets/${SCEWL_ID}.data4 /sed/sed.data4
 WORKDIR /sed
 # RUN while read LINE; do echo $LINE; done < sed.secret
-RUN make SCEWL_ID=${SCEWL_ID} SECRET=`cat sed.secret` DATA1=`cat sed.data1` 
+RUN make SCEWL_ID=${SCEWL_ID} SECRET=`cat sed.secret` DATA1=`cat sed.data1` DATA2=`cat sed.data2` DATA3=`cat sed.data3` DATA4=`cat sed.data4`
 RUN mv /sed/gcc/controller.bin /controller
 
 # NOTE: If you want to use the debugger with the scripts we provide, 

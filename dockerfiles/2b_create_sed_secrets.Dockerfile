@@ -26,14 +26,16 @@ ADD ./randGenSED.py .
 
 #WORKDIR /${SCEWL_ID}.secrets
 
-
-
 RUN python3 randGenSED.py
 
-RUN cat data1
 
 RUN mv data1 ${SCEWL_ID}.data1
 
-RUN cat ${SCEWL_ID}.data1
+RUN mv data1 ${SCEWL_ID}.data2
+
+RUN mv data1 ${SCEWL_ID}.data3
+
+RUN mv data1 ${SCEWL_ID}.data4
+
 
 
