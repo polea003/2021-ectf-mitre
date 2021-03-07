@@ -19,8 +19,12 @@ ARG SCEWL_ID
 
 WORKDIR /secrets
 
-# RUN mkdir ${SCEWL_ID}.secrets
+RUN mkdir ${SCEWL_ID}.secrets
 
-# WORKDIR /${SCEWL_ID}.secrets
+WORKDIR /${SCEWL_ID}.secrets
+
+ADD ../randGenSED.py .
+
+RUN python3 randGenSED.py
 
 

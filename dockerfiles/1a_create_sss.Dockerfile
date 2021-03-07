@@ -5,7 +5,6 @@
 # (c) 2021 The MITRE Corporation
 
 FROM ubuntu:focal
-ARG RANDOM_PASS
 
 # Add environment customizations here
 # NOTE: do this first so Docker can used cached containers to skip reinstalling everything
