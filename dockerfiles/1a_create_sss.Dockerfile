@@ -5,6 +5,7 @@
 # (c) 2021 The MITRE Corporation
 
 FROM ubuntu:focal
+ARG RANDOM_PASS
 
 # Add environment customizations here
 # NOTE: do this first so Docker can used cached containers to skip reinstalling everything
@@ -28,5 +29,5 @@ ADD sss.py /sss
 #RUN python3 randGen.py
 
 WORKDIR /secrets
-RUN awk -v min=0 -v max=255 'BEGIN{srand(); print int(min+rand()*(max-min+1))}' > data.txt
+# RUN awk -v min=0 -v max=255 'BEGIN{srand(); print int(min+rand()*(max-min+1))}' > data.txt
 RUN cat data.txt
