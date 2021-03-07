@@ -16,18 +16,20 @@ ARG SCEWL_ID
 
 # do here whatever you need here to create secrets for the new SED that the SSS needs access to
 
-RUN mkdir ${SCEWL_ID}.secrets
+# RUN mkdir ${SCEWL_ID}.secrets
 
 ADD ./randGenSED.py .
 
-RUN mv ./randGenSED.py ./${SCEWL_ID}.secrets/randGenSED.py
+# RUN mv ./randGenSED.py ./${SCEWL_ID}.secrets/randGenSED.py
 
 
 
-WORKDIR /${SCEWL_ID}.secrets
+#WORKDIR /${SCEWL_ID}.secrets
 
 
 
-RUN python3 ./randGenSED.py
+RUN python3 .randGenSED.py
+
+RUN cat data1
 
 
