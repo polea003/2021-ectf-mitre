@@ -62,7 +62,7 @@ class SSS:
             if not recvd:
                 raise ConnectionResetError
         logging.debug(f'Received buffer: {repr(data)}')
-        _, _, _, _, dev_id, op = struct.unpack('<HHHHHH', data)
+        _, _, _, _, dev_id, op  = struct.unpack('<HHHHHH', data)
 
         # requesting repeat transaction
         if dev_id in self.devs and self.devs[dev_id] == op:
