@@ -74,7 +74,6 @@ char* itoa(long long value, char* buffer, int base)
 #include <stdint.h>
 #include <time.h>
 
-time_t t;
 
 uint8_t key[16]
   = { "0123456789abcdef"
@@ -412,8 +411,8 @@ int sss_register() {
     send_str("Provisioned Secret: ");
    char secret[20];
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 3, itoa(SECRET, secret, 10));
-      send_str("DATA 1: ");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 18, itoa(DATA1, secret, 10));
+    //  send_str("DATA 1: ");
+  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 18, itoa(DATA1, secret, 10));
 
   // fill registration message
   msg.dev_id = SCEWL_ID;
