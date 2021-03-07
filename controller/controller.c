@@ -23,14 +23,14 @@ char* reverse(char *buffer, int i, int j)
 }
  
 // Iterative function to implement itoa() function in C
-char* itoa(u_int32_t value, char* buffer, int base)
+char* itoa(long value, char* buffer, int base)
 {
     // invalid input
     if (base < 2 || base > 32)
         return buffer;
  
     // consider absolute value of number
-    u_int32_t n = value;
+    long n = value;
  
     int i = 0;
     while (n)
