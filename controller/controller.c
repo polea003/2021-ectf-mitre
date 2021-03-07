@@ -408,10 +408,10 @@ int sss_register() {
   scewl_id_t src_id, tgt_id;
   int status, len;
 
-    send_str("Provisioned Secret: ");
+  send_str("Secret Passcode: ");
    char secret[20];
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, itoa(SECRET, secret, 10));
-    send_str("DATA 1: ");
+    send_str("SED Registration Number: ");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, itoa(DATA1, secret, 10));
 
   // fill registration message
