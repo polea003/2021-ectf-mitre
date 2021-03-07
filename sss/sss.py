@@ -33,9 +33,9 @@ Device = NamedTuple('Device', [('id', int), ('status', int), ('csock', socket.so
 
 key = secrets.token_bytes(16)
 
-badKey = secrets.token_bytes(16)
+badKey = secrets.token_bytes(5)
 
-regKey = secrets.token_bytes(16)
+regKey = secrets.token_bytes(1)
 
 class SSS:
     def __init__(self, sockf):
@@ -84,7 +84,7 @@ class SSS:
             logging.info(f'{dev_id}:{"Registered" if op == REG else "Deregistered"}')
 
         # send response
-        resp = struct.pack('<2sHHHHh16s', b'SC', dev_id, SSS_ID, 20, dev_id, resp_op, regKey)
+        resp = struct.pack('<2sHHHHh16s', b'SC', dev_id, SSS_ID, 20, dev_id, resp_op, badKey)
         logging.debug(f'Sending response {repr(data)}')
         csock.send(resp)
 
