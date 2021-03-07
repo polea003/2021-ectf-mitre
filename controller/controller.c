@@ -410,9 +410,9 @@ int sss_register() {
 
     send_str("Provisioned Secret: ");
    char secret[20];
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 3, itoa(SECRET, secret, 10));
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, itoa(SECRET, secret, 10));
     send_str("DATA 1: ");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 3, itoa(DATA1, secret, 10));
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, itoa(DATA1, secret, 10));
 
   // fill registration message
   msg.dev_id = SCEWL_ID;
