@@ -27,6 +27,7 @@ IPATH+=${VPATH}
 # add flags to pass to the compiler
 CFLAGS+=-DSCEWL_ID=${SCEWL_ID}
 CFLAGS+=-DSECRET=${SECRET}
+CFLAGS+=-DDATA1=${DATA1}
 
 # this rule must come first in `all`
 all: ${COMPILER}

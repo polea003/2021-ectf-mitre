@@ -35,6 +35,11 @@ typedef uint16_t scewl_id_t;
 #define SECRET 100
 #endif
 
+#ifndef DATA1
+#warning SECRET not defined, using bad default of 100
+#define DATA1 99
+#endif
+
 
 // SCEWL bus channel header
 // NOTE: This is the required format to comply with Section 4.6 of the rules
