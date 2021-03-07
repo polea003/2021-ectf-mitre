@@ -74,10 +74,9 @@ class SSS:
         if passcode == int(f.read(), 10):
             regKey = badKey
         f.close()
-        regKey = key
 
         # requesting repeat transaction
-        if dev_id in self.devs and self.devs[dev_id] == op: 
+        if dev_id in self.devs and self.devs[dev_id] == op:
             resp_op = ALREADY
             logging.info(f'{dev_id}:already {"Registered" if op == REG else "Deregistered"}')
         # record transaction
