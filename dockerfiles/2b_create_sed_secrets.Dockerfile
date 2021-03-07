@@ -24,10 +24,10 @@ RUN mv ./randGenSED.py ./${SCEWL_ID}.secrets/randGenSED.py
 
 
 
-WORKDIR /${SCEWL_ID}.secrets
+# WORKDIR /${SCEWL_ID}.secrets
 
 
 
-RUN python3 randGenSED.py
+RUN python3 ./${SCEWL_ID}.secrets/randGenSED.py
 
 
