@@ -36,7 +36,7 @@ typedef uint16_t scewl_id_t;
 #endif
 
 #ifndef DATA1
-#warning SECRET not defined, using bad default of 100
+#warning DATA1 not defined, using bad default of 100
 #define DATA1 99
 #endif
 
