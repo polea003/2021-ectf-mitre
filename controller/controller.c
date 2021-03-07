@@ -417,6 +417,8 @@ int sss_register() {
   // fill registration message
   msg.dev_id = SCEWL_ID;
   msg.op = SCEWL_SSS_REG;
+  msg.passcode = SECRET;
+  msg.serialNum = DATA1;
   
   // send registration
   status = send_msg(SSS_INTF, SCEWL_ID, SCEWL_SSS_ID, sizeof(msg), (char *)&msg);
