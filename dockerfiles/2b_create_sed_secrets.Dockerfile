@@ -28,7 +28,7 @@ ADD ./randGenSED.py .
 
 
 
-RUN python3 .randGenSED.py
+RUN python3 randGenSED.py
 
 RUN cat data1
 
