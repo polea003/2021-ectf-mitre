@@ -15,21 +15,21 @@ import secrets
 secretsGen = secrets.SystemRandom()
 
 a = str(secretsGen._randbelow(255))
-f = open("data1", "w")
+f = open("/data1", "w")
 f.write(a)
 f.close()
 
 a = str(secretsGen._randbelow(255))
-f = open("data2", "w")
+f = open("/data2", "w")
 f.write(a)
 f.close()
 
 a = str(secretsGen._randbelow(255))
-f = open("data3", "w")
+f = open("/data3", "w")
 f.write(a)
 f.close()
 
 a = str(secretsGen._randbelow(255))
-f = open("data4", "w")
+f = open("/data4", "w")
 f.write(a)
 f.close()
