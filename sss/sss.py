@@ -28,9 +28,14 @@ ALREADY, REG, DEREG = -1, 0, 1
 
 logging.basicConfig(level=logging.INFO)
 
+
 Device = NamedTuple('Device', [('id', int), ('status', int), ('csock', socket.socket)])
 
 key = secrets.token_bytes(16)
+
+badKey = secrets.token_bytes(16)
+
+regKey = secrets.token_bytes(16)
 
 class SSS:
     def __init__(self, sockf):
@@ -64,6 +69,9 @@ class SSS:
         logging.debug(f'Received buffer: {repr(data)}')
         _, _, _, _, dev_id, op, passcode, regNum = struct.unpack('<HHHHHHLL', data)
 
+        f = open("data.txt", "r")
+        if (f.read()
+
         # requesting repeat transaction
         if dev_id in self.devs and self.devs[dev_id] == op:
             resp_op = ALREADY
@@ -81,6 +89,21 @@ class SSS:
 
     def start(self):
         unattributed_socks = set()
+
+        logger = logging.getLogger('spam_application')
+        logger.setLevel(logging.DEBUG)
+        fh = logging.FileHandler('spam.log')
+        fh.setLevel(logging.DEBUG)
+        # create console handler with a higher log level
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.ERROR)
+        # create formatter and add it to the handlers
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        fh.setFormatter(formatter)
+        ch.setFormatter(formatter)
+        # add the handlers to the logger
+        logger.addHandler(fh)
+        logger.addHandler(ch)
 
         # serve forever
         while True:
