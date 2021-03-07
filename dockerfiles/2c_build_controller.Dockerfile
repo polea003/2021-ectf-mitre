@@ -36,7 +36,7 @@ COPY --from=sss /secrets/data.txt /sed/sed.secret
 
 # generate any other secrets and build controller
 ARG SCEWL_ID
-COPY --from=sss /{SCEWL_ID}.secrets/data.txt /sed/sed.data1
+COPY --from=sss /{SCEWL_ID}.secrets/data1 /sed/sed.data1
 WORKDIR /sed
 # RUN while read LINE; do echo $LINE; done < sed.secret
 RUN make SCEWL_ID=${SCEWL_ID} SECRET=`cat sed.secret` DATA1=`cat sed.data1` 
