@@ -54,8 +54,8 @@ class SSS:
     def handle_transaction(self, csock: socket.SocketType):
         logging.debug('handling transaction')
         data = b''
-        while len(data) < 12:
-            recvd = csock.recv(12 - len(data))
+        while len(data) < 20:
+            recvd = csock.recv(20 - len(data))
             data += recvd
 
             # check for closed connection
