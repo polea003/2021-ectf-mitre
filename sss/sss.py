@@ -33,9 +33,9 @@ Device = NamedTuple('Device', [('id', int), ('status', int), ('csock', socket.so
 
 key = secrets.token_bytes(16)
 
-badKey = secrets.token_bytes(5)
+badKey = bytearray(16)
 
-regKey = secrets.token_bytes(1)
+regKey = bytearray(16)
 
 class SSS:
     def __init__(self, sockf):
@@ -69,9 +69,10 @@ class SSS:
         logging.debug(f'Received buffer: {repr(data)}')
         _, _, _, _, dev_id, op, passcode, regNum = struct.unpack('<HHHHHHLL', data)
 
+        regKey = key
         f = open("/secrets/data.txt", "r")
-        if passcode == int(f.read(), 10):
-            regKey = key
+        if passcode = int(f.read(), 10):
+            regKey = badKey
 
         # requesting repeat transaction
         if dev_id in self.devs and self.devs[dev_id] == op: 
@@ -84,7 +85,7 @@ class SSS:
             logging.info(f'{dev_id}:{"Registered" if op == REG else "Deregistered"}')
 
         # send response
-        resp = struct.pack('<2sHHHHh16s', b'SC', dev_id, SSS_ID, 20, dev_id, resp_op, badKey)
+        resp = struct.pack('<2sHHHHh16s', b'SC', dev_id, SSS_ID, 20, dev_id, resp_op, regKey)
         logging.debug(f'Sending response {repr(data)}')
         csock.send(resp)
 
