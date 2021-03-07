@@ -14,7 +14,7 @@ import secrets
 
 secretsGen = secrets.SystemRandom()
 
-a = str(secretsGen._randbelow(18446744073709551615))
+a = str(secretsGen._randbelow(25000))
 f = open("/secrets/data1", "w")
 f.write(a)
 f.close()
