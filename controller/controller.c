@@ -72,29 +72,11 @@ char* itoa(unsigned long value, char* buffer, int base)
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
-#include <time.h>
-
 
 uint8_t key[16] = { "0123456789abcdef"};
 uint8_t hmac_key[16] = { "0123456789abcdef"};
 uint8_t iv[16] = { "0123456789abcdef"};
 uint8_t badKey[16] = { "0123456789abcdef"};
-
-/*const uint8_t iv[16] = {
-	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b,
-	0x0c, 0x0d, 0x0e, 0x0f
-};
-*/
-
-
-/* #ifdef EXAMPLE_AES
-#include "aes.h"
-
-char int2char(uint8_t i) {
-  char *hex = "0123456789abcdef";
-  return hex[i & 0xf];
-}
-#endif */
 
 #define send_str(M) send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, strlen(M), M)
 #define BLOCK_SIZE 16
