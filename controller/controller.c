@@ -402,7 +402,7 @@ int handle_registration(char* msg) {
 
 
 int sss_register() {
-  char msg2[52];
+  char msg2[20];
   scewl_sss_msg_t msg;
   scewl_id_t src_id, tgt_id;
   int status, len;
@@ -428,8 +428,8 @@ int sss_register() {
   // receive response
   len = read_msg(SSS_INTF, msg2, &src_id, &tgt_id, sizeof(msg2) , 1);
   for (int i = 0; i < 16; i++) key[i] = msg2[sizeof(msg2) - 48 + i];
-  for (int i = 0; i < 16; i++) hmac_key[i] = msg2[sizeof(msg2) - 32 + i];
-  for (int i = 0; i < 16; i++) iv[i] = msg2[sizeof(msg2) - 16 + i];
+  //for (int i = 0; i < 16; i++) hmac_key[i] = msg2[sizeof(msg2) - 32 + i];
+  //for (int i = 0; i < 16; i++) iv[i] = msg2[sizeof(msg2) - 16 + i];
   send_str("SSS registration complete, Recieved secret key:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(key), (char *)key);
     send_str("SSS registration complete, Recieved secret hmac:");
