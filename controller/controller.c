@@ -75,17 +75,14 @@ char* itoa(unsigned long value, char* buffer, int base)
 #include <time.h>
 
 
-uint8_t key[16]
-  = { "0123456789abcdef"
-/*	0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88,
-	0x09, 0xcf, 0x4f, 0x3c
-  */
-};
+uint8_t key[16] = { "0123456789abcdef"};
 
 const uint8_t iv[16] = {
 	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b,
 	0x0c, 0x0d, 0x0e, 0x0f
 };
+
+unsigned long msgCount = 0;
 
 /* #ifdef EXAMPLE_AES
 #include "aes.h"
@@ -135,6 +132,7 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   if(read == INTF_NO_DATA) {
     return SCEWL_NO_MSG;
   }
+  msgCount++;
 
   // unpack header
   *src_id = hdr.src_id;
@@ -181,6 +179,9 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   //send_str("recieved message:");
   //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
+  char test[16];
+  send_str("message Count - recieved: ");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 2, itoa(msgCount, test, 10));
   
   uint16_t n = len - 32;
   uint8_t encrypted[n];
@@ -237,6 +238,9 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
+  char test[16];
+  send_str("message Count - sent: ");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 2, itoa(msgCount, test, 10));
 
   if (len % 16 != 0) 
   {
