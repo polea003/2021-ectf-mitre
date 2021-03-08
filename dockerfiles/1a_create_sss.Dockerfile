@@ -25,3 +25,6 @@ ADD sss.py /sss
 ADD ./randGen.py .
 
 RUN python3 randGen.py
+
+WORKDIR /secrets
+
