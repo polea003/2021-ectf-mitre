@@ -14,5 +14,6 @@ ARG SCEWL_ID
 WORKDIR /secrets
 RUN ls -a
 RUN rm ${SCEWL_ID}.data1
+RUN ls -a
 
 # do whatever you need to remove the SED from the deployment
