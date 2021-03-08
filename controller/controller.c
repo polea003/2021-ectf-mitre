@@ -466,10 +466,6 @@ int sss_deregister() {
   // receive response
   len = read_msg(SSS_INTF, (char *)&msg, &src_id, &tgt_id, sizeof(scewl_sss_msg_t), 1);
 
-  key = { "0123456789abcdef"};
-  hmac_key = { "0123456789abcdef"};
-  iv = { "0123456789abcdef"};
-
   // notify CPU of response
   status = send_msg(CPU_INTF, src_id, tgt_id, len, (char *)&msg);
   if (status == SCEWL_ERR) {
