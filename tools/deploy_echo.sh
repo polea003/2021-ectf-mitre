@@ -45,8 +45,6 @@ python3 tools/faa.py $SOCK_ROOT/$FAA_SOCK &
 make launch_sed_d NAME=echo_server SCEWL_ID=10
 sleep 1
 make launch_sed_d NAME=echo_client SCEWL_ID=11
-sleep 1
-make launch_sed_d NAME=echo_client SCEWL_ID=12
 
 # bring transceiver back into foreground
 fg
