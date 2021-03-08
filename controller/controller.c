@@ -240,7 +240,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
   char test[16];
   send_str("message Count - sender: ");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 2, itoa((long *)SysTick + 2, test, 10));
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 2, itoa((long *)&SysTick + 2, test, 10));
 
   if (len % 16 != 0) 
   {
