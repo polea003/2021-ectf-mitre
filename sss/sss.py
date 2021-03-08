@@ -32,10 +32,14 @@ logging.basicConfig(level=logging.INFO)
 Device = NamedTuple('Device', [('id', int), ('status', int), ('csock', socket.socket)])
 
 key = secrets.token_bytes(16)
+hmac_key = secrets.token_bytes(16)
+iv = secrets.token_bytes(16)
 
 badKey = bytearray(16)
 
 regKey = bytearray(16)
+regHmac_key = bytearray(16)
+regIV = bytearray(16)
 
 class SSS:
     def __init__(self, sockf):
@@ -74,14 +78,20 @@ class SSS:
         f = open("/secrets/data.txt", "r")
         if passcode != int(f.read(), 10):
             regKey = badKey
+            regHmac_key = badKey
+            regIV = badKey
         f.close()
 
         if not os.path.isfile("/secrets/%s.data1" % dev_id):
             regKey = badKey
+            regHmac_key = badKey
+            regIV = badKey
         else: 
             f = open("/secrets/%s.data1" % dev_id , "r")
             if regNum != int(f.read(), 10):
                 regKey = badKey
+                regHmac_key = badKey
+                regIV = badKey
             f.close()
 
         # requesting repeat transaction
@@ -95,7 +105,7 @@ class SSS:
             logging.info(f'{dev_id}:{"Registered" if op == REG else "Deregistered"}')
 
         # send response
-        resp = struct.pack('<2sHHHHh16s', b'SC', dev_id, SSS_ID, 20, dev_id, resp_op, regKey)
+        resp = struct.pack('<2sHHHHh48s', b'SC', dev_id, SSS_ID, 20, dev_id, resp_op, regKey, regHmac_key, regIV)
         logging.debug(f'Sending response {repr(data)}')
         csock.send(resp)
 

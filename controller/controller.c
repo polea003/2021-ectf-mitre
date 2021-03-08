@@ -76,14 +76,15 @@ char* itoa(unsigned long value, char* buffer, int base)
 
 
 uint8_t key[16] = { "0123456789abcdef"};
+uint8_t hmac_key[16] = { "0123456789abcdef"};
+uint8_t iv[16] = { "0123456789abcdef"};
 
-const uint8_t iv[16] = {
+/*const uint8_t iv[16] = {
 	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b,
 	0x0c, 0x0d, 0x0e, 0x0f
 };
+*/
 
-unsigned long msgCount = 0;
-long t;
 
 /* #ifdef EXAMPLE_AES
 #include "aes.h"
@@ -179,9 +180,6 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   //send_str("recieved message:");
   //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
-  char test[16];
-  send_str("message Count - reciever: ");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 2, itoa(msgCount, test, 10));
   
   uint16_t n = len - 32;
   uint8_t encrypted[n];
@@ -238,9 +236,6 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
-  char test[16];
-  send_str("message Count - sender: ");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 2, itoa((long *)&SysTick + 2, test, 10));
 
   if (len % 16 != 0) 
   {
@@ -407,7 +402,7 @@ int handle_registration(char* msg) {
 
 
 int sss_register() {
-  char msg2[20];
+  char msg2[52];
   scewl_sss_msg_t msg;
   scewl_id_t src_id, tgt_id;
   int status, len;
@@ -432,9 +427,15 @@ int sss_register() {
 
   // receive response
   len = read_msg(SSS_INTF, msg2, &src_id, &tgt_id, sizeof(msg2) , 1);
-  for (int i = 0; i < 16; i++) key[i] = msg2[sizeof(msg2) - 16 + i];
+  for (int i = 0; i < 16; i++) key[i] = msg2[sizeof(msg2) - 48 + i];
+  for (int i = 0; i < 16; i++) hmac_key[i] = msg2[sizeof(msg2) - 32 + i];
+  for (int i = 0; i < 16; i++) iv[i] = msg2[sizeof(msg2) - 16 + i];
   send_str("SSS registration complete, Recieved secret key:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(key), (char *)key);
+    send_str("SSS registration complete, Recieved secret hmac:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(hmac_key), (char *)hmac_key);
+    send_str("SSS registration complete, Recieved secret iv:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(iv), (char *)iv);
 
   // notify CPU of response
   status = send_msg(CPU_INTF, src_id, tgt_id, len, msg2);
