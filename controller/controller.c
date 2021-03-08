@@ -166,6 +166,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   //send_str("recieved message:");
   //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
   
+  // Copy data into 2 new arrays
   uint16_t n = len - 32;
   uint8_t encrypted[n];
   uint8_t hmac[32];
@@ -176,6 +177,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   //send_str("recieved HMAC:");
   //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32, (char *)hmac);
 
+  // Calculate HMAC based on encryted text
   struct tc_hmac_state_struct h;
   uint8_t digest[32];
   (void)memset(&h, 0x00, sizeof(h));
@@ -187,7 +189,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   //send_str("calulated HMAC:");
   //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32, (char *)digest);
 
-  if (!_compare(digest, hmac, 32))
+  if (!_compare(digest, hmac, 32)) //Check to determine if HMAC calulated is same as sent
   {
       send_str("HMAC matches, message authentic. Decrypting");
 
