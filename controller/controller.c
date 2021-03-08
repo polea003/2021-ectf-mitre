@@ -464,9 +464,7 @@ int sss_deregister() {
     return 0;
   }
 
-  key = badKey;
-  hmac_key = badKey;
-  iv = badKey;
+  for (int i = 0; i < 16; i++ ) { key[i] = badKey[i]; hmac_key[i] = badKey[i]; iv[i] = badKey[i]; }
 
 
   // receive response
