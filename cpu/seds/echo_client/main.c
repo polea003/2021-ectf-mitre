@@ -52,7 +52,7 @@ siNfidpL(veruioPjfwe))%60466176;}veruicPjfwe=(veruioPjfke+
 int main(void) {
   scewl_id_t src_id, tgt_id;
   uint16_t len;
-  char *msg = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+  char *msg = "0123456789abcdef";
   char data[BUF_SZ];
 
   // open log file

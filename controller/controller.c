@@ -163,19 +163,14 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 
 
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
-  //send_str("recieved message:");
-  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
-  
-  // Copy data into 2 new arrays
+
+  // Copy data into 2 new arrays - 1 for encypted text and 1 for HMAC
   uint16_t n = len - 32;
   uint8_t encrypted[n];
   uint8_t hmac[32];
   int i;
   for (i = 0; i < n; i++) encrypted[i] = data[i];
   for (i = n; i < n + 32; i++) hmac[i - n] = data[i];
-
-  //send_str("recieved HMAC:");
-  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32, (char *)hmac);
 
   // Calculate HMAC based on encryted text
   struct tc_hmac_state_struct h;
@@ -186,34 +181,30 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   (void)tc_hmac_update(&h, (char *)encrypted, n);
   (void)tc_hmac_final(digest, 32, &h);
 
-  //send_str("calulated HMAC:");
-  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32, (char *)digest);
-
-  if (!_compare(digest, hmac, 32)) //Check to determine if HMAC calulated is same as sent
+  if (!_compare(digest, hmac, 32)) //Check to determine if HMAC calulated mathes the one sent
   {
-      send_str("HMAC matches, message authentic. Decrypting");
-
-      struct tc_aes_key_sched_struct a;
+      
+      
       uint16_t sizeofDec = n - 16;
-      uint8_t decrypted[sizeofDec];
+      uint8_t decrypted[sizeofDec]; //create decryted text array
       char *p;
-      //unsigned int length;
+
+      //decrypt text and store in array
+      struct tc_aes_key_sched_struct a;
       (void)tc_aes128_set_decrypt_key(&a, key);
       p = &data[16];
-      //length = ((unsigned int) sizeof(data));
       tc_cbc_mode_decrypt(decrypted, len, (uint8_t *)p, len, (uint8_t *)data, &a);
-      //send_str("decrypted message:");
-      //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec, (char *)decrypted);
 
-  for (i = sizeofDec - 1; decrypted[i] == '#'; i--,sizeofDec--) decrypted[i] = '\0';
-  send_str("Unpadded message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted); 
-
+      //remove padding
+      for (i = sizeofDec - 1; decrypted[i] == '#'; i--,sizeofDec--) decrypted[i] = '\0';
+      
+      send_str("Decrypted message:");
+      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted); 
       return send_msg(CPU_INTF, src_id, SCEWL_ID, sizeofDec, (char *)decrypted);
   }
   else
   {
-    send_str("HMAC did not match, message not authentic. Not decrypting");
+    //disregard message if not authentic
     return 0;
   }  
 
