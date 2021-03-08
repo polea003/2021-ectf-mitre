@@ -194,7 +194,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   struct tc_hmac_state_struct h;
   uint8_t digest[32];
   (void)memset(&h, 0x00, sizeof(h));
-  (void)tc_hmac_set_key(&h, key, sizeof(key));
+  (void)tc_hmac_set_key(&h, hmac_key, sizeof(hmac_key));
   (void)tc_hmac_init(&h);
   (void)tc_hmac_update(&h, (char *)encrypted, n);
   (void)tc_hmac_final(digest, 32, &h);
@@ -259,7 +259,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   struct tc_hmac_state_struct h;
   uint8_t digest[32];
   (void)memset(&h, 0x00, sizeof(h));
-  (void)tc_hmac_set_key(&h, key, sizeof(key));
+  (void)tc_hmac_set_key(&h, hmac_key, sizeof(hmac_key));
   (void)tc_hmac_init(&h);
   (void)tc_hmac_update(&h, (char *)encrypted, sizeofEnc);
   (void)tc_hmac_final(digest, 32, &h);
@@ -296,7 +296,7 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
   struct tc_hmac_state_struct h;
   uint8_t digest[32];
   (void)memset(&h, 0x00, sizeof(h));
-  (void)tc_hmac_set_key(&h, key, sizeof(key));
+  (void)tc_hmac_set_key(&h, hmac_key, sizeof(hmac_key));
   (void)tc_hmac_init(&h);
   (void)tc_hmac_update(&h, (char *)encrypted, n);
   (void)tc_hmac_final(digest, 32, &h);
@@ -358,7 +358,7 @@ int handle_brdcst_send(char *data, uint16_t len) {
   struct tc_hmac_state_struct h;
   uint8_t digest[32];
   (void)memset(&h, 0x00, sizeof(h));
-  (void)tc_hmac_set_key(&h, key, sizeof(key));
+  (void)tc_hmac_set_key(&h, hmac_key, sizeof(hmac_key));
   (void)tc_hmac_init(&h);
   (void)tc_hmac_update(&h, (char *)encrypted, sizeofEnc);
   (void)tc_hmac_final(digest, 32, &h);
@@ -466,9 +466,9 @@ int sss_deregister() {
   // receive response
   len = read_msg(SSS_INTF, (char *)&msg, &src_id, &tgt_id, sizeof(scewl_sss_msg_t), 1);
 
-  key[16] = { "0123456789abcdef"};
-  hmac_key[16] = { "0123456789abcdef"};
-  iv[16] = { "0123456789abcdef"};
+  key = { "0123456789abcdef"};
+  hmac_key = { "0123456789abcdef"};
+  iv = { "0123456789abcdef"};
 
   // notify CPU of response
   status = send_msg(CPU_INTF, src_id, tgt_id, len, (char *)&msg);
