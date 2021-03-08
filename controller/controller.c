@@ -83,6 +83,7 @@ const uint8_t iv[16] = {
 };
 
 unsigned long msgCount = 0;
+long t;
 
 /* #ifdef EXAMPLE_AES
 #include "aes.h"
@@ -136,7 +137,6 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   // unpack header
   *src_id = hdr.src_id;
   *tgt_id = hdr.tgt_id;
-  if (hdr.src_id != SCEWL_ID && hdr.src_id != SCEWL_FAA_ID && hdr.src_id != SCEWL_SSS_ID && hdr.tgt_id != SCEWL_ID) msgCount++;
 
   // read body
   max = hdr.len < n ? hdr.len : n;
@@ -164,7 +164,6 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
   hdr.src_id = src_id;
   hdr.tgt_id = tgt_id;
   hdr.len    = len;
-  //if (hdr.tgt_id != SCEWL_FAA_ID && hdr.tgt_id != SCEWL_SSS_ID) msgCount++;
 
   // send header
   intf_write(intf, (char *)&hdr, sizeof(scewl_hdr_t));
@@ -178,7 +177,6 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 
 
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
-  if (src_id != SCEWL_ID && src_id != SCEWL_FAA_ID && src_id != SCEWL_SSS_ID) msgCount++;
   //send_str("recieved message:");
   //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
   char test[16];
@@ -238,12 +236,12 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
-  if (tgt_id != SCEWL_ID && tgt_id != SCEWL_FAA_ID && tgt_id != SCEWL_SSS_ID) msgCount++;
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
+  srand((unsigned) time(&t));
   char test[16];
   send_str("message Count - sender: ");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 2, itoa(msgCount, test, 10));
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 2, itoa(rand() % 50, test, 10));
 
   if (len % 16 != 0) 
   {
