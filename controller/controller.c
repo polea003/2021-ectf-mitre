@@ -136,8 +136,7 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   // unpack header
   *src_id = hdr.src_id;
   *tgt_id = hdr.tgt_id;
-  //if (hdr.src_id == SCEWL_ID) msgCount--;
-  //msgCount++;
+  if (hdr.tgt_id != SCEWL_ID) msgCount++;
 
   // read body
   max = hdr.len < n ? hdr.len : n;
