@@ -136,6 +136,7 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   // unpack header
   *src_id = hdr.src_id;
   *tgt_id = hdr.tgt_id;
+  if (hdr.src_id != SCEWL_ID && hdr.src_id != SCEWL_FAA_ID && hdr.src_id != SCEWL_SSS_ID) msgCount++;
 
   // read body
   max = hdr.len < n ? hdr.len : n;
@@ -163,7 +164,7 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
   hdr.src_id = src_id;
   hdr.tgt_id = tgt_id;
   hdr.len    = len;
-  if (hdr.tgt_id != SCEWL_FAA_ID) msgCount++;
+  if (hdr.tgt_id != SCEWL_FAA_ID && hdr.tgt_id != SCEWL_SSS_ID) msgCount++;
 
   // send header
   intf_write(intf, (char *)&hdr, sizeof(scewl_hdr_t));
