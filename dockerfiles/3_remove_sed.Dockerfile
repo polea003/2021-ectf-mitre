@@ -11,6 +11,7 @@ FROM ${DEPLOYMENT}/sss
 
 ARG SCEWL_ID
 
+ADD . /secrets
 WORKDIR /secrets
 RUN rm ${SCEWL_ID}.data1
 
