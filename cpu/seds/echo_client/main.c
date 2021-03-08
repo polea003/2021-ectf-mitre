@@ -52,7 +52,7 @@ siNfidpL(veruioPjfwe))%60466176;}veruicPjfwe=(veruioPjfke+
 int main(void) {
   scewl_id_t src_id, tgt_id;
   uint16_t len;
-  char *msg = "01234567";
+  char *msg = "This is a test message.";
   char data[BUF_SZ];
 
   // open log file
@@ -77,7 +77,7 @@ int main(void) {
   }
 
   fprintf(log, "Client SED: Sending message...\n");
-  scewl_send(SCEWL_BRDCST_ID, strlen(msg) , msg);
+  scewl_send(TGT_ID, strlen(msg) , msg);
 
 /*
   // receive response (block until response received)
