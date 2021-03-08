@@ -78,6 +78,7 @@ char* itoa(unsigned long value, char* buffer, int base)
 uint8_t key[16] = { "0123456789abcdef"};
 uint8_t hmac_key[16] = { "0123456789abcdef"};
 uint8_t iv[16] = { "0123456789abcdef"};
+uint8_t badKey[16] = { "0123456789abcdef"};
 
 /*const uint8_t iv[16] = {
 	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b,
@@ -462,6 +463,11 @@ int sss_deregister() {
   if (status == SCEWL_ERR) {
     return 0;
   }
+
+  key = badKey;
+  hmac_key = badKey;
+  iv = badKey;
+
 
   // receive response
   len = read_msg(SSS_INTF, (char *)&msg, &src_id, &tgt_id, sizeof(scewl_sss_msg_t), 1);
