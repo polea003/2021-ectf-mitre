@@ -238,7 +238,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
-  srand((unsigned) time(&t));
+  srand(0);
   char test[16];
   send_str("message Count - sender: ");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 2, itoa(rand() % 50, test, 10));
