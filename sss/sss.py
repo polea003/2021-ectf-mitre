@@ -74,6 +74,8 @@ class SSS:
         _, _, _, _, dev_id, op, passcode, regNum = struct.unpack('<HHHHHHLL', data)
 
         regKey = key
+        regHmac_key = hmac_key
+        regIV = iv
 
         f = open("/secrets/data.txt", "r")
         if passcode != int(f.read(), 10):
