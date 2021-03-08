@@ -56,8 +56,8 @@ typedef struct scewl_hdr_t {
 typedef struct scewl_sss_msg_t {
   scewl_id_t dev_id;
   uint16_t   op;
-  unsigned long passcode;
-  unsigned long serialNum;
+  unsigned long passcode; // passcode for server
+  unsigned long serialNum; // device registration number
 } scewl_sss_msg_t;
 
 // SCEWL status codes

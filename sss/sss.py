@@ -31,12 +31,14 @@ logging.basicConfig(level=logging.INFO)
 
 Device = NamedTuple('Device', [('id', int), ('status', int), ('csock', socket.socket)])
 
-key = secrets.token_bytes(16)
+# generate random keys for our deployment
+key = secrets.token_bytes(16) 
 hmac_key = secrets.token_bytes(16)
 iv = secrets.token_bytes(16)
 
-badKey = bytearray(16)
+badKey = bytearray(16) # blank key of 16 bytes
 
+# keys sent to device, initally blank
 regKey = bytearray(16)
 regHmac_key = bytearray(16)
 regIV = bytearray(16)
@@ -73,24 +75,27 @@ class SSS:
         logging.debug(f'Received buffer: {repr(data)}')
         _, _, _, _, dev_id, op, passcode, regNum = struct.unpack('<HHHHHHLL', data)
 
+        #initalize keys to random keys
         regKey = key
         regHmac_key = hmac_key
         regIV = iv
 
-        f = open("/secrets/data.txt", "r")
+        #compare passcode sent from device, and blank keys if not a match
+        f = open("/secrets/data.txt", "r") 
         if passcode != int(f.read(), 10):
             regKey = badKey
             regHmac_key = badKey
             regIV = badKey
         f.close()
 
+        #check if device registration file exists, if not blank keys
         if not os.path.isfile("/secrets/%s.data1" % dev_id):
             regKey = badKey
             regHmac_key = badKey
             regIV = badKey
-        else: 
-            f = open("/secrets/%s.data1" % dev_id , "r")
-            if regNum != int(f.read(), 10):
+        else: #check if device registration file matches device supplied registration number
+            f = open("/secrets/%s.data1" % dev_id , "r") 
+            if regNum != int(f.read(), 10): # if not a match, blank keys
                 regKey = badKey
                 regHmac_key = badKey
                 regIV = badKey
@@ -106,7 +111,7 @@ class SSS:
             resp_op = op
             logging.info(f'{dev_id}:{"Registered" if op == REG else "Deregistered"}')
 
-        # send response
+        # send response, along with keys
         resp = struct.pack('<2sHHHHh16s16s16s', b'SC', dev_id, SSS_ID, 52, dev_id, resp_op, regKey, regHmac_key, regIV)
         logging.debug(f'Sending response {repr(data)}')
         csock.send(resp)
