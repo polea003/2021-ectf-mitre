@@ -25,8 +25,3 @@ ADD sss.py /sss
 ADD ./randGen.py .
 
 RUN python3 randGen.py
-
-WORKDIR /secrets
-#RUN awk -v min=0 -v max=255 'BEGIN{srand(); print int(min+rand()*(max-min+1))}' > data.txt
-#RUN cat /dev/urandom | tr -dc _A-Z-a-z-0-9 | head -c${1:-10} > data.txt
-RUN cat data.txt
