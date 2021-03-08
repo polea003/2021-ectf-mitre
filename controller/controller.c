@@ -73,6 +73,7 @@ char* itoa(unsigned long value, char* buffer, int base)
 #include <string.h>
 #include <stdint.h>
 
+//temporary keys
 uint8_t key[16] = { "0123456789abcdef"};
 uint8_t hmac_key[16] = { "0123456789abcdef"};
 uint8_t iv[16] = { "0123456789abcdef"};
@@ -181,7 +182,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   (void)tc_hmac_update(&h, (char *)encrypted, n);
   (void)tc_hmac_final(digest, 32, &h);
 
-  if (!_compare(digest, hmac, 32)) //Check to determine if HMAC calulated mathes the one sent
+  if (!_compare(digest, hmac, 32)) //Check to determine if HMAC calulated matches the one sent
   {
       
       
@@ -215,14 +216,14 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
 
+  //pad message if needed for 16 byte blocks
   if (len % 16 != 0) 
   {
        for (int i = len; i < len + (16 - (len % 16)); i++) data[i] = '#';
        len = strlen(data);
-        //send_str("padded message:");
-      //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);     
   }
 
+  //encrypt data AES CBC algo implementation 
   struct tc_aes_key_sched_struct a;
 	uint8_t iv_buffer[16];
   uint16_t sizeofEnc = len + 16;
@@ -231,9 +232,8 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
 	(void)memcpy(iv_buffer, iv, 16);
   tc_cbc_mode_encrypt(encrypted, sizeofEnc,
 	(uint8_t *)data, len , iv_buffer, &a);
-  //send_str("encrypted message:");
-  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofEnc, (char *)encrypted);
 
+  //calulate HMAC of encryoted data
   struct tc_hmac_state_struct h;
   uint8_t digest[32];
   (void)memset(&h, 0x00, sizeof(h));
@@ -241,26 +241,22 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   (void)tc_hmac_init(&h);
   (void)tc_hmac_update(&h, (char *)encrypted, sizeofEnc);
   (void)tc_hmac_final(digest, 32, &h);
-  //send_str("HMAC:");
-  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
 
 
+  //copy ciphertext and HMAC to new array
   uint8_t msg[sizeofEnc + 32];
   int i;
   for (i = 0; i < sizeofEnc; i++) msg[i] = encrypted[i];
   for (i = sizeofEnc; i < sizeofEnc + 32; i++) msg[i] = digest[i - sizeofEnc];
 
-  //send_str("combined:");
-  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(msg), (char *)msg);
-
+  //send encrypted message
   return send_msg(RAD_INTF, SCEWL_ID, tgt_id, sizeof(msg), (char *)msg);
 }
 
 
 int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
-  //send_str("recieved message:");
-  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
   
+  // Copy data into 2 new arrays - 1 for encypted text and 1 for HMAC
   uint16_t n = len - 32;
   uint8_t encrypted[n];
   uint8_t hmac[32];
@@ -268,9 +264,7 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
   for (i = 0; i < n; i++) encrypted[i] = data[i];
   for (i = n; i < n + 32; i++) hmac[i - n] = data[i];
 
-  //send_str("recieved HMAC:");
-  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32, (char *)hmac);
-
+  // Calculate HMAC based on encryted text
   struct tc_hmac_state_struct h;
   uint8_t digest[32];
   (void)memset(&h, 0x00, sizeof(h));
@@ -279,32 +273,32 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
   (void)tc_hmac_update(&h, (char *)encrypted, n);
   (void)tc_hmac_final(digest, 32, &h);
 
-  //send_str("calulated HMAC:");
-  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32, (char *)digest);
-
-  if (!_compare(digest, hmac, 32))
+  if (!_compare(digest, hmac, 32)) //Check to determine if HMAC calulated matches the one sent
   {
       send_str("HMAC matches, message authentic. Decrypting");
-
-      struct tc_aes_key_sched_struct a;
+      
+      
       uint16_t sizeofDec = n - 16;
-      uint8_t decrypted[sizeofDec];
+      uint8_t decrypted[sizeofDec]; //create decrypted text array
       char *p;
+
+      //decrypt text and store in array
+      struct tc_aes_key_sched_struct a;
       (void)tc_aes128_set_decrypt_key(&a, key);
       p = &data[16];
       tc_cbc_mode_decrypt(decrypted, len, (uint8_t *)p, len, (uint8_t *)data, &a);
-      //send_str("decrypted message:");
-      //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec, (char *)decrypted);
 
+      //remove padding
       for (i = sizeofDec - 1; decrypted[i] == '#'; i--,sizeofDec--) decrypted[i] = '\0';
-      send_str("Unpadded message:");
+      
+      //send message
+      send_str("Decrypted message:");
       send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted); 
-
       return send_msg(CPU_INTF, src_id, SCEWL_BRDCST_ID, sizeofDec, (char *)decrypted);
   }
   else
   {
-    send_str("HMAC did not match, message not authentic. Not decrypting");
+    //disregard non-authentic messages
     return 0;
   }  
 }
@@ -314,14 +308,15 @@ int handle_brdcst_send(char *data, uint16_t len) {
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
 
+  //pad message if need to fit into 16 byte blocks
   if (len % 16 != 0) 
   {
        for (int i = len; i < len + (16 - (len % 16)); i++) data[i] = '#';
-       len = strlen(data);
-        //send_str("padded message:");
-      //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);     
+       len = strlen(data);    
   }
 
+
+  //Encrypt using AES CBC algo
   struct tc_aes_key_sched_struct a;
 	uint8_t iv_buffer[16];
   uint16_t sizeofEnc = len + 16;
@@ -330,9 +325,8 @@ int handle_brdcst_send(char *data, uint16_t len) {
 	(void)memcpy(iv_buffer, iv, 16);
   tc_cbc_mode_encrypt(encrypted, sizeofEnc,
 	(uint8_t *)data, len , iv_buffer, &a);
-  //send_str("encrypted message:");
-  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofEnc, (char *)encrypted);
 
+  //Calulate HMAC of ciphertext
   struct tc_hmac_state_struct h;
   uint8_t digest[32];
   (void)memset(&h, 0x00, sizeof(h));
@@ -340,17 +334,14 @@ int handle_brdcst_send(char *data, uint16_t len) {
   (void)tc_hmac_init(&h);
   (void)tc_hmac_update(&h, (char *)encrypted, sizeofEnc);
   (void)tc_hmac_final(digest, 32, &h);
-  //send_str("HMAC:");
-  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
 
+
+  //copy ciphertext and HMAC to new array
   uint8_t msg[sizeofEnc + 32];
-  int i;
-  for (i = 0; i < sizeofEnc; i++) msg[i] = encrypted[i];
-  for (i = sizeofEnc; i < sizeofEnc + 32; i++) msg[i] = digest[i - sizeofEnc];
+  for (int i = 0; i < sizeofEnc; i++) msg[i] = encrypted[i];
+  for (int i = sizeofEnc; i < sizeofEnc + 32; i++) msg[i] = digest[i - sizeofEnc];
 
-  //send_str("combined:");
-  //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(msg), (char *)msg);
-
+  //send message
   return send_msg(RAD_INTF, SCEWL_ID, SCEWL_BRDCST_ID, sizeof(msg), (char *)msg);
 }   
 
@@ -376,22 +367,22 @@ void handle_registration(char* msg) {
 
 
 int sss_register() {
-  char msg2[52];
+  char msg2[52]; //create message array for server response, large enough to recieve secret keys
   scewl_sss_msg_t msg;
   scewl_id_t src_id, tgt_id;
   int status, len;
 
-  send_str("Secret Passcode: ");
+  send_str("Pass: ");
    char secret[20];
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, itoa(SECRET, secret, 10));
-    send_str("SED Registration Number: ");
+    send_str("SRN: ");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, itoa(DATA1, secret, 10));
 
   // fill registration message
   msg.dev_id = SCEWL_ID;
   msg.op = SCEWL_SSS_REG;
-  msg.passcode = SECRET;
-  msg.serialNum = DATA1;
+  msg.passcode = SECRET; //add secret passcode to registration message
+  msg.serialNum = DATA1; //add device serial number to registration message
   
   // send registration
   status = send_msg(SSS_INTF, SCEWL_ID, SCEWL_SSS_ID, sizeof(msg), (char *)&msg);
@@ -401,14 +392,14 @@ int sss_register() {
 
   // receive response
   len = read_msg(SSS_INTF, msg2, &src_id, &tgt_id, sizeof(msg2) , 1);
-  for (int i = 0; i < 16; i++) key[i] = msg2[4 + i];
-  for (int i = 0; i < 16; i++) hmac_key[i] = msg2[20 + i];
-  for (int i = 0; i < 16; i++) iv[i] = msg2[36 + i];
-  send_str("SSS registration complete, Recieved secret key:");
+  for (int i = 0; i < 16; i++) key[i] = msg2[4 + i]; //get AES key from server response
+  for (int i = 0; i < 16; i++) hmac_key[i] = msg2[20 + i]; //get HMAC key from server response
+  for (int i = 0; i < 16; i++) iv[i] = msg2[36 + i]; //get initialization vector from server response
+  send_str("AES:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(key), (char *)key);
-  send_str("SSS registration complete, Recieved secret hmac:");
+  send_str("HMAC:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(hmac_key), (char *)hmac_key);
-  send_str("SSS registration complete, Recieved secret iv:");
+  send_str("IV:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(iv), (char *)iv);
 
   // notify CPU of response
@@ -437,6 +428,7 @@ int sss_deregister() {
     return 0;
   }
 
+  //remove stored encryption keys on deregistration
   for (int i = 0; i < 16; i++ ) { key[i] = badKey[i]; hmac_key[i] = badKey[i]; iv[i] = badKey[i]; }
 
 
@@ -462,60 +454,6 @@ int main() {
   intf_init(CPU_INTF);
   intf_init(SSS_INTF);
   intf_init(RAD_INTF);
-
-//#ifdef EXAMPLE_AES
-/*
- const uint8_t key[16] = {
-	0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88,
-	0x09, 0xcf, 0x4f, 0x3c
-};
-
-const uint8_t iv[16] = {
-	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b,
-	0x0c, 0x0d, 0x0e, 0x0f
-};
-
-const uint8_t plaintext[128] = { "The encryption algorithm processes the plaintext, and the MAC then hashes the encrypted message to authenticate. So cool right??"
-};
-
- struct tc_aes_key_sched_struct a;
-	uint8_t iv_buffer[16];
-	uint8_t encrypted[144];
-	uint8_t decrypted[128];
-	uint8_t *p;
-	unsigned int length;
-  struct tc_hmac_state_struct h;
-        uint8_t digest[32];
-	//int result = 0;
-	(void)tc_aes128_set_encrypt_key(&a, key);
-
-	(void)memcpy(iv_buffer, iv, 16);
-
-	//printf("Plaintext = %s\n", plaintext);
-  send_str("Plaintext message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(plaintext), (char *)plaintext);
-	tc_cbc_mode_encrypt(encrypted, sizeof(plaintext) + 16,
-				plaintext, sizeof(plaintext), iv_buffer, &a);
-    send_str("Encrypted message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(plaintext), (char *)encrypted);
-	//show_str1("encrypted = ", encrypted, 144);
-        (void)memset(&h, 0x00, sizeof(h));
-        (void)tc_hmac_set_key(&h, key, sizeof(key));
-        (void)tc_hmac_init(&h);
-        (void)tc_hmac_update(&h, plaintext, sizeof(plaintext));
-        (void)tc_hmac_final(digest, 32, &h);
-  send_str("MAC message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(digest), (char *)digest);
-
-	(void)tc_aes128_set_decrypt_key(&a, key);
-	p = &encrypted[16];
-	length = ((unsigned int) sizeof(encrypted));
-	tc_cbc_mode_decrypt(decrypted, length, p, length, encrypted, &a);
-    send_str("Decrypted message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(plaintext), (char *)decrypted);
-	//printf("Decrypted = %s\n", decrypted);
-  */
-//#endif
 
   // serve forever
   while (1) {
