@@ -34,6 +34,7 @@ make add_sed SED=echo_server SCEWL_ID=10 NAME=echo_server
 make add_sed SED=echo_client SCEWL_ID=11 NAME=echo_client CUSTOM='TGT_ID=10'
 make add_sed SED=echo_client SCEWL_ID=12 NAME=echo_client CUSTOM='TGT_ID=10'
 make add_sed SED=echo_client SCEWL_ID=13 NAME=echo_client CUSTOM='TGT_ID=10'
+make add_sed SED=echo_client SCEWL_ID=14 NAME=echo_client CUSTOM='TGT_ID=10'
 make remove_sed DEPLOYMENT=echo SCEWL_ID=14 NAME=echo_client
 
 # launch deployment
