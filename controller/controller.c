@@ -584,17 +584,18 @@ const uint8_t plaintext[128] = { "The encryption algorithm processes the plainte
 Response/challenge means of authentication
 
 To Do:
--pull in new changes from mitre server
+-pull in new changes from mitre server (done)
 
 -only send key to drones on proper registration, not on degistration or if already registered.
-currently sends to all.
+currently sends to all. (done)
 
--different key for HMAC and AES
--Random IV
--Add random first block to encryption
+-different key for HMAC and AES (done)
+-Random IV (done)
+-Add random first block to encryption (obe)
 
--Check authenticity of drone in supply chain before distributing key
--counter or timer (timestamp included in message, only approved in small time window)
+-Check authenticity of drone in supply chain before distributing key (done)
+
+-counter or timer (timestamp included in message, only approved in small time window) (obe)
 
 -Next, we want to remind all teams of one critical security feature. 
 All attacking teams will receive the compiled binary firmware from one UAV’s SCEWL Bus Controller,
@@ -602,7 +603,7 @@ providing access to any secrets compiled into the device.
 After the organizers collect the binary, we will run make remove_sed to remove that device 
 from the deployment, so make sure to do any necessary cleanup there 
 (in dockerfiles/3_remove_sed.Dockerfile) necessary to protect your system from the 
-compromised SED.
+compromised SED. (done)
 
 -compromised CPU does not result in a compromised controller (ie no blocking?)
 
