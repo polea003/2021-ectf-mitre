@@ -90,7 +90,7 @@ class SSS:
             regIV = badKey
         else: 
             f = open("/secrets/%s.data1" % dev_id , "r")
-            if regNum == int(f.read(), 10):
+            if regNum != int(f.read(), 10):
                 regKey = badKey
                 regHmac_key = badKey
                 regIV = badKey
