@@ -132,7 +132,6 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   if(read == INTF_NO_DATA) {
     return SCEWL_NO_MSG;
   }
-  msgCount++;
 
   // unpack header
   *src_id = hdr.src_id;
@@ -177,6 +176,7 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 
 
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
+  msgCount++;
   //send_str("recieved message:");
   //send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
   char test[16];
@@ -236,6 +236,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
+  msgCount++;
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
   char test[16];
