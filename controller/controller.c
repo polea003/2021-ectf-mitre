@@ -432,9 +432,9 @@ int sss_register() {
   for (int i = 0; i < 16; i++) iv[i] = msg2[36 + i];
   send_str("SSS registration complete, Recieved secret key:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(key), (char *)key);
-    send_str("SSS registration complete, Recieved secret hmac:");
+  send_str("SSS registration complete, Recieved secret hmac:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(hmac_key), (char *)hmac_key);
-    send_str("SSS registration complete, Recieved secret iv:");
+  send_str("SSS registration complete, Recieved secret iv:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(iv), (char *)iv);
 
   // notify CPU of response
@@ -465,6 +465,10 @@ int sss_deregister() {
 
   // receive response
   len = read_msg(SSS_INTF, (char *)&msg, &src_id, &tgt_id, sizeof(scewl_sss_msg_t), 1);
+
+  key[16] = { "0123456789abcdef"};
+  hmac_key[16] = { "0123456789abcdef"};
+  iv[16] = { "0123456789abcdef"};
 
   // notify CPU of response
   status = send_msg(CPU_INTF, src_id, tgt_id, len, (char *)&msg);
