@@ -84,7 +84,7 @@ class SSS:
             regIV = badKey
         f.close()
 
-        if not os.path.isfile("/secrets/%s.data2" % dev_id):
+        if not os.path.isfile("/secrets/%s.data1" % dev_id):
             regKey = badKey
             regHmac_key = badKey
             regIV = badKey
