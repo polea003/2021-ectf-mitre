@@ -231,7 +231,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
 
-  DT_hmac_key[11] = (u_int8_t)(35 % 256); //customize HMAC for specific target SED
+  DT_hmac_key[11] = (u_int8_t)(tgt_id % 256); //customize HMAC for specific target SED
 
   //pad message if needed for 16 byte blocks
   if (len % 16 != 0) 
