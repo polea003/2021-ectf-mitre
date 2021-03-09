@@ -202,7 +202,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
       *DTdigestArray[2] = *DTdigestArray[1];
       *DTdigestArray[1] = *DTdigestArray[0];
-      *DTdigestArray[0] = digest;
+      *DTdigestArray[0] = *digest;
       
       uint16_t sizeofDec = n - 16;
       uint8_t decrypted[sizeofDec]; //create decryted text array
