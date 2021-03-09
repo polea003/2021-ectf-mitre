@@ -79,10 +79,8 @@ uint8_t hmac_key[16] = { "0123456789abcdef"};
 uint8_t iv[16] = { "0123456789abcdef"};
 uint8_t badKey[16] = { "0123456789abcdef"};
 
-uint8_t* digestArray[3];
-
-unsigned long msgCounter = 0;
-
+uint8_t* DTdigestArray[3]; //Saved Direct transmissions
+uint8_t* BCdigestArray[3]; //Saved Broadcasts
 
 #define send_str(M) send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, strlen(M), M)
 #define BLOCK_SIZE 16
@@ -189,17 +187,17 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
   if (!_compare(digest, hmac, 32)) //Check to determine if HMAC calulated matches the one sent
   {
-      
+      // Check if transmission matches previously recieved transmissions. Ignore if the same.
       for (int i = 0; i < 3; i++) {
-        if (!_compare(digest, digestArray[i], 32)) {
+        if (!_compare(digest, DTdigestArray[i], 32)) {
           send_str("Replayed message!!!!!");
           return 0; 
           }
       }
 
-      digestArray[2] = digestArray[1];
-      digestArray[1] = digestArray[0];
-      digestArray[0] = digest;
+      DTdigestArray[2] = DTdigestArray[1];
+      DTdigestArray[1] = DTdigestArray[0];
+      DTdigestArray[0] = digest;
       
       uint16_t sizeofDec = n - 16;
       uint8_t decrypted[sizeofDec]; //create decryted text array
@@ -214,9 +212,6 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
       //remove padding
       for (i = sizeofDec - 1; decrypted[i] == '#'; i--,sizeofDec--) decrypted[i] = '\0';
       
-      send_str("msgCount: ");
-      char secret[20];
-      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 2, itoa(msgCounter, secret, 10));
       send_str("Decrypted message:");
       send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted); 
       return send_msg(CPU_INTF, src_id, SCEWL_ID, sizeofDec, (char *)decrypted);
@@ -231,9 +226,6 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
-  send_str("msgCount: ");
-  char secret[20];
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 2, itoa(msgCounter, secret, 10));
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
 
@@ -276,6 +268,8 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
 
 
 int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
+
+
   
   // Copy data into 2 new arrays - 1 for encypted text and 1 for HMAC
   uint16_t n = len - 32;
@@ -296,6 +290,18 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
   if (!_compare(digest, hmac, 32)) //Check to determine if HMAC calulated matches the one sent
   {
+      // Check if broadcast matches previously recieved broadcasts. Ignore if the same.
+      for (int i = 0; i < 3; i++) {
+        if (!_compare(digest, BCdigestArray[i], 32)) {
+          send_str("Replayed message!!!!!");
+          return 0; 
+          }
+      }
+
+      BCdigestArray[2] = BCdigestArray[1];
+      BCdigestArray[1] = BCdigestArray[0];
+      BCdigestArray[0] = digest;
+
       send_str("HMAC matches, message authentic. Decrypting");
       
       
@@ -487,8 +493,6 @@ int main() {
       handle_registration(buf);
     }
 
-    if (intf_avail(RAD_INTF)) msgCounter++;
-
     // server while registered
     while (registered) {
       memset(&hdr, 0, sizeof(hdr));
@@ -515,7 +519,6 @@ int main() {
       if (intf_avail(RAD_INTF)) {
         // Read message from antenna
         len = read_msg(RAD_INTF, buf, &src_id, &tgt_id, sizeof(buf), 1);
-        msgCounter++;
         
         if (src_id != SCEWL_ID) { // ignore our own outgoing messages
           if (tgt_id == SCEWL_BRDCST_ID) {
