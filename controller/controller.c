@@ -314,6 +314,8 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
           return 0; 
           }
       }*/
+      send_str("Calculated HMAC:");
+      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32 , (char *)digest); 
 
       BCdigestArray[2] = BCdigestArray[1];
       BCdigestArray[1] = BCdigestArray[0];
