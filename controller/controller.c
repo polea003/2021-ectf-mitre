@@ -237,7 +237,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
 
   DT_hmac_key[11] = (u_int8_t)(tgt_id % 256); //customize HMAC for specific target SED
 
-  /*
+  
   send_str("SRN + msgCounter: ");
   char tempAry[10];
   char* secret;
@@ -245,7 +245,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, secret);
   for(int i = len; i < len + 10; i++) data[i] = secret[i-len];
   len += 10;
-  */
+  
 
   send_str("modified message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
