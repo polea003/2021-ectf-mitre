@@ -191,6 +191,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   {
       for (int i = 0; i < 3; i++) {
         if (!_compare(digest, digestArray[i], 32)) {
+          send_str("Replayed message!!!!!")
           return 0; 
           }
       }
