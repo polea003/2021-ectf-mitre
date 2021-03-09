@@ -189,12 +189,13 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
   if (!_compare(digest, hmac, 32)) //Check to determine if HMAC calulated matches the one sent
   {
-      /*for (int i = 0; i < 3; i++) {
+      
+      for (int i = 0; i < 3; i++) {
         if (!_compare(digest, digestArray[i], 32)) {
           send_str("Replayed message!!!!!");
           return 0; 
           }
-      }*/
+      }
 
       digestArray[2] = digestArray[1];
       digestArray[1] = digestArray[0];
