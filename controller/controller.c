@@ -345,7 +345,7 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
       tc_cbc_mode_decrypt(decrypted, len, (uint8_t *)p, len, (uint8_t *)data, &a);
 
       //remove padding
-      for (i = sizeofDec - 1; decrypted[i] == '#'; i--,sizeofDec--) decrypted[i] = '\0';
+      for (i = sizeofDec - 1; decrypted[i] == '#' && decrypted[i] != '\0'; i--,sizeofDec--) decrypted[i] = '\0';
       n = i - 10;
       for (i -= 1; i > n; i--,sizeofDec--) decrypted[i] = '\0';
       
