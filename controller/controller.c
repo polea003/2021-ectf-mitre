@@ -240,7 +240,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   char* secret;
   secret = itoa(DATA1 + msgCounter, tempAry, 10);
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, secret);
-  for(int i = len; i < len + 10; i++) data[i] = secret[i];
+  for(int i = len, int j = 0; i < len + 10; i++, j++) data[i] = secret[j];
   len += 10;
 
 
