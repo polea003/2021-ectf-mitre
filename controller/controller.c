@@ -200,9 +200,9 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
       send_str("Calculated HMAC:");
       send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32 , (char *)digest); 
 
-      DTdigestArray[2] = DTdigestArray[1];
-      DTdigestArray[1] = DTdigestArray[0];
-      DTdigestArray[0] = digest;
+      *DTdigestArray[2] = *DTdigestArray[1];
+      *DTdigestArray[1] = *DTdigestArray[0];
+      *DTdigestArray[0] = digest;
       
       uint16_t sizeofDec = n - 16;
       uint8_t decrypted[sizeofDec]; //create decryted text array
@@ -319,9 +319,10 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
       send_str("Calculated HMAC:");
       send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32 , (char *)digest); 
 
-      BCdigestArray[2] = BCdigestArray[1];
+     /* BCdigestArray[2] = BCdigestArray[1];
       BCdigestArray[1] = BCdigestArray[0];
       BCdigestArray[0] = digest;
+      */
 
       send_str("HMAC matches, message authentic. Decrypting");
       
