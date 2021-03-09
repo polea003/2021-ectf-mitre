@@ -346,6 +346,8 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
       //remove padding
       for (i = sizeofDec - 1; decrypted[i] == '#'; i--,sizeofDec--) decrypted[i] = '\0';
+      n = i - 10;
+      for (; i >= n; i--) decrypted[i] = '\0';
       
       //send message
       send_str("Decrypted message:");
