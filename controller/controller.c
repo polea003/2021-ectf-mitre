@@ -466,7 +466,12 @@ int sss_deregister() {
   }
 
   //remove stored encryption keys on deregistration
-  for (int i = 0; i < 16; i++ ) { key[i] = badKey[i]; hmac_key[i] = badKey[i]; iv[i] = badKey[i]; }
+  for (int i = 0; i < 16; i++ ) { 
+    key[i] = badKey[i]; 
+    BC_hmac_key[i] = badKey[i]; 
+    DT_hmac_key[i] = badKey[i]; 
+    iv[i] = badKey[i]; 
+  }
 
 
   // receive response
