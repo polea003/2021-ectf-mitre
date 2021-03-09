@@ -197,11 +197,11 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
           return 0; 
           }
       } 
+
       for (int j = 2; j > 0; j--){
         for (int i = 0; i < 32; i++) DTdigestArray[j][i] = DTdigestArray[j-1][i];
       }
-        
-        for (int i = 0; i < 32; i++) DTdigestArray[0][i] = digest[i];
+      for (int i = 0; i < 32; i++) DTdigestArray[0][i] = digest[i];
 
 
       send_str("HMAC list 1:");
@@ -209,7 +209,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
        send_str("HMAC list 2:");
       send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32 , (char *)DTdigestArray[1]); 
-             send_str("HMAC list 2:");
+        send_str("HMAC list 3:");
       send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32 , (char *)DTdigestArray[2]); 
       
 
@@ -245,14 +245,14 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   DT_hmac_key[11] = (u_int8_t)(tgt_id % 256); //customize HMAC for specific target SED
 
   
-  send_str("SRN + msgCounter: ");
+ /* send_str("SRN + msgCounter: ");
   char tempAry[10];
   char* secret;
   secret = itoa(DATA1 + msgCounter, tempAry, 10);
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, secret);
   for(int i = len; i < len + 10; i++) data[i] = secret[i-len];
   len += 10;
-  
+  */
 
   send_str("modified message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
