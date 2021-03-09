@@ -80,8 +80,8 @@ uint8_t BC_hmac_key[16] = { "0123456789abcdef"};
 uint8_t iv[16] = { "0123456789abcdef"};
 uint8_t badKey[16] = { "0123456789abcdef"};
 
-uint8_t* DTdigestArray[3][32]; //Saved Direct transmissions
-uint8_t* BCdigestArray[3][32]; //Saved Broadcasts
+uint8_t DTdigestArray[3][32]; //Saved Direct transmissions
+uint8_t BCdigestArray[3][32]; //Saved Broadcasts
 
 unsigned long msgCounter = 0;
 
