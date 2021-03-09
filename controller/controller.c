@@ -79,6 +79,8 @@ uint8_t hmac_key[16] = { "0123456789abcdef"};
 uint8_t iv[16] = { "0123456789abcdef"};
 uint8_t badKey[16] = { "0123456789abcdef"};
 
+unsigned long msgCounter = 0;
+
 #define send_str(M) send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, strlen(M), M)
 #define BLOCK_SIZE 16
 
@@ -199,6 +201,9 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
       //remove padding
       for (i = sizeofDec - 1; decrypted[i] == '#'; i--,sizeofDec--) decrypted[i] = '\0';
       
+      send_str("msgCount: ");
+      char secret[20];
+      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 2, itoa(msgCounter, secret, 10));
       send_str("Decrypted message:");
       send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted); 
       return send_msg(CPU_INTF, src_id, SCEWL_ID, sizeofDec, (char *)decrypted);
@@ -213,6 +218,9 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
+  send_str("msgCount: ");
+  char secret[20];
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 2, itoa(msgCounter, secret, 10));
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
 
@@ -305,8 +313,10 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
 
 int handle_brdcst_send(char *data, uint16_t len) {
+  
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
+  
 
   //pad message if need to fit into 16 byte blocks
   if (len % 16 != 0) 
@@ -464,6 +474,8 @@ int main() {
       handle_registration(buf);
     }
 
+    if (intf_avail(RAD_INTF) && src_id == SCEWL_FAA_ID) msgCounter++;
+
     // server while registered
     while (registered) {
       memset(&hdr, 0, sizeof(hdr));
@@ -490,7 +502,8 @@ int main() {
       if (intf_avail(RAD_INTF)) {
         // Read message from antenna
         len = read_msg(RAD_INTF, buf, &src_id, &tgt_id, sizeof(buf), 1);
-
+        msgCounter++;
+        if (src_id == SCEWL_FAA_ID) msgCounter--;
         if (src_id != SCEWL_ID) { // ignore our own outgoing messages
           if (tgt_id == SCEWL_BRDCST_ID) {
             // receive broadcast message
