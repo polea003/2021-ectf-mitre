@@ -191,12 +191,14 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   if (!_compare(digest, hmac, 32)) //Check to determine if HMAC calulated matches the one sent
   {
       // Check if transmission matches previously recieved transmissions. Ignore if the same.
-      for (int i = 0; i < 3; i++) {
+      /*for (int i = 0; i < 3; i++) {
         if (!_compare(digest, DTdigestArray[i], 32)) {
           send_str("Replayed message!!!!!");
           return 0; 
           }
-      }
+      } */
+      send_str("Calculated HMAC:");
+      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32 , (char *)digest); 
 
       DTdigestArray[2] = DTdigestArray[1];
       DTdigestArray[1] = DTdigestArray[0];
