@@ -80,8 +80,8 @@ uint8_t BC_hmac_key[16] = { "0123456789abcdef"};
 uint8_t iv[16] = { "0123456789abcdef"};
 uint8_t badKey[16] = { "0123456789abcdef"};
 
-uint8_t* DTdigestArray[3]; //Saved Direct transmissions
-uint8_t* BCdigestArray[3]; //Saved Broadcasts
+uint8_t* DTdigestArray[3][32]; //Saved Direct transmissions
+uint8_t* BCdigestArray[3][32]; //Saved Broadcasts
 
 unsigned long msgCounter = 0;
 
@@ -515,7 +515,7 @@ int main() {
   intf_init(SSS_INTF);
   intf_init(RAD_INTF);
 
-  for (int i=0; i < 3; i++) DTdigestArray[i] = { "0123456789abcdef0123456789abcdef"} ;
+  //for (int i=0; i < 3; i++) DTdigestArray[i] = { "0123456789abcdef0123456789abcdef"} ;
   // serve forever
   while (1) {
     // register with SSS
