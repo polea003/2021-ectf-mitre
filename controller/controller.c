@@ -432,8 +432,10 @@ int sss_register() {
 
   send_str("AES:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(key), (char *)key);
-  send_str("HMAC:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(hmac_key), (char *)hmac_key);
+  send_str("BC_HMAC:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(BC_hmac_key), (char *)BC_hmac_key);
+  send_str("DT_HMAC:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(DT_hmac_key), (char *)DT_hmac_key);
   send_str("IV:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(iv), (char *)iv);
 
