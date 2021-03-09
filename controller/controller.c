@@ -198,17 +198,20 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
           }
       } 
 
-      for (int j = 0; i < 2; j++) {
-        for (int i = 0; i < 32; i++) {
-          DTdigestArray[j+1][i] = DTdigestArray[j][i];
-        }
-      }
-      for (int i = 0; i < 32; i++) DTdigestArray[0][i] = digest[i];
+        for (int i = 0; i < 32; i++) DTdigestArray[2][i] = DTdigestArray[1][i];
+        for (int i = 0; i < 32; i++) DTdigestArray[1][i] = DTdigestArray[0][i];
+        
+        for (int i = 0; i < 32; i++) DTdigestArray[0][i] = digest[i];
 
-      for (int i = 0; i < 3; i++) {
-      send_str("HMAC list:");
-      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32 , (char *)DTdigestArray[i]); 
-      }
+
+      send_str("HMAC list 1:");
+      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32 , (char *)DTdigestArray[0]); 
+
+       send_str("HMAC list 2:");
+      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32 , (char *)DTdigestArray[1]); 
+             send_str("HMAC list 2:");
+      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32 , (char *)DTdigestArray[2]); 
+      
 
       uint16_t sizeofDec = n - 16;
       uint8_t decrypted[sizeofDec]; //create decryted text array
