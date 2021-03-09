@@ -75,7 +75,8 @@ char* itoa(unsigned long value, char* buffer, int base)
 
 //temporary keys
 uint8_t key[16] = { "0123456789abcdef"};
-uint8_t hmac_key[16] = { "0123456789abcdef"};
+uint8_t DT_hmac_key[16] = { "0123456789abcdef"};
+uint8_t BC_hmac_key[16] = { "0123456789abcdef"};
 uint8_t iv[16] = { "0123456789abcdef"};
 uint8_t badKey[16] = { "0123456789abcdef"};
 
@@ -180,7 +181,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   struct tc_hmac_state_struct h;
   uint8_t digest[32];
   (void)memset(&h, 0x00, sizeof(h));
-  (void)tc_hmac_set_key(&h, hmac_key, sizeof(hmac_key));
+  (void)tc_hmac_set_key(&h, DT_hmac_key, sizeof(DT_hmac_key));
   (void)tc_hmac_init(&h);
   (void)tc_hmac_update(&h, (char *)encrypted, n);
   (void)tc_hmac_final(digest, 32, &h);
@@ -229,6 +230,8 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
 
+  DT_hmac_key[11] = (u_int8_t)(tgt_id % 256); //customize HMAC for specific target SED
+
   //pad message if needed for 16 byte blocks
   if (len % 16 != 0) 
   {
@@ -250,7 +253,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   struct tc_hmac_state_struct h;
   uint8_t digest[32];
   (void)memset(&h, 0x00, sizeof(h));
-  (void)tc_hmac_set_key(&h, hmac_key, sizeof(hmac_key));
+  (void)tc_hmac_set_key(&h, DT_hmac_key, sizeof(DT_hmac_key));
   (void)tc_hmac_init(&h);
   (void)tc_hmac_update(&h, (char *)encrypted, sizeofEnc);
   (void)tc_hmac_final(digest, 32, &h);
@@ -283,7 +286,7 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
   struct tc_hmac_state_struct h;
   uint8_t digest[32];
   (void)memset(&h, 0x00, sizeof(h));
-  (void)tc_hmac_set_key(&h, hmac_key, sizeof(hmac_key));
+  (void)tc_hmac_set_key(&h, BC_hmac_key, sizeof(BC_hmac_key));
   (void)tc_hmac_init(&h);
   (void)tc_hmac_update(&h, (char *)encrypted, n);
   (void)tc_hmac_final(digest, 32, &h);
@@ -359,7 +362,7 @@ int handle_brdcst_send(char *data, uint16_t len) {
   struct tc_hmac_state_struct h;
   uint8_t digest[32];
   (void)memset(&h, 0x00, sizeof(h));
-  (void)tc_hmac_set_key(&h, hmac_key, sizeof(hmac_key));
+  (void)tc_hmac_set_key(&h, BC_hmac_key, sizeof(BC_hmac_key));
   (void)tc_hmac_init(&h);
   (void)tc_hmac_update(&h, (char *)encrypted, sizeofEnc);
   (void)tc_hmac_final(digest, 32, &h);
@@ -422,8 +425,11 @@ int sss_register() {
   // receive response
   len = read_msg(SSS_INTF, msg2, &src_id, &tgt_id, sizeof(msg2) , 1);
   for (int i = 0; i < 16; i++) key[i] = msg2[4 + i]; //get AES key from server response
-  for (int i = 0; i < 16; i++) hmac_key[i] = msg2[20 + i]; //get HMAC key from server response
+  for (int i = 0; i < 16; i++) DT_hmac_key[i] = msg2[20 + i]; //get HMAC key from server response
+  for (int i = 0; i < 16; i++) BC_hmac_key[i] = msg2[20 + i]; //get HMAC key from server response
   for (int i = 0; i < 16; i++) iv[i] = msg2[36 + i]; //get initialization vector from server response
+  DT_hmac_key[11] = (u_int8_t)(SCEWL_ID % 256);
+
   send_str("AES:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(key), (char *)key);
   send_str("HMAC:");
