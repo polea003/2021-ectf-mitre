@@ -244,7 +244,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   DT_hmac_key[11] = (u_int8_t)(tgt_id % 256); //customize HMAC for specific target SED
 
   
-  send_str("SRN + msgCounter: ");
+
   char tempAry[10];
   char* secret;
   secret = itoa(DATA1 + msgCounter, tempAry, 10);
@@ -332,14 +332,6 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
         for (int i = 0; i < 32; i++) BCdigestArray[j][i] = BCdigestArray[j-1][i];
       }
       for (int i = 0; i < 32; i++) BCdigestArray[0][i] = digest[i];
-
-
-      send_str("HMAC list 1:");
-      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32 , (char *)BCdigestArray[0]); 
-       send_str("HMAC list 2:");
-      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32 , (char *)BCdigestArray[1]); 
-        send_str("HMAC list 3:");
-      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 32 , (char *)BCdigestArray[2]); 
       
       
       uint16_t sizeofDec = n - 16;
@@ -373,7 +365,7 @@ int handle_brdcst_send(char *data, uint16_t len) {
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
 
-  send_str("SRN + msgCounter: ");
+
   char tempAry[10];
   char* secret;
   secret = itoa(DATA1 + msgCounter, tempAry, 10);
@@ -471,15 +463,6 @@ int sss_register() {
   for (int i = 0; i < 16; i++) BC_hmac_key[i] = msg2[20 + i]; //get HMAC key from server response
   for (int i = 0; i < 16; i++) iv[i] = msg2[36 + i]; //get initialization vector from server response
   DT_hmac_key[11] = (u_int8_t)(SCEWL_ID % 256);
-
-  send_str("AES:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(key), (char *)key);
-  send_str("BC_HMAC:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(BC_hmac_key), (char *)BC_hmac_key);
-  send_str("DT_HMAC:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(DT_hmac_key), (char *)DT_hmac_key);
-  send_str("IV:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(iv), (char *)iv);
 
   // notify CPU of response
   status = send_msg(CPU_INTF, src_id, tgt_id, len, msg2);
