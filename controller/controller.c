@@ -474,7 +474,7 @@ int main() {
       handle_registration(buf);
     }
 
-    if (intf_avail(RAD_INTF) && src_id != SCEWL_FAA_ID) msgCounter++;
+    if (intf_avail(RAD_INTF)) msgCounter++;
 
     // server while registered
     while (registered) {
@@ -502,8 +502,9 @@ int main() {
       if (intf_avail(RAD_INTF)) {
         // Read message from antenna
         len = read_msg(RAD_INTF, buf, &src_id, &tgt_id, sizeof(buf), 1);
-        msgCounter++;
-        if (src_id == SCEWL_FAA_ID) msgCounter--;
+
+        if (src_id != SCEWL_FAA_ID) msgCounter++;
+        
         if (src_id != SCEWL_ID) { // ignore our own outgoing messages
           if (tgt_id == SCEWL_BRDCST_ID) {
             // receive broadcast message
