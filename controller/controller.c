@@ -502,8 +502,7 @@ int main() {
       if (intf_avail(RAD_INTF)) {
         // Read message from antenna
         len = read_msg(RAD_INTF, buf, &src_id, &tgt_id, sizeof(buf), 1);
-
-        if (src_id != SCEWL_FAA_ID) msgCounter++;
+        msgCounter++;
         
         if (src_id != SCEWL_ID) { // ignore our own outgoing messages
           if (tgt_id == SCEWL_BRDCST_ID) {
