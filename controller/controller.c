@@ -220,6 +220,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   else
   {
     //disregard message if not authentic
+    send_str("HMAC doesn't match. disgarding message.");
     return 0;
   }  
 
