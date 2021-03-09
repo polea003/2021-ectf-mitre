@@ -515,6 +515,7 @@ int main() {
   intf_init(SSS_INTF);
   intf_init(RAD_INTF);
 
+  for (int i=0; i < 3; i++) DTdigestArray[i] = { "0123456789abcdef0123456789abcdef"} ;
   // serve forever
   while (1) {
     // register with SSS
