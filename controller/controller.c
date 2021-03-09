@@ -83,6 +83,8 @@ uint8_t badKey[16] = { "0123456789abcdef"};
 uint8_t* DTdigestArray[3]; //Saved Direct transmissions
 uint8_t* BCdigestArray[3]; //Saved Broadcasts
 
+unsigned long msgCounter = 0;
+
 #define send_str(M) send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, strlen(M), M)
 #define BLOCK_SIZE 16
 
@@ -232,6 +234,14 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
 
   DT_hmac_key[11] = (u_int8_t)(tgt_id % 256); //customize HMAC for specific target SED
+
+  send_str("SRN + msgCounter: ");
+  char secret[10] = itoa(DATA1 + msgCounter, secret, 10);
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, secret);
+  for(int i = len; i < len + 10; i++) data[i] = secret[i];
+  len += 10;
+
+
 
   //pad message if needed for 16 byte blocks
   if (len % 16 != 0) 
@@ -517,12 +527,14 @@ int main() {
         len = read_msg(CPU_INTF, buf, &src_id, &tgt_id, sizeof(buf), 1);
 
         if (tgt_id == SCEWL_BRDCST_ID) {
+          msgCounter++;
           handle_brdcst_send(buf, len);
         } else if (tgt_id == SCEWL_SSS_ID) {
           handle_registration(buf);
         } else if (tgt_id == SCEWL_FAA_ID) {
           handle_faa_send(buf, len);
         } else {
+          msgCounter++;
           handle_scewl_send(buf, tgt_id, len);
         }
 
