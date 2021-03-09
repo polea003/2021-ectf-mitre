@@ -372,6 +372,14 @@ int handle_brdcst_send(char *data, uint16_t len) {
   
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
+
+  send_str("SRN + msgCounter: ");
+  char tempAry[10];
+  char* secret;
+  secret = itoa(DATA1 + msgCounter, tempAry, 10);
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, secret);
+  for(int i = len; i < len + 10; i++) data[i] = secret[i-len];
+  len += 10;
   
 
   //pad message if need to fit into 16 byte blocks
