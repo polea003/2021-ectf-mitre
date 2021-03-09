@@ -230,8 +230,6 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
-  send_str("origional message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
 
   DT_hmac_key[11] = (u_int8_t)(tgt_id % 256); //customize HMAC for specific target SED
 
@@ -242,6 +240,9 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, secret);
   for(int i = len; i < len + 10; i++) data[i] = secret[i-len];
   len += 10;
+
+  send_str("modified message:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
 
 
 
@@ -307,12 +308,12 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
   if (!_compare(digest, hmac, 32)) //Check to determine if HMAC calulated matches the one sent
   {
       // Check if broadcast matches previously recieved broadcasts. Ignore if the same.
-      for (int i = 0; i < 3; i++) {
+      /*for (int i = 0; i < 3; i++) {
         if (!_compare(digest, BCdigestArray[i], 32)) {
           send_str("Replayed message!!!!!");
           return 0; 
           }
-      }
+      }*/
 
       BCdigestArray[2] = BCdigestArray[1];
       BCdigestArray[1] = BCdigestArray[0];
