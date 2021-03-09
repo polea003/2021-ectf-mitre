@@ -79,7 +79,10 @@ uint8_t hmac_key[16] = { "0123456789abcdef"};
 uint8_t iv[16] = { "0123456789abcdef"};
 uint8_t badKey[16] = { "0123456789abcdef"};
 
+uint8_t* digestArray[3];
+
 unsigned long msgCounter = 0;
+
 
 #define send_str(M) send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, strlen(M), M)
 #define BLOCK_SIZE 16
@@ -186,7 +189,13 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
   if (!_compare(digest, hmac, 32)) //Check to determine if HMAC calulated matches the one sent
   {
-      
+      for (int i = 0; i < 3; i++) 
+        if (!_compare(digest, *digestArray[i], 32))
+          return 0;
+
+      digestArray[2] = digestArray[1];
+      digestArray[1] = digestArray[0];
+      digestArray[0] = digest;
       
       uint16_t sizeofDec = n - 16;
       uint8_t decrypted[sizeofDec]; //create decryted text array
