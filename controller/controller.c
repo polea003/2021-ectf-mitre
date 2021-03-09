@@ -197,9 +197,9 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
           return 0; 
           }
       } 
-
-        for (int i = 0; i < 32; i++) DTdigestArray[2][i] = DTdigestArray[1][i];
-        for (int i = 0; i < 32; i++) DTdigestArray[1][i] = DTdigestArray[0][i];
+      for (int j = 0; j < 2; j ++){
+        for (int i = 0; i < 32; i++) DTdigestArray[j+1][i] = DTdigestArray[j][i];
+      }
         
         for (int i = 0; i < 32; i++) DTdigestArray[0][i] = digest[i];
 
