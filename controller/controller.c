@@ -474,7 +474,7 @@ int main() {
       handle_registration(buf);
     }
 
-    if (intf_avail(RAD_INTF) && src_id == SCEWL_FAA_ID) msgCounter++;
+    if (intf_avail(RAD_INTF) && src_id != SCEWL_FAA_ID) msgCounter++;
 
     // server while registered
     while (registered) {
