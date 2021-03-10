@@ -254,7 +254,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   if (len % 16 != 0) 
   {
        for (int i = len; i < len + (16 - (len % 16)); i++) data[i] = '#';
-       len = len + (16 - (len % 16));
+       len = strlen(data);
   }
 
   //encrypt data AES CBC algo implementation 
