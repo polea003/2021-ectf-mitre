@@ -462,7 +462,7 @@ int sss_register() {
   tenDigitSerial = DATA1; //set serial equal to provisioned registration number and increment if less than 10 digits
   while (tenDigitSerial < 1000000000) tenDigitSerial *= 2;
   send_str("provisioned IV:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , (char *)iv);
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 16 , (char *)iv);
 
   // notify CPU of response
   status = send_msg(CPU_INTF, src_id, tgt_id, len, msg2);
