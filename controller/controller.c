@@ -254,14 +254,17 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   if (len % 16 != 0) 
   {
        for (int i = len; i < len + (16 - (len % 16)); i++) data[i] = '#';
+         char secret[20];
+         send_str("len + (16 - (len d 16))");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 2, itoa((unsigned long)len + (16 - (len % 16)), secret, 10));
+
+  send_str("strlen: ");
+
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 2, itoa((unsigned long)strlen(data), secret, 10));
        len = strlen(data);
   }
 
-  send_str("strlen: ");
-  char secret[20];
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 2, itoa((unsigned long)strlen(data), secret, 10));
-  send_str("len + (16 - (len d 16))");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 2, itoa((unsigned long)len + (16 - (len % 16)), secret, 10));
+
 
   //encrypt data AES CBC algo implementation 
   struct tc_aes_key_sched_struct a;
