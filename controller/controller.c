@@ -234,28 +234,27 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
-
-  msgCounter++;
-  DT_hmac_key[11] = (u_int8_t)(tgt_id % 256); //customize HMAC for specific target SED
-
-  char tempAry[10];
-  char* secret; 
-  secret = itoa(tenDigitSerial + msgCounter, tempAry, 10);
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, secret);
-  for(int i = len; i < len + 10; i++) data[i] = secret[i-len];
-  len += 10; 
-  
-
-  send_str("modified message:");
+  send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
 
 
+  msgCounter++; 
+  DT_hmac_key[11] = (u_int8_t)(tgt_id % 256); //customize HMAC for specific target SED
+
+  //append message with unique message ID
+  char tempAry[10]; 
+  char* messageID; 
+  messageID = itoa(tenDigitSerial + msgCounter, tempAry, 10);
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, messageID);
+  for(int i = len; i < len + 10; i++) data[i] = messageID[i-len];
+  len += 10; 
+  
 
   //pad message if needed for 16 byte blocks
   if (len % 16 != 0) 
   {
        for (int i = len; i < len + (16 - (len % 16)); i++) data[i] = '#';
-       len = strlen(data);
+       len = len + (16 - (len % 16));
   }
 
   //encrypt data AES CBC algo implementation 
