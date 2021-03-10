@@ -217,7 +217,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
       //remove padding
       for (i = sizeofDec - 1; decrypted[i] == '#'; i--,sizeofDec--) decrypted[i] = '\0';
-      //sizeofDec -= 10;
+      sizeofDec -= 10;
       
       send_str("Decrypted message:");
       send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted); 
