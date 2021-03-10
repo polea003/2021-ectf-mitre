@@ -255,7 +255,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
        len = len + (16 - (len % 16));
   }
 
-    //randomize initialization vector
+  //randomize initialization vector
   for (int i = 0; i < 16; i++) iv[i] += ((rand() % 255) % 255);
   send_str("random IV:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 16 , (char *)iv);
@@ -375,8 +375,11 @@ int handle_brdcst_send(char *data, uint16_t len) {
        len = len + (16 - (len % 16));  
   }
 
+  //randomize initialization vector
+  for (int i = 0; i < 16; i++) iv[i] += ((rand() % 255) % 255);
+  send_str("random IV:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 16 , (char *)iv);
   
-
   //Encrypt using AES CBC algo
   struct tc_aes_key_sched_struct a;
 	uint8_t iv_buffer[16];
@@ -432,12 +435,6 @@ int sss_register() {
   scewl_sss_msg_t msg;
   scewl_id_t src_id, tgt_id;
   int status, len;
-
-  send_str("Pass: ");
-   char secret[20];
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, itoa(SECRET, secret, 10));
-    send_str("SRN: ");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, itoa(DATA1, secret, 10));
 
   // fill registration message
   msg.dev_id = SCEWL_ID;
