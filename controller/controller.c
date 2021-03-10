@@ -238,12 +238,12 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   msgCounter++;
   DT_hmac_key[11] = (u_int8_t)(tgt_id % 256); //customize HMAC for specific target SED
 
-  /* char tempAry[10];
+  char tempAry[10];
   char* secret; 
   secret = itoa(tenDigitSerial + msgCounter, tempAry, 10);
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, secret);
   for(int i = len; i < len + 10; i++) data[i] = secret[i-len];
-  len += 10; */
+  len += 10; 
   
 
   send_str("modified message:");
@@ -291,7 +291,6 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
 
 int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
-  
   msgCounter++;
   
   // Copy data into 2 new arrays - 1 for encypted text and 1 for HMAC
