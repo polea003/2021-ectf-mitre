@@ -80,9 +80,11 @@ uint8_t BC_hmac_key[16] = { "0123456789abcdef"};
 uint8_t iv[16] = { "0123456789abcdef"};
 uint8_t badKey[16] = { "0123456789abcdef"};
 
+
 uint8_t DTdigestArray[16][32]; //Saved Direct Transmissions
 uint8_t BCdigestArray[16][32]; //Saved Broadcasts
 
+unsigned long tenDigitSerial = 0;
 unsigned long msgCounter = 0;
 
 #define send_str(M) send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, strlen(M), M)
@@ -243,8 +245,6 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
 
   DT_hmac_key[11] = (u_int8_t)(tgt_id % 256); //customize HMAC for specific target SED
 
-  
-
   char tempAry[10];
   char* secret;
   secret = itoa(DATA1 + msgCounter, tempAry, 10);
@@ -369,7 +369,7 @@ int handle_brdcst_send(char *data, uint16_t len) {
 
   char tempAry[10];
   char* secret;
-  secret = itoa(DATA1 + msgCounter, tempAry, 10);
+  secret = itoa(tenDigitSerial + msgCounter, tempAry, 10);
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, secret);
   for(int i = len; i < len + 10; i++) data[i] = secret[i-len];
   len += 10;
@@ -463,7 +463,9 @@ int sss_register() {
   for (int i = 0; i < 16; i++) DT_hmac_key[i] = msg2[20 + i]; //get HMAC key from server response
   for (int i = 0; i < 16; i++) BC_hmac_key[i] = msg2[20 + i]; //get HMAC key from server response
   for (int i = 0; i < 16; i++) iv[i] = msg2[36 + i]; //get initialization vector from server response
-  DT_hmac_key[11] = (u_int8_t)(SCEWL_ID % 256);
+  DT_hmac_key[11] = (u_int8_t)(SCEWL_ID % 256); //personalize direct transmission key based on provisoned ID
+  tenDigitSerial = DATA1; //set serial equal to provisioned registration number and increment if less than 10 digits
+  while (tenDigitSerial < 1000000000) tenDigitSerial *= 2;
 
   // notify CPU of response
   status = send_msg(CPU_INTF, src_id, tgt_id, len, msg2);
@@ -498,6 +500,7 @@ int sss_deregister() {
     DT_hmac_key[i] = badKey[i]; 
     iv[i] = badKey[i]; 
   }
+  tenDigitSerial = 0; // reset serial num
 
   // receive response
   len = read_msg(SSS_INTF, (char *)&msg, &src_id, &tgt_id, sizeof(scewl_sss_msg_t), 1);
