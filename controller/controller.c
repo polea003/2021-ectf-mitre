@@ -217,7 +217,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
       //remove padding
       for (i = sizeofDec - 1; decrypted[i] == '#'; i--,sizeofDec--) decrypted[i] = '\0';
-      sizeofDec -= 10;
+      sizeofDec -= 10; //disgard unique messageID
       
       send_str("Decrypted message:");
       send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted); 
@@ -232,20 +232,18 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
 }
 
-
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
 
 
-  msgCounter++; 
+  msgCounter++; //increment message counter for unique message ID
   DT_hmac_key[11] = (u_int8_t)(tgt_id % 256); //customize HMAC for specific target SED
 
   //append message with unique message ID
   char tempAry[10]; 
   char* messageID; 
   messageID = itoa(tenDigitSerial + msgCounter, tempAry, 10);
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, messageID);
   for(int i = len; i < len + 10; i++) data[i] = messageID[i-len];
   len += 10; 
   
@@ -257,6 +255,10 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
        len = len + (16 - (len % 16));
   }
 
+    //randomize initialization vector
+  iv[rand() % 16] += ((rand() % 255) % 255);
+  send_str("random IV:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , (char *)iv);
 
 
   //encrypt data AES CBC algo implementation 
@@ -291,8 +293,6 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
 
 
 int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
-
-  msgCounter++;
   
   // Copy data into 2 new arrays - 1 for encypted text and 1 for HMAC
   uint16_t n = len - 32;
@@ -339,7 +339,7 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
       //remove padding
       for (i = sizeofDec - 1; decrypted[i] == '#'; i--,sizeofDec--) decrypted[i] = '\0';
-      sizeofDec -= 10;
+      sizeofDec -= 10; //disgard unique messageID
       
       //send message
       send_str("Decrypted message:");
@@ -355,19 +355,19 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
 
 int handle_brdcst_send(char *data, uint16_t len) {
-  
+
+  msgCounter++; //increment message counter for unique message ID
+
   send_str("origional message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
 
-
+  //append message with unique message ID
   char tempAry[10];
-  char* secret;
-  secret = itoa(tenDigitSerial + msgCounter, tempAry, 10);
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10, secret);
-  for(int i = len; i < len + 10; i++) data[i] = secret[i-len];
+  char* messageID;
+  messageID = itoa(tenDigitSerial + msgCounter, tempAry, 10);
+  for(int i = len; i < len + 10; i++) data[i] = messageID[i-len];
   len += 10;
   
-
   //pad message if need to fit into 16 byte blocks
   if (len % 16 != 0) 
   {
@@ -375,6 +375,7 @@ int handle_brdcst_send(char *data, uint16_t len) {
        len = len + (16 - (len % 16));  
   }
 
+  
 
   //Encrypt using AES CBC algo
   struct tc_aes_key_sched_struct a;
@@ -452,6 +453,7 @@ int sss_register() {
 
   // receive response
   len = read_msg(SSS_INTF, msg2, &src_id, &tgt_id, sizeof(msg2) , 1);
+
   for (int i = 0; i < 16; i++) key[i] = msg2[4 + i]; //get AES key from server response
   for (int i = 0; i < 16; i++) DT_hmac_key[i] = msg2[20 + i]; //get HMAC key from server response
   for (int i = 0; i < 16; i++) BC_hmac_key[i] = msg2[20 + i]; //get HMAC key from server response
@@ -459,6 +461,8 @@ int sss_register() {
   DT_hmac_key[11] = (u_int8_t)(SCEWL_ID % 256); //personalize direct transmission key based on provisoned ID
   tenDigitSerial = DATA1; //set serial equal to provisioned registration number and increment if less than 10 digits
   while (tenDigitSerial < 1000000000) tenDigitSerial *= 2;
+  send_str("provisioned IV:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , (char *)iv);
 
   // notify CPU of response
   status = send_msg(CPU_INTF, src_id, tgt_id, len, msg2);
@@ -522,6 +526,7 @@ int main() {
   // serve forever
   while (1) {
     // register with SSS
+    srand(DATA1); //seed randGen with provisioned Device Registration Number
     read_msg(CPU_INTF, buf, &hdr.src_id, &hdr.tgt_id, sizeof(buf), 1);
 
     if (hdr.tgt_id == SCEWL_SSS_ID) {
