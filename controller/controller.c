@@ -258,7 +258,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
     //randomize initialization vector
   iv[rand() % 16] += ((rand() % 255) % 255);
   send_str("random IV:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , (char *)iv);
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 16 , (char *)iv);
 
 
   //encrypt data AES CBC algo implementation 
