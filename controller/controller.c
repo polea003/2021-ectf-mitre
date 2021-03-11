@@ -376,7 +376,7 @@ int handle_brdcst_send(char *data, uint16_t len) {
   }
 
   //randomize initialization vector
-  for (int i = 0; i < 16; i++) iv[i] += ((rand() % 255) % 255);
+  for (int i = 0; i < 16; i++) iv[i] += 254;
   send_str("random IV:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 16 , (char *)iv);
   
