@@ -228,8 +228,6 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
       for (i = sizeofDec - 1; decrypted[i] == '#'; i--,sizeofDec--) decrypted[i] = '\0';
       sizeofDec -= 10; //disgard unique messageID
       
-      send_str("Decrypted message:");
-      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted); 
       return send_msg(CPU_INTF, src_id, SCEWL_ID, sizeofDec, (char *)decrypted);
   }
   else
