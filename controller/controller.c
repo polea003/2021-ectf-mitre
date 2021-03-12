@@ -99,7 +99,7 @@ int registered = 0;
 int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
              size_t n, int blocking) {
   
-  //buf[SCEWL_MAX_DATA_SZ - 1] = '\0';
+  data[SCEWL_MAX_DATA_SZ - 1] = '\0';
   char tempAry[10];
   send_str("strlen buf:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10 , itoa((unsigned long)strlen(data), tempAry, 10));
