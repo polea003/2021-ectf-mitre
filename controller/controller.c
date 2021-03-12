@@ -85,7 +85,7 @@ uint8_t DTdigestArray[16][32]; //Saved Direct Transmissions
 uint8_t BCdigestArray[16][32]; //Saved Broadcasts
 
 unsigned long tenDigitSerial = 0;
-unsigned long msgCounter = 0;
+unsigned long msgCounter = 1;
 
 #define send_str(M) send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, strlen(M), M)
 #define BLOCK_SIZE 16
@@ -265,7 +265,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   }
 
   //randomize initialization vector
-  for (int i = 0; i < 16; i++) iv[i] += ((rand() % 255) % 255);
+  for (int i = 0; i < 16; i++) iv[i] = (rand() % 256);
   send_str("random IV:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 16 , (char *)iv);
 
@@ -385,7 +385,7 @@ int handle_brdcst_send(char *data, uint16_t len) {
   }
 
   //randomize initialization vector
-  for (int i = 0; i < 16; i++) iv[i] += (rand() % 256);
+  for (int i = 0; i < 16; i++) iv[i] = (rand() % 256);
   send_str("random IV:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 16 , (char *)iv);
   
@@ -528,11 +528,11 @@ int main() {
   intf_init(SSS_INTF);
   intf_init(RAD_INTF);
 
-  //for (int i=0; i < 3; i++) DTdigestArray[i] = { "0123456789abcdef0123456789abcdef"} ;
+
   // serve forever
   while (1) {
     // register with SSS
-    srand(DATA1); //seed randGen with provisioned Device Registration Number
+    srand(DATA1/msgCounter); //seed randGen with provisioned Device Registration Number and msgCounter
     read_msg(CPU_INTF, buf, &hdr.src_id, &hdr.tgt_id, sizeof(buf), 1);
 
     if (hdr.tgt_id == SCEWL_SSS_ID) {
@@ -544,8 +544,7 @@ int main() {
       memset(&hdr, 0, sizeof(hdr));
 
       // handle outgoing message from CPU
-      if (intf_avail(CPU_INTF)) {
-        
+      if (intf_avail(CPU_INTF)) { 
         // Read message from CPU
         len = read_msg(CPU_INTF, buf, &src_id, &tgt_id, sizeof(buf), 1);
 
