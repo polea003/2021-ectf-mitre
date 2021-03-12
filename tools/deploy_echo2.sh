@@ -24,7 +24,7 @@ export SSS_SOCK=sss.sock
 export FAA_SOCK=faa.sock
 export MITM_SOCK=mitm.sock
 export START_ID=10
-export END_ID=12
+export END_ID=13
 export SC_PROBE_SOCK=sc_probe.sock
 export SC_RECVR_SOCK=sc_recvr.sock
 
