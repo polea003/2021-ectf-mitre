@@ -357,9 +357,6 @@ int handle_brdcst_send(char *data, uint16_t len) {
 
   msgCounter++; //increment message counter for unique message ID
 
-  send_str("origional message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
-
   //append message with unique message ID
   char tempAry[10];
   char* messageID;
@@ -376,8 +373,6 @@ int handle_brdcst_send(char *data, uint16_t len) {
 
   //randomize initialization vector
   for (int i = 0; i < 16; i++) iv[i] = (rand() % 256);
-  send_str("random IV:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 16 , (char *)iv);
   
   //Encrypt using AES CBC algo
   struct tc_aes_key_sched_struct a;
