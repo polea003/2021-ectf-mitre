@@ -541,10 +541,10 @@ int main() {
 
       // handle outgoing message from CPU
       if (intf_avail(CPU_INTF)) {
-        buf[SCEWL_MAX_DATA_SZ - 1] = '\0';
+        //buf[SCEWL_MAX_DATA_SZ - 1] = '\0';
         // Read message from CPU
         len = read_msg(CPU_INTF, buf, &src_id, &tgt_id, sizeof(buf), 1);
-        buf[SCEWL_MAX_DATA_SZ - 1] = '\0';
+
 
         if (tgt_id == SCEWL_BRDCST_ID) {
           handle_brdcst_send(buf, len);
