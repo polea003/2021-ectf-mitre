@@ -242,9 +242,6 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 }
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
-  send_str("origional message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data);
-
 
   msgCounter++; //increment message counter for unique message ID
   DT_hmac_key[11] = (u_int8_t)(tgt_id % 256); //customize HMAC for specific target SED
@@ -266,9 +263,6 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
 
   //randomize initialization vector
   for (int i = 0; i < 16; i++) iv[i] = (rand() % 256);
-  send_str("random IV:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 16 , (char *)iv);
-
 
   //encrypt data AES CBC algo implementation 
   struct tc_aes_key_sched_struct a;
@@ -351,8 +345,6 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
       sizeofDec -= 10; //disgard unique messageID
       
       //send message
-      send_str("Decrypted message:");
-      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted); 
       return send_msg(CPU_INTF, src_id, SCEWL_BRDCST_ID, sizeofDec, (char *)decrypted);
   }
   else
@@ -465,10 +457,9 @@ int sss_register() {
   for (int i = 0; i < 16; i++) BC_hmac_key[i] = msg2[20 + i]; //get HMAC key from server response
   for (int i = 0; i < 16; i++) iv[i] = msg2[36 + i]; //get initialization vector from server response
   DT_hmac_key[11] = (u_int8_t)(SCEWL_ID % 256); //personalize direct transmission key based on provisoned ID
-  tenDigitSerial = DATA1; //set serial equal to provisioned registration number and increment if less than 10 digits
-  while (tenDigitSerial < 1000000000) tenDigitSerial *= 2;
-  send_str("provisioned IV:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 16 , (char *)iv);
+  tenDigitSerial = DATA1; //set serial equal to provisioned registration number 
+  while (tenDigitSerial < 1000000000) tenDigitSerial *= 2; //increment if less than 10 digits
+
 
   // notify CPU of response
   status = send_msg(CPU_INTF, src_id, tgt_id, len, msg2);
