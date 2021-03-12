@@ -105,5 +105,101 @@ int main(void) {
   if (scewl_deregister() != SCEWL_OK) {
     fprintf(log, "BAD DEREGISTRATION!\n");
   }
+
+  if (scewl_register() != SCEWL_OK) {
+    fprintf(log, "BAD REGISTRATION! Reregistering...\n");
+    if (scewl_deregister() != SCEWL_OK) {
+      fprintf(log, "BAD DEREGISTRATION!\n");
+      return 1;
+    }
+    if (scewl_register() != SCEWL_OK) {
+      fprintf(log, "BAD REGISTRATION! CANNOT RECOVER\n");
+      return 1;
+    }
+  }
+
+  fprintf(log, "Client SED: Sending message...\n");
+  scewl_send(SCEWL_BRDCST_ID, strlen(msg) , msg);
+  fprintf(log, "Deregistering...\n");
+  if (scewl_deregister() != SCEWL_OK) {
+    fprintf(log, "BAD DEREGISTRATION!\n");
+  }
+
+    if (scewl_register() != SCEWL_OK) {
+    fprintf(log, "BAD REGISTRATION! Reregistering...\n");
+    if (scewl_deregister() != SCEWL_OK) {
+      fprintf(log, "BAD DEREGISTRATION!\n");
+      return 1;
+    }
+    if (scewl_register() != SCEWL_OK) {
+      fprintf(log, "BAD REGISTRATION! CANNOT RECOVER\n");
+      return 1;
+    }
+  }
+
+  fprintf(log, "Client SED: Sending message...\n");
+  scewl_send(SCEWL_BRDCST_ID, strlen(msg) , msg);
+  fprintf(log, "Deregistering...\n");
+  if (scewl_deregister() != SCEWL_OK) {
+    fprintf(log, "BAD DEREGISTRATION!\n");
+  }
+
+    if (scewl_register() != SCEWL_OK) {
+    fprintf(log, "BAD REGISTRATION! Reregistering...\n");
+    if (scewl_deregister() != SCEWL_OK) {
+      fprintf(log, "BAD DEREGISTRATION!\n");
+      return 1;
+    }
+    if (scewl_register() != SCEWL_OK) {
+      fprintf(log, "BAD REGISTRATION! CANNOT RECOVER\n");
+      return 1;
+    }
+  }
+
+  fprintf(log, "Client SED: Sending message...\n");
+  scewl_send(SCEWL_BRDCST_ID, strlen(msg) , msg);
+  fprintf(log, "Deregistering...\n");
+  if (scewl_deregister() != SCEWL_OK) {
+    fprintf(log, "BAD DEREGISTRATION!\n");
+  }
+
+    if (scewl_register() != SCEWL_OK) {
+    fprintf(log, "BAD REGISTRATION! Reregistering...\n");
+    if (scewl_deregister() != SCEWL_OK) {
+      fprintf(log, "BAD DEREGISTRATION!\n");
+      return 1;
+    }
+    if (scewl_register() != SCEWL_OK) {
+      fprintf(log, "BAD REGISTRATION! CANNOT RECOVER\n");
+      return 1;
+    }
+  }
+
+  fprintf(log, "Client SED: Sending message...\n");
+  scewl_send(SCEWL_BRDCST_ID, strlen(msg) , msg);
+  fprintf(log, "Deregistering...\n");
+  if (scewl_deregister() != SCEWL_OK) {
+    fprintf(log, "BAD DEREGISTRATION!\n");
+  }
+
+    if (scewl_register() != SCEWL_OK) {
+    fprintf(log, "BAD REGISTRATION! Reregistering...\n");
+    if (scewl_deregister() != SCEWL_OK) {
+      fprintf(log, "BAD DEREGISTRATION!\n");
+      return 1;
+    }
+    if (scewl_register() != SCEWL_OK) {
+      fprintf(log, "BAD REGISTRATION! CANNOT RECOVER\n");
+      return 1;
+    }
+  }
+
+  fprintf(log, "Client SED: Sending message...\n");
+  scewl_send(SCEWL_BRDCST_ID, strlen(msg) , msg);
+  fprintf(log, "Deregistering...\n");
+  if (scewl_deregister() != SCEWL_OK) {
+    fprintf(log, "BAD DEREGISTRATION!\n");
+  }
+
   fprintf(log, "Exiting...\n");
 }
