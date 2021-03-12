@@ -99,11 +99,10 @@ int registered = 0;
 int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
              size_t n, int blocking) {
   
-  data[SCEWL_MAX_DATA_SZ - 1] = '\0';
-
-  if (strlen(data) > (SCEWL_MAX_DATA_SZ - 32)) {
-    for (int i = 0; i < strlen(data); i++) intf_readb(intf, 0);
-    send_str("disgarding message because too long");
+  //Check if buffer is overflowed
+  data[SCEWL_MAX_DATA_SZ - 1] = '\0'; //set last character equal to terminating value
+  if (strlen(data) > (SCEWL_MAX_DATA_SZ - 32)) { 
+    for (int i = 0; i < strlen(data); i++) intf_readb(intf, 0); //if too long, throw away message
     n = 0; 
   }
     
