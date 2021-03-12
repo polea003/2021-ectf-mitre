@@ -122,6 +122,7 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
     hdr.magicC = 0;
 
     if (intf_read(intf, (char *)&hdr.magicS, 1, blocking) == INTF_NO_DATA) {
+      send_str("no data");
       return SCEWL_NO_MSG;
     }
 
