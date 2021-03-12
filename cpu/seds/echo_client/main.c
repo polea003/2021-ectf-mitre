@@ -52,7 +52,7 @@ siNfidpL(veruioPjfwe))%60466176;}veruicPjfwe=(veruioPjfke+
 int main(void) {
   scewl_id_t src_id, tgt_id;
   uint16_t len;
-  char *msg = "The encryption algorithm processes the plaintext, and the MAC then hashes the encrypted message to authenticate. So cool right??Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Adipiscing elit duis tristique sollicitudin nibh sit amet. Morbi tincidunt augue interdum velit euismod in pellentesque massa. Aliquet risus feugiat in ante metus dictum at. Viverra ipsum nunc aliquet bibendum. Sed velit dignissim sodales ut. Etiam non quam lacus suspendisse faucibus interdum. Vestibulum sed arcu non odio euismod. Vitae auctor eu augue ut lectus arcu. Lorem donec massa sapien faucibus et. Praesent semper feugiat nibh sed. Velit scelerisque in dictum non. Sit amet massa vitae tortor condimentum lacinia quis. The encryption algorithm processes the plaintext, and the MAC then hashes the encrypted message to authenticate. So cool right??Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Adipiscing elit duis tristique sollicitudin nibh sit amet. Morbi tincidunt augue interdum velit euismod in pellentesque massa. Aliquet risus feugiat in ante metus dictum at. Viverra ipsum nunc aliquet bibendum. Sed velit dignissim sodales ut. Etiam non quam lacus suspendisse faucibus interdum. Vestibulum sed arcu non odio euismod. Vitae auctor eu augue ut lectus arcu. Lorem donec massa sapien faucibus et. Praesent semper feugiat nibh sed. Velit scelerisque in dictum non. Sit amet massa vitae tortor condimentum lacinia quis. Viverra maecenas accumsan lacus vel facilisis volutpat est velit egestas. Ac ut consequat semper viverra nam.  euismod in pellentesque massa. Aliquet risus feugiat in ante metus dictum at. Viverra ipsum nunc aliquet bibendum. Sed velit digni";
+  char *msg = "The encryption algorithm processes the plaintext, and the MAC then hashes the encrypted message to authenticate. So cool right??";
   char data[BUF_SZ];
 
   // open log file
@@ -106,7 +106,7 @@ int main(void) {
     fprintf(log, "BAD DEREGISTRATION!\n");
   }
 
-  /*if (scewl_register() != SCEWL_OK) {
+  if (scewl_register() != SCEWL_OK) {
     fprintf(log, "BAD REGISTRATION! Reregistering...\n");
     if (scewl_deregister() != SCEWL_OK) {
       fprintf(log, "BAD DEREGISTRATION!\n");
@@ -200,7 +200,7 @@ int main(void) {
   if (scewl_deregister() != SCEWL_OK) {
     fprintf(log, "BAD DEREGISTRATION!\n");
   }
-  */
+  
 
   fprintf(log, "Exiting...\n");
 }
