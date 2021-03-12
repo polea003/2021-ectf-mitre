@@ -532,7 +532,7 @@ int main() {
   // serve forever
   while (1) {
     // register with SSS
-    srand(DATA1/msgCounter); //seed randGen with provisioned Device Registration Number and msgCounter
+    srand(DATA1); //seed randGen with provisioned Device Registration Number and msgCounter
     read_msg(CPU_INTF, buf, &hdr.src_id, &hdr.tgt_id, sizeof(buf), 1);
 
     if (hdr.tgt_id == SCEWL_SSS_ID) {
