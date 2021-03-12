@@ -30,11 +30,13 @@ typedef uint16_t scewl_id_t;
 #define SCEWL_ID 0
 #endif
 
+// deployment passcode defined at compile
 #ifndef SECRET
 #warning SECRET not defined, using bad default of 100
 #define SECRET 100
 #endif
 
+// device registration number defined at compile
 #ifndef DATA1
 #warning DATA1 not defined, using bad default of 100
 #define DATA1 99

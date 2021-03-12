@@ -9,61 +9,9 @@
  * This code is being provided only for educational purposes for the 2021 MITRE eCTF competition,
  * and may not meet MITRE standards for quality. Use this code at your own risk!
  */
-void swap(char *x, char *y) {
-    char t = *x; *x = *y; *y = t;
-}
- 
-// function to reverse buffer[i..j]
-char* reverse(char *buffer, int i, int j)
-{
-    while (i < j)
-        swap(&buffer[i++], &buffer[j--]);
- 
-    return buffer;
-}
- 
-// Iterative function to implement itoa() function in C
-char* itoa(unsigned long value, char* buffer, int base)
-{
-    // invalid input
-    if (base < 2 || base > 32)
-        return buffer;
- 
-    // consider absolute value of number
-    unsigned long n = value;
- 
-    int i = 0;
-    while (n)
-    {
-        int r = n % base;
- 
-        if (r >= 10) 
-            buffer[i++] = 65 + (r - 10);
-        else
-            buffer[i++] = 48 + r;
- 
-        n = n / base;
-    }
- 
-    // if number is 0
-    if (i == 0)
-        buffer[i++] = '0';
- 
-    // If base is 10 and value is negative, the resulting string 
-    // is preceded with a minus sign (-)
-    // With any other base, value is always considered unsigned
-    if (value < 0 && base == 10)
-        buffer[i++] = '-';
- 
-    buffer[i] = '\0'; // null terminate string
- 
-    // reverse the string and return it
-    return reverse(buffer, 0, i - 1);
-}
 
 #include "controller.h"
 #include <tinycrypt/constants.h>
-//#include <test_utils.h>
 #include <tinycrypt/utils.h>
 #include <tinycrypt/cbc_mode.h>
 #include <tinycrypt/hmac.h>
@@ -72,6 +20,11 @@ char* itoa(unsigned long value, char* buffer, int base)
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+
+//functions for implementing an integer to ascii conversion
+void swap(char *x, char *y);
+char* reverse(char *buffer, int i, int j);
+char* itoa(unsigned long value, char* buffer, int base);
 
 //temporary keys
 uint8_t key[16] = { "0123456789abcdef"};
@@ -201,14 +154,14 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
   if (!_compare(digest, hmac, 32)) //Check to determine if HMAC calulated matches the one sent
   {
-      // Check if transmission matches previously recieved transmissions. Ignore if the same.
+      // Check if MAC matches previously recieved MACs. Ignore if the same.
       for (int i = 0; i < 16; i++) {
         if (!_compare(digest, DTdigestArray[i], 32)) {
-          send_str("Replayed message!!!!!");
-          return 0; 
+          return 0;
           }
       } 
 
+      //store newly recieved MAC in array
       for (int j = 15; j > 0; j--){
         for (int i = 0; i < 32; i++) DTdigestArray[j][i] = DTdigestArray[j-1][i];
       }
@@ -314,14 +267,14 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
   if (!_compare(digest, hmac, 32)) //Check to determine if HMAC calulated matches the one sent
   {
-      // Check if broadcast matches previously recieved broadcasts. Ignore if the same.
+      // Check if MAC matches previously recieved MACs. Ignore if the same.
       for (int i = 0; i < 16; i++) {
         if (!_compare(digest, BCdigestArray[i], 32)) {
-          send_str("Replayed message!!!!!");
           return 0; 
           }
       } 
 
+      //store newly recieved MAC in array
       for (int j = 15; j > 0; j--){
         for (int i = 0; i < 32; i++) BCdigestArray[j][i] = BCdigestArray[j-1][i];
       }
@@ -573,48 +526,55 @@ int main() {
     }
   }
 }
-//Zero Proof for authenication
-//OAUTH (initial password, then server challenges drones)
-//strncpy over strcpy - explicity define num of characters to prevent overflow
-/*
-Response/challenge means of authentication
 
-To Do:
--pull in new changes from mitre server (done)
-
--only send key to drones on proper registration, not on degistration or if already registered.
-currently sends to all. (done)
-
--different key for HMAC and AES (done)
--Random IV (done)
--Add random first block to encryption (obe)
-
--Check authenticity of drone in supply chain before distributing key (done)
-
--counter or timer (timestamp included in message, only approved in small time window) (obe)
-
--Next, we want to remind all teams of one critical security feature. 
-All attacking teams will receive the compiled binary firmware from one UAV’s SCEWL Bus Controller,
-providing access to any secrets compiled into the device. 
-After the organizers collect the binary, we will run make remove_sed to remove that device 
-from the deployment, so make sure to do any necessary cleanup there 
-(in dockerfiles/3_remove_sed.Dockerfile) necessary to protect your system from the 
-compromised SED. (done)
-
--compromised CPU does not result in a compromised controller (ie no blocking?)
-
--Random key generation in SSS post prossessing and distributing key
-to drones on registration (done)
--Proper comparing of MACs (done)
-
--Address buffer overflow attacks (check the size of any input read, 
-reject any message too large) *memset *memcpy
--Address side-chain attacks
--Address FAA attacks, must be passed directly to the CPU (nothing to do)
-
--dynamic or static memory for message buffer
--validate data before putting in buffer
--UNIX Sockets - how does our communications/exchange of communications work?
-
--potenitally modifying build process to address vulnerabilities (safegaurds to gcc compiler)
-*/
+void swap(char *x, char *y) {
+    char t = *x; *x = *y; *y = t;
+}
+ 
+// function to reverse buffer[i..j]
+char* reverse(char *buffer, int i, int j)
+{
+    while (i < j)
+        swap(&buffer[i++], &buffer[j--]);
+ 
+    return buffer;
+}
+ 
+// Iterative function to implement itoa() function in C
+char* itoa(unsigned long value, char* buffer, int base)
+{
+    // invalid input
+    if (base < 2 || base > 32)
+        return buffer;
+ 
+    // consider absolute value of number
+    unsigned long n = value;
+ 
+    int i = 0;
+    while (n)
+    {
+        int r = n % base;
+ 
+        if (r >= 10) 
+            buffer[i++] = 65 + (r - 10);
+        else
+            buffer[i++] = 48 + r;
+ 
+        n = n / base;
+    }
+ 
+    // if number is 0
+    if (i == 0)
+        buffer[i++] = '0';
+ 
+    // If base is 10 and value is negative, the resulting string 
+    // is preceded with a minus sign (-)
+    // With any other base, value is always considered unsigned
+    if (value < 0 && base == 10)
+        buffer[i++] = '-';
+ 
+    buffer[i] = '\0'; // null terminate string
+ 
+    // reverse the string and return it
+    return reverse(buffer, 0, i - 1);
+}
