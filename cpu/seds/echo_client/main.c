@@ -108,10 +108,11 @@ int main(void) {
   */
 
   // deregister
-  fprintf(log, "Deregistering...\n");
+  fprintf(log, "Client Deregistering...\n");
   if (scewl_deregister() != SCEWL_OK) {
     fprintf(log, "BAD DEREGISTRATION!\n");
   }
+  else fprintf(log, "SUCCESSFUL DEREGISTRATION!\n");
 
   /*if (scewl_register() != SCEWL_OK) {
     fprintf(log, "BAD REGISTRATION! Reregistering...\n");
