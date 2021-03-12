@@ -32,6 +32,7 @@ export SC_RECVR_SOCK=sc_recvr.sock
 make create_deployment
 make add_sed SED=echo_server SCEWL_ID=10 NAME=echo_server
 make add_sed SED=echo_client SCEWL_ID=11 NAME=echo_client CUSTOM='TGT_ID=10'
+make add_sed SED=echo_client SCEWL_ID=12 NAME=echo_client2 CUSTOM='TGT_ID=10'
 
 # launch deployment
 make deploy
@@ -43,6 +44,8 @@ python3 tools/faa.py $SOCK_ROOT/$FAA_SOCK &
 make launch_sed_d NAME=echo_server SCEWL_ID=10
 sleep 1
 make launch_sed_d NAME=echo_client SCEWL_ID=11
+sleep 1
+make launch_sed_d NAME=echo_client2 SCEWL_ID=12
 
 # bring transceiver back into foreground
 fg
