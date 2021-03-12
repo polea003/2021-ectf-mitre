@@ -103,7 +103,13 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   char tempAry[10];
   send_str("strlen buf:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, 10 , itoa((unsigned long)strlen(data), tempAry, 10));
-  if (strlen(data) > (SCEWL_MAX_DATA_SZ - 32)) return SCEWL_NO_MSG; 
+  if (strlen(data) > (SCEWL_MAX_DATA_SZ - 32)) {
+
+    for (int i = 0; strlen(data); i++) {
+    intf_readb(intf, 0);
+  }
+  return SCEWL_NO_MSG; 
+  }
     
   scewl_hdr_t hdr;
   int read, max;
