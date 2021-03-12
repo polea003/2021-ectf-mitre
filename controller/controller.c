@@ -107,7 +107,7 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   if (strlen(data) > (SCEWL_MAX_DATA_SZ - 32)) {
     for (int i = 0; i < strlen(data); i++) intf_readb(intf, 0);
     send_str("disgarding message because too long");
-    //n = 0; 
+    n = 0; 
   }
     
   scewl_hdr_t hdr;
