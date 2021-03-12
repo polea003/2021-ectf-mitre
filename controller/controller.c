@@ -528,13 +528,18 @@ int main() {
   intf_init(SSS_INTF);
   intf_init(RAD_INTF);
 
+  //seed randGen with provisioned Device Registration Number and msgCounter
+  unsigned long randomizer = DATA1;
+  randomizer += msgCounter;
+  srand(randomizer);
+  randomizer = 0;
 
   // serve forever
   while (1) {
     // register with SSS
-    srand(DATA1); //seed randGen with provisioned Device Registration Number and msgCounter
     read_msg(CPU_INTF, buf, &hdr.src_id, &hdr.tgt_id, sizeof(buf), 1);
 
+    
     if (hdr.tgt_id == SCEWL_SSS_ID) {
       handle_registration(buf);
     }
