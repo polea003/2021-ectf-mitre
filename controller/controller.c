@@ -52,9 +52,16 @@ int registered = 0;
 int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
              size_t n, int blocking) {
   
-  
+  char bufFlag = 0;
+  unsigned long bufLen = 0;
 
-    
+  data[SCEWL_MAX_DATA_SZ - 1] = '\0'; //set last character equal to terminating value
+  if (strlen(data) > 16000) {   
+    send_str("too big");
+    unsigned long bufLen = strlen(data);
+    bufFlag = 1;
+  }
+
   scewl_hdr_t hdr;
   int read, max;
 
@@ -62,11 +69,9 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   memset(&hdr, 0, sizeof(hdr));
   memset(data, 0, n);
 
-  //Check if buffer is overflowed
-  data[SCEWL_MAX_DATA_SZ - 1] = '\0'; //set last character equal to terminating value
-  if (strlen(data) > 16000) { 
-    send_str("too big");
-    for (int i = 0; i < strlen(data); i++) intf_readb(intf, 0); //if too long, throw away message
+  if (bufFlag) { 
+    send_str("deleting string");
+    for (int i = 0; i < bufLen; i++) intf_readb(intf, 0); //if too long, throw away message
     n = 0; 
   }
 
