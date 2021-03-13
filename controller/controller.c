@@ -140,6 +140,11 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
+  if (strlen(data) > 16528) {   
+    send_str("too big discarding message");
+    return 0;
+  }
+
   send_str("recieved message:");
   send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data); 
 
