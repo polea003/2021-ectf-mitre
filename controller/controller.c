@@ -58,8 +58,6 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   data[SCEWL_MAX_DATA_SZ - 1] = '\0'; //set last character equal to terminating value
   if (strlen(data) > 16000) {   
     send_str("too big");
-    send_str("deleting message body");
-    bufFlag = 1;
   }
 
   scewl_hdr_t hdr;
@@ -506,9 +504,6 @@ int main() {
       if (intf_avail(CPU_INTF)) { 
         // Read message from CPU
         len = read_msg(CPU_INTF, buf, &src_id, &tgt_id, sizeof(buf), 1);
-        if (bufFlag) {
-          for (int i = 0; i < sizeof(buf); i++) buf[i] = '\0';
-        }
 
         if (tgt_id == SCEWL_BRDCST_ID) {
           handle_brdcst_send(buf, len);
