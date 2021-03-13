@@ -248,7 +248,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
 
   //send encrypted message
   send_str("sent message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , (char *)msg); 
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(msg), (char *)msg); 
   return send_msg(RAD_INTF, SCEWL_ID, tgt_id, sizeof(msg), (char *)msg);
 }
 
