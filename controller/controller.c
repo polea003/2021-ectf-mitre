@@ -54,10 +54,10 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   
   //Check if buffer is overflowed
   //data[SCEWL_MAX_DATA_SZ - 1] = '\0'; //set last character equal to terminating value
-  if (strlen(data) > (SCEWL_MAX_DATA_SZ)) { 
+ /* if (strlen(data) > (SCEWL_MAX_DATA_SZ)) { 
     for (int i = 0; i < strlen(data); i++) intf_readb(intf, 0); //if too long, throw away message
     n = 0; 
-  }
+  }*/
     
   scewl_hdr_t hdr;
   int read, max;
@@ -245,6 +245,8 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   for (i = sizeofEnc; i < sizeofEnc + 32; i++) msg[i] = digest[i - sizeofEnc];
 
   //send encrypted message
+  send_str("sent message:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , msg); 
   return send_msg(RAD_INTF, SCEWL_ID, tgt_id, sizeof(msg), (char *)msg);
 }
 
