@@ -19,7 +19,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#define SCEWL_MAX_DATA_SZ 16560
+#define SCEWL_MAX_DATA_SZ 16544
 
 // type of a SCEWL ID
 typedef uint16_t scewl_id_t;
