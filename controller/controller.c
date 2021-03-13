@@ -70,7 +70,7 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   memset(data, 0, n);
 
   if (bufFlag) { 
-    return SCEWL_NO_MSG;
+    return 0;
   }
 
   // find header start
@@ -205,6 +205,8 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 }
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
+
+  if (len == 0) { send_str("sending nothing"); return 0;}
 
   msgCounter++; //increment message counter for unique message ID
   DT_hmac_key[11] = (u_int8_t)(tgt_id % 256); //customize HMAC for specific target SED
@@ -504,8 +506,9 @@ int main() {
       if (intf_avail(CPU_INTF)) { 
         // Read message from CPU
         len = read_msg(CPU_INTF, buf, &src_id, &tgt_id, sizeof(buf), 1);
-        if (bufFlag) for (int i = 0; i < sizeof(buf); i++) buf[i] = '\0';
-
+        if (bufFlag) {
+          for (int i = 0; i < sizeof(buf); i++) buf[i] = '\0';
+        }
 
         if (tgt_id == SCEWL_BRDCST_ID) {
           handle_brdcst_send(buf, len);
