@@ -71,7 +71,7 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
 
   if (bufFlag) { 
     send_str("deleting string");
-    for (int i = 0; i < bufLen; i++) intf_readb(intf, 0); //if too long, throw away message
+    //for (int i = 0; i < bufLen; i++) intf_readb(intf, 0); //if too long, throw away message
     n = 0; 
   }
 
