@@ -70,9 +70,8 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   memset(data, 0, n);
 
   if (bufFlag) { 
-    send_str("deleting string");
-    //for (int i = 0; i < bufLen; i++) intf_readb(intf, 0); //if too long, throw away message
-    return SCEWL_NO_MSG;
+    send_str("deleting message body");
+    for (int i = 8; i < bufLen; i++) data[i] = '\0';
   }
 
   // find header start
