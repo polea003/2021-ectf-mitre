@@ -53,13 +53,13 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
              size_t n, int blocking) {
   
   char bufFlag = 0;
-  unsigned long bufLen = 0;
+  //unsigned long bufLen = 0;
 
   data[SCEWL_MAX_DATA_SZ - 1] = '\0'; //set last character equal to terminating value
   if (strlen(data) > 16000) {   
     send_str("too big");
     send_str("deleting message body");
-    bufLen = strlen(data);
+    //bufLen = strlen(data);
     //for (int i = 8; i < bufLen; i++) data[i] = '\0';
     bufFlag = 1;
   }
@@ -72,7 +72,7 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   memset(data, 0, n);
 
   if (bufFlag) { 
-    n = 0;
+    return SCEWL_NO_MSG;
   }
 
   // find header start
@@ -108,10 +108,6 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   max = hdr.len < n ? hdr.len : n;
   if (n == 0) max = 0;
   read = intf_read(intf, data, max, blocking);
-
-  if (bufFlag) { 
-  for (int i = 0; i < bufLen - 8; i++) intf_readb(intf, 0);
-  }
 
   // throw away rest of message if too long
   for (int i = 0; hdr.len > max && i < hdr.len - max; i++) {
