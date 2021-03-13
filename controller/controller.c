@@ -135,6 +135,9 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
+  send_str("recieved message:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data); 
+
   // Copy data into 2 new arrays - 1 for encypted text and 1 for HMAC
   uint16_t n = len - 32;
   uint8_t encrypted[n];
@@ -157,6 +160,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
       // Check if MAC matches previously recieved MACs. Ignore if the same.
       for (int i = 0; i < 16; i++) {
         if (!_compare(digest, DTdigestArray[i], 32)) {
+          send_str("macs dont match");
           return 0;
           }
       } 
