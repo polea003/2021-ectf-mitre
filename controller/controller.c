@@ -71,7 +71,8 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
 
   if (bufFlag) { 
     send_str("deleting message body");
-    for (int i = 8; i < bufLen; i++) data[i] = '\0';
+    for (int i = 8; i < bufLen; i++) (char *)&data + i = '\0';
+    n = 0;
   }
 
   // find header start
