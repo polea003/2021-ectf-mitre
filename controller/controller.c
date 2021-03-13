@@ -22,6 +22,7 @@
 #include <stdint.h>
 
 //functions for implementing an integer to ascii conversion
+char bufFlag;
 void swap(char *x, char *y);
 char* reverse(char *buffer, int i, int j);
 char* itoa(unsigned long value, char* buffer, int base);
@@ -51,15 +52,13 @@ int registered = 0;
 
 int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
              size_t n, int blocking) {
-  
-  char bufFlag = 0;
-  //unsigned long bufLen = 0;
+
+  bufFlag = 0;
 
   data[SCEWL_MAX_DATA_SZ - 1] = '\0'; //set last character equal to terminating value
   if (strlen(data) > 16000) {   
     send_str("too big");
     send_str("deleting message body");
-    for (int i = 0; i < SCEWL_MAX_DATA_SZ; i++) intf_readb(intf, 0);
     bufFlag = 1;
   }
 
@@ -105,7 +104,6 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
 
   // read body
   max = hdr.len < n ? hdr.len : n;
-  if (n == 0) max = 0;
   read = intf_read(intf, data, max, blocking);
 
   // throw away rest of message if too long
@@ -506,6 +504,7 @@ int main() {
       if (intf_avail(CPU_INTF)) { 
         // Read message from CPU
         len = read_msg(CPU_INTF, buf, &src_id, &tgt_id, sizeof(buf), 1);
+        if (bufFlag) for (int i = 0; i < sizeof(buf); i++) buf[i] = '\0';
 
 
         if (tgt_id == SCEWL_BRDCST_ID) {
