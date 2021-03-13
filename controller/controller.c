@@ -185,7 +185,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
       sizeofDec -= 10; //disgard unique messageID
       
       send_str("decrypted message:");
-      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , (char *)decrypted); 
+      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted); 
       return send_msg(CPU_INTF, src_id, SCEWL_ID, sizeofDec, (char *)decrypted);
   }
   else
