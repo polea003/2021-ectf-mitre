@@ -62,6 +62,7 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
     for (int i = 8; i < bufLen; i++) data[i] = '\0';
     bufLen = strlen(data);
     bufFlag = 1;
+    return SCEWL_NO_MSG;
   }
 
   scewl_hdr_t hdr;
