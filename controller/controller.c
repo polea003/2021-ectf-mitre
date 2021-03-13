@@ -60,7 +60,7 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
     send_str("too big");
     send_str("deleting message body");
     bufLen = strlen(data);
-    for (int i = 8; i < bufLen; i++) data[i] = '\0';
+    //for (int i = 8; i < bufLen; i++) data[i] = '\0';
     bufFlag = 1;
   }
 
@@ -111,6 +111,7 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   if (bufFlag) { 
   for (int i = 0; i < bufLen - 8; i++) intf_readb(intf, 0);
   }
+
   // throw away rest of message if too long
   for (int i = 0; hdr.len > max && i < hdr.len - max; i++) {
     intf_readb(intf, 0);
