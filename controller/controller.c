@@ -59,8 +59,7 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   if (strlen(data) > 16000) {   
     send_str("too big");
     send_str("deleting message body");
-    //bufLen = strlen(data);
-    //for (int i = 8; i < bufLen; i++) data[i] = '\0';
+    for (int i = 0; i < strlen(data); i++) intf_readb(intf, 0);
     bufFlag = 1;
   }
 
