@@ -106,6 +106,7 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
 
   // read body
   max = hdr.len < n ? hdr.len : n;
+  if (n == 0) max = 0;
   read = intf_read(intf, data, max, blocking);
 
   if (bufFlag) { 
