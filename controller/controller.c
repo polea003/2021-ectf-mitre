@@ -160,7 +160,6 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
       // Check if MAC matches previously recieved MACs. Ignore if the same.
       for (int i = 0; i < 16; i++) {
         if (!_compare(digest, DTdigestArray[i], 32)) {
-          send_str("macs dont match");
           return 0;
           }
       } 
@@ -305,6 +304,7 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
   else
   {
     //disregard non-authentic messages
+    send_str("macs dont match");
     return 0;
   }  
 }
