@@ -195,17 +195,13 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   
-  if (len > 16456) {
-    send_str("in if statement");
-    memset(data + 16456, 0, (len - 16456));
-    len = 16456;
+  //check if message exceeds buffer length and shorten if necessary
+  int maxMsgLength = 16456;
+  if (len > maxMsgLength) {
+    memset(data + maxMsgLength, 0, (len - maxMsgLength));
+    len = maxMsgLength;
   }
-  /*data[SCEWL_MAX_DATA_SZ - 1] = '\0'; //set last character equal to terminating value
-  for (int i = len - 1 ; i >= 16456; i--) {
-    data[i] = '\0';
-  }
-  }
-*/
+
   msgCounter++; //increment message counter for unique message ID
   DT_hmac_key[11] = (u_int8_t)(tgt_id % 256); //customize HMAC for specific target SED
 
@@ -323,9 +319,9 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
 int handle_brdcst_send(char *data, uint16_t len) {
 
+  //check if message exceeds buffer length and shorten if necessary
   int maxMsgLength = 16456;
   if (len > maxMsgLength) {
-    send_str("in if statement");
     memset(data + maxMsgLength, 0, (len - maxMsgLength));
     len = maxMsgLength;
   }
