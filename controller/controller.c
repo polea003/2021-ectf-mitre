@@ -205,11 +205,11 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
 }
 
-int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
+int handle_scewl_send(char** data, scewl_id_t tgt_id, uint16_t len) {
   
   if (len > 16456) {
     send_str("in if statement");
-    memset(data + 16456, '\0', (SCEWL_MAX_DATA_SZ - 16456));
+    memset(data + 16456, 0, (len - 16456));
     len = 16456;
   }
   /*data[SCEWL_MAX_DATA_SZ - 1] = '\0'; //set last character equal to terminating value
