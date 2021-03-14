@@ -131,10 +131,9 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
   hdr.tgt_id = tgt_id;
   hdr.len    = len;
 
-  if (len > 16544)
+  if (len > 16544) {
   data[SCEWL_MAX_DATA_SZ - 1] = '\0'; //set last character equal to terminating value
-  if (strlen(data) > 16456) {   
-  for (int i = (SCEWL_MAX_DATA_SZ - 1) ; i >= strlen(data); i--) {
+  for (int i = len -1 ; i >= 16456; i--) {
     data[i] = '\0';
   }
   }
