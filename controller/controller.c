@@ -35,8 +35,8 @@ uint8_t iv[16] = { "0123456789abcdef"};
 uint8_t badKey[16] = { "0123456789abcdef"};
 
 
-uint8_t DTdigestArray[16][32]; //Saved Direct Transmissions
-uint8_t BCdigestArray[16][32]; //Saved Broadcasts
+uint8_t DTdigestArray[16][32]; //Saved Direct Transmissions MACs
+uint8_t BCdigestArray[16][32]; //Saved Broadcasts MACs
 
 unsigned long tenDigitSerial = 0;
 unsigned long msgCounter = 1;
