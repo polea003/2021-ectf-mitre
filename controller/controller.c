@@ -406,10 +406,12 @@ int sss_register() {
   // receive response
   len = read_msg(SSS_INTF, msg2, &src_id, &tgt_id, sizeof(msg2) , 1);
 
-  for (int i = 0; i < 16; i++) key[i] = msg2[4 + i]; //get AES key from server response
-  for (int i = 0; i < 16; i++) DT_hmac_key[i] = msg2[20 + i]; //get HMAC key from server response
-  for (int i = 0; i < 16; i++) BC_hmac_key[i] = msg2[20 + i]; //get HMAC key from server response
-  for (int i = 0; i < 16; i++) iv[i] = msg2[36 + i]; //get initialization vector from server response
+  for (int i = 0; i < 16; i++) {
+    key[i] = msg2[4 + i]; //get AES key from server response
+    DT_hmac_key[i] = msg2[20 + i]; //get HMAC key from server response
+    BC_hmac_key[i] = msg2[20 + i]; //get HMAC key from server response
+    iv[i] = msg2[36 + i]; //get initialization vector from server response
+  }
   DT_hmac_key[11] = (u_int8_t)(SCEWL_ID % 256); //personalize direct transmission key based on provisoned ID
   tenDigitSerial = DATA1; //set serial equal to provisioned registration number 
   while (tenDigitSerial < 1000000000) tenDigitSerial *= 2; //increment if less than 10 digits
