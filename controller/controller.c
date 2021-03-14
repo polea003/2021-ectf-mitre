@@ -53,15 +53,7 @@ int registered = 0;
 int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
              size_t n, int blocking) {
 
-  /*char bufFlag = 0;
-  data[SCEWL_MAX_DATA_SZ - 1] = '\0'; //set last character equal to terminating value
-  if (strlen(data) > 16456) {   
-  for (int i = (SCEWL_MAX_DATA_SZ - 1) ; i >= strlen(data); i--) {
-    data[i] = '\0';
-  }
-    bufFlag = 1;
-  }*/
-  
+  int maxMsgLength = 16528;
 
   scewl_hdr_t hdr;
   int read, max;
@@ -100,16 +92,12 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   *src_id = hdr.src_id;
   *tgt_id = hdr.tgt_id;
 
-  /*if (bufFlag) {  
-    hdr.len = 16456;
-  }*/
-
   // read body
-  max = hdr.len < n ? hdr.len : n;
+  max = hdr.len < maxMsgLength ? hdr.len : maxMsgLength;
   read = intf_read(intf, data, max, blocking);
 
   // throw away rest of message if too long
-  for (int i = 0; hdr.len > max && i < hdr.len - max; i++) {
+  for (int i = 0; hdr.len > maxMsgLength && i < hdr.len - maxMsgLength; i++) {
     intf_readb(intf, 0);
   }
 
@@ -207,11 +195,11 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   
-  if (len > 16456) {
+  /*if (len > 16456) {
     send_str("in if statement");
     memset(data + 16456, 0, (len - 16456));
     len = 16456;
-  }
+  }*/
   /*data[SCEWL_MAX_DATA_SZ - 1] = '\0'; //set last character equal to terminating value
   for (int i = len - 1 ; i >= 16456; i--) {
     data[i] = '\0';
