@@ -57,7 +57,7 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
 
   data[SCEWL_MAX_DATA_SZ - 1] = '\0'; //set last character equal to terminating value
   if (strlen(data) > 16456) {   
-  for (int i = 0; i < strlen(data); i++) {
+  for (int i = 0; i < SCEWL_MAX_DATA_SZ; i++) {
     intf_readb(intf, 0);
   }
     bufFlag = 1;
