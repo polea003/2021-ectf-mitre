@@ -131,12 +131,6 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
   hdr.tgt_id = tgt_id;
   hdr.len    = len;
 
-  if (len > 16544) {
-  data[SCEWL_MAX_DATA_SZ - 1] = '\0'; //set last character equal to terminating value
-  for (int i = len -1 ; i >= 16456; i--) {
-    data[i] = '\0';
-  }
-  }
   // send header
   intf_write(intf, (char *)&hdr, sizeof(scewl_hdr_t));
 
@@ -212,6 +206,13 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 }
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
+  
+  if (len > 16544) {
+  data[SCEWL_MAX_DATA_SZ - 1] = '\0'; //set last character equal to terminating value
+  for (int i = len -1 ; i >= 16456; i--) {
+    data[i] = '\0';
+  }
+  }
 
   msgCounter++; //increment message counter for unique message ID
   DT_hmac_key[11] = (u_int8_t)(tgt_id % 256); //customize HMAC for specific target SED
