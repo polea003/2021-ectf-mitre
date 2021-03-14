@@ -53,11 +53,11 @@ int registered = 0;
 int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
              size_t n, int blocking) {
 
-  bufFlag = 0;
+  
 
   data[SCEWL_MAX_DATA_SZ - 1] = '\0'; //set last character equal to terminating value
-  if (strlen(data) > 16000) {   
-    send_str("too big");
+  if (strlen(data) > 16456) {   
+    bufFlag = 1;
   }
 
   scewl_hdr_t hdr;
@@ -140,14 +140,6 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
-  if (strlen(data) > 16528) {   
-    send_str("too big discarding message");
-    return 0;
-  }
-
-  send_str("recieved message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len , data); 
-
   // Copy data into 2 new arrays - 1 for encypted text and 1 for HMAC
   uint16_t n = len - 32;
   uint8_t encrypted[n];
@@ -208,8 +200,6 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 }
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
-
-  if (len == 0) { send_str("sending nothing"); return 0;}
 
   msgCounter++; //increment message counter for unique message ID
   DT_hmac_key[11] = (u_int8_t)(tgt_id % 256); //customize HMAC for specific target SED
