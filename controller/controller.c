@@ -53,8 +53,6 @@ int registered = 0;
 int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
              size_t n, int blocking) {
 
-  int maxMsgLength = 16528;
-
   scewl_hdr_t hdr;
   int read, max;
 
@@ -93,11 +91,11 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   *tgt_id = hdr.tgt_id;
 
   // read body
-  max = hdr.len < maxMsgLength ? hdr.len : maxMsgLength;
+  max = hdr.len < n ? hdr.len : n;
   read = intf_read(intf, data, max, blocking);
 
   // throw away rest of message if too long
-  for (int i = 0; hdr.len > maxMsgLength && i < hdr.len - maxMsgLength; i++) {
+  for (int i = 0; hdr.len > n && i < hdr.len - n; i++) {
     intf_readb(intf, 0);
   }
 
@@ -122,8 +120,6 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
   // send header
   intf_write(intf, (char *)&hdr, sizeof(scewl_hdr_t));
 
-
-  
   // send body
   intf_write(intf, data, len);
 
@@ -178,10 +174,8 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
       //remove padding
       for (i = sizeofDec - 1; decrypted[i] == '#'; i--,sizeofDec--) decrypted[i] = '\0';
-      sizeofDec -= 10; //disgard unique messageID
+      sizeofDec -= 10; //discard unique messageID
       
-      send_str("decrypted message:");
-      send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeofDec , (char *)decrypted); 
       return send_msg(CPU_INTF, src_id, SCEWL_ID, sizeofDec, (char *)decrypted);
   }
   else
@@ -250,8 +244,6 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   for (i = sizeofEnc; i < sizeofEnc + 32; i++) msg[i] = digest[i - sizeofEnc];
 
   //send encrypted message
-  send_str("sent message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, sizeof(msg), (char *)msg); 
   return send_msg(RAD_INTF, SCEWL_ID, tgt_id, sizeof(msg), (char *)msg);
 }
 
@@ -303,7 +295,7 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
       //remove padding
       for (i = sizeofDec - 1; decrypted[i] == '#'; i--,sizeofDec--) decrypted[i] = '\0';
-      sizeofDec -= 10; //disgard unique messageID
+      sizeofDec -= 10; //discard unique messageID
       
       //send message
       return send_msg(CPU_INTF, src_id, SCEWL_BRDCST_ID, sizeofDec, (char *)decrypted);
@@ -311,7 +303,6 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
   else
   {
     //disregard non-authentic messages
-    send_str("macs dont match");
     return 0;
   }  
 }
@@ -544,6 +535,7 @@ int main() {
   }
 }
 
+//functions to implement integer to ascii conversion
 void swap(char *x, char *y) {
     char t = *x; *x = *y; *y = t;
 }
