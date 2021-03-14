@@ -22,6 +22,7 @@
 #include <stdint.h>
 
 //functions for implementing an integer to ascii conversion
+static const int maxMsgLength = 16456;
 char bufFlag;
 void swap(char *x, char *y);
 char* reverse(char *buffer, int i, int j);
@@ -190,7 +191,6 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   
   //check if message exceeds buffer length and shorten if necessary
-  int maxMsgLength = 16456;
   if (len > maxMsgLength) {
     memset(data + maxMsgLength, 0, (len - maxMsgLength));
     len = maxMsgLength;
@@ -311,7 +311,6 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
 int handle_brdcst_send(char *data, uint16_t len) {
 
   //check if message exceeds buffer length and shorten if necessary
-  int maxMsgLength = 16456;
   if (len > maxMsgLength) {
     memset(data + maxMsgLength, 0, (len - maxMsgLength));
     len = maxMsgLength;
