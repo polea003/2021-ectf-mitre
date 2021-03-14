@@ -100,9 +100,9 @@ int read_msg(intf_t *intf, char *data, scewl_id_t *src_id, scewl_id_t *tgt_id,
   *src_id = hdr.src_id;
   *tgt_id = hdr.tgt_id;
 
-  if (bufFlag) {  
+  /*if (bufFlag) {  
     hdr.len = 16456;
-  }
+  }*/
 
   // read body
   max = hdr.len < n ? hdr.len : n;
