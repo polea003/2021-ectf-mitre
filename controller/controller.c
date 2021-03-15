@@ -188,7 +188,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   else
   {
     //disregard message if not authentic
-    send_str("HMAC doesn't match. disgarding message.");
+    //send_str("HMAC doesn't match. disgarding message.");
     return 0;
   }  
 
@@ -196,11 +196,10 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   
-  //check if message exceeds buffer length and reduces it to a nominal length if so
+  //check if message exceeds buffer length and reduces to it to nomial length message
   if (len > maxMsgLength) {
-    memset(data, 0, len);
-    data = "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789";
-    return send_msg(RAD_INTF, SCEWL_ID, tgt_id, sizeof(data), data);
+    memset(data + 32, 0, len - 32);
+    len = 32;
   } 
 
   msgCounter++; //increment message counter for unique message ID
