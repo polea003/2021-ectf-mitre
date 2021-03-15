@@ -191,10 +191,10 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   
   //check if message exceeds buffer length and shorten if necessary
-  if (len > maxMsgLength) {
+ /* if (len > maxMsgLength) {
     memset(data + maxMsgLength, 0, (len - maxMsgLength));
     len = maxMsgLength;
-  }
+  } */
 
   msgCounter++; //increment message counter for unique message ID
   DT_hmac_key[11] = (u_int8_t)(tgt_id % 256); //customize HMAC for specific target SED
