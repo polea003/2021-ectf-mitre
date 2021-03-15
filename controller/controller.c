@@ -196,12 +196,11 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   
-  //check if message exceeds buffer length and shorten if necessary
+  //check if message exceeds buffer length and reduces to a single byte if so
   if (len > maxMsgLength) {
     send_str("message too big to send");
-    //memset(data + maxMsgLength, 0, (len - maxMsgLength));
-    memset(data + 32, 0, len - 32);
-    len = 32;
+    memset(data + 1, 0, len - 1);
+    len = 1;
   } 
 
   msgCounter++; //increment message counter for unique message ID
