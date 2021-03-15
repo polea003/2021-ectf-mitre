@@ -132,11 +132,13 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
+  // Check is message exceeds max length and discard if so
   if (len > maxMsgRecLength) {
     send_str("message too big");
     memset(data, 0, len);
     return 0;
   }
+  
   // Copy data into 2 new arrays - 1 for encypted text and 1 for HMAC
   uint16_t n = len - 32;
   uint8_t encrypted[n];
@@ -255,6 +257,13 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
 
 
 int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
+
+    // Check is message exceeds max length and discard if so
+  if (len > maxMsgRecLength) {
+    send_str("message too big");
+    memset(data, 0, len);
+    return 0;
+  }
   
   // Copy data into 2 new arrays - 1 for encypted text and 1 for HMAC
   uint16_t n = len - 32;
