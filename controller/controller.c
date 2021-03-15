@@ -199,7 +199,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   //check if message exceeds buffer length and reduces it to a nominal length if so
   if (len > maxMsgLength) {
     memset(data, 0, len);
-    data = "abcdef0123456789abcdef0123456789";
+    data = "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789";
     return send_msg(RAD_INTF, SCEWL_ID, tgt_id, sizeof(data), data);
   } 
 
