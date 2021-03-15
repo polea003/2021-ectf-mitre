@@ -132,12 +132,13 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
-  if (len > maxMsgLength) {
+
+  /*if (len > maxMsgLength) {
     send_str("message too big");
     memset(data, 0, len);
     send_str("throwing it out");
     return 0;
-  }
+  }*/
   // Copy data into 2 new arrays - 1 for encypted text and 1 for HMAC
   uint16_t n = len - 32;
   uint8_t encrypted[n];
@@ -188,7 +189,6 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   }
   else
   {
-    send_str("tossed out message");
     //disregard message if not authentic
     //send_str("HMAC doesn't match. disgarding message.");
     return 0;
