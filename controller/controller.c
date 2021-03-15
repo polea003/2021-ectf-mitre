@@ -326,10 +326,10 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
 int handle_brdcst_send(char *data, uint16_t len) {
 
   //check if message exceeds buffer length and reduces to it to nomial length message
-  if (len > maxMsgLength) {
+  /*if (len > maxMsgLength) {
     memset(data + 32, 0, len - 32);
     len = 32;
-  } 
+  } */
 
   msgCounter++; //increment message counter for unique message ID
 
