@@ -198,6 +198,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   
   //check if message exceeds buffer length and shorten if necessary
   if (len > maxMsgLength) {
+    send_str("message too big to send");
     //memset(data + maxMsgLength, 0, (len - maxMsgLength));
     memset(data, 0, len);
     return 0;
