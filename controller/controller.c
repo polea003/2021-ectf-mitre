@@ -21,10 +21,11 @@
 #include <string.h>
 #include <stdint.h>
 
-//functions for implementing an integer to ascii conversion
+// max buffer values
 static const int maxMsgLength = 16456;
 static const int maxMsgRecLength = 16528;
-char bufFlag;
+
+//functions for implementing an integer to ascii conversion
 void swap(char *x, char *y);
 char* reverse(char *buffer, int i, int j);
 char* itoa(unsigned long value, char* buffer, int base);
