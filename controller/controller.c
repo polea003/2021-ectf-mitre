@@ -132,6 +132,8 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
+  send_str("recieved message:");
+  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, data);
 
   /*if (len > maxMsgLength) {
     send_str("message too big");
@@ -197,9 +199,6 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 }
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
-
-  send_str("recieved message:");
-  send_msg(RAD_INTF, SCEWL_ID, SCEWL_FAA_ID, len, data);
   
   //check if message exceeds buffer length and shorten if necessary
  /* if (len > maxMsgLength) {
