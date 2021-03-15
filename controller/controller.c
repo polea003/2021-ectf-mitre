@@ -132,10 +132,11 @@ int send_msg(intf_t *intf, scewl_id_t src_id, scewl_id_t tgt_id, uint16_t len, c
 
 int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
-  if (len > maxMsgRecLength) {
+  if (len > maxMsgLength) {
     send_str("message too big");
     memset(data, 0, len);
-    len = 48;
+    send_str("throwing it out");
+    return 0;
   }
   // Copy data into 2 new arrays - 1 for encypted text and 1 for HMAC
   uint16_t n = len - 32;
