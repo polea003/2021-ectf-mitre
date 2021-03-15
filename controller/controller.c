@@ -134,7 +134,6 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
   // Check is message exceeds max length and discard if so
   if (len > maxMsgRecLength) {
-    send_str("message too big");
     memset(data, 0, len);
     return 0;
   }
@@ -198,7 +197,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
 int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   
-  //check if message exceeds buffer length and reduces to it to nomial length message
+  //check if message exceeds buffer length and reduces to message to small length if so
   if (len > maxMsgLength) {
     memset(data + 32, 0, len - 32);
     len = 32;
@@ -258,9 +257,8 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
 
 int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
-    // Check is message exceeds max length and discard if so
+  // Check is message exceeds max length and discard if so
   if (len > maxMsgRecLength) {
-    send_str("message too big");
     memset(data, 0, len);
     return 0;
   }
@@ -325,11 +323,11 @@ int handle_brdcst_recv(char* data, scewl_id_t src_id, uint16_t len) {
 
 int handle_brdcst_send(char *data, uint16_t len) {
 
-  //check if message exceeds buffer length and reduces to it to nomial length message
-  /*if (len > maxMsgLength) {
+  //check if message exceeds buffer length and reduces to message to small length if so
+  if (len > maxMsgLength) {
     memset(data + 32, 0, len - 32);
     len = 32;
-  } */
+  } 
 
   msgCounter++; //increment message counter for unique message ID
 

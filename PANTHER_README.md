@@ -17,7 +17,7 @@ To prevent replay attacks, the SEDs store an array of previously recieved MACs a
 A unique deployment-wide passcode along with an SED specific registration number is generated during the build process. An SED can only register with the SSS after the SSS has checked if those secrets match the numbers on file. When an SED is removed for the deployment, the SSS removes the SED specific registration number so that it will no longer be able to register and recieve the encryption keys.
 
 # Defense in depth
-The size of the buffer is evaluated before a transmission or broadcast is sent. If the message is too long, the message is reduced to the maximum length and the leftover messgae is discarded.
+The size of the buffer is evaluated before a transmission or broadcast is sent or recieved. If the message is too long, the message is reduced in length or discarded.
 
 # Credits
 The library used for the encryption and hashing is the TinyCrypt library, an open source project supported by Intel.
