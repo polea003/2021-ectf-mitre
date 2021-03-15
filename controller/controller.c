@@ -200,7 +200,7 @@ int handle_scewl_send(char* data, scewl_id_t tgt_id, uint16_t len) {
   if (len > maxMsgLength) {
     memset(data, 0, len);
     data = "abcdef0123456789abcdef0123456789";
-    return send_msg(RAD_INTF, SCEWL_ID, tgt_id, 32, data);
+    return send_msg(RAD_INTF, SCEWL_ID, tgt_id, sizeof(data), data);
   } 
 
   msgCounter++; //increment message counter for unique message ID
