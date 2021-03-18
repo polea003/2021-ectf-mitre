@@ -45,4 +45,4 @@ RUN mv /sed/gcc/controller.bin /controller
 
 # NOTE: If you want to use the debugger with the scripts we provide, 
 #       the ELF file must be at /controller.elf
-RUN mv /sed/gcc/controller.axf /controller.elf
+# RUN mv /sed/gcc/controller.axf /controller.elf
