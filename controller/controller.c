@@ -534,8 +534,10 @@ int main() {
         
         if (src_id != SCEWL_ID) { // ignore our own outgoing messages
           if (tgt_id == SCEWL_BRDCST_ID) {
-            // receive broadcast message
-            handle_brdcst_recv(buf, src_id, len);
+            // check if FAA broadcast
+            if (src_id == SCEWL_FAA_ID) handle_faa_recv(buf, len);
+            // else receive broadcast message
+            else handle_brdcst_recv(buf, src_id, len);
           } else if (tgt_id == SCEWL_ID) {
             // receive unicast message
             if (src_id == SCEWL_FAA_ID) {
