@@ -33,6 +33,7 @@ char* itoa(unsigned long value, char* buffer, int base);
 //temporary keys
 uint8_t key[16] = { "0123456789abcdef"};
 uint8_t DT_hmac_key[16] = { "0123456789abcdef"};
+uint8_t DT_recv_hmac_key[16] = { "0123456789abcdef"};
 uint8_t BC_hmac_key[16] = { "0123456789abcdef"};
 uint8_t iv[16] = { "0123456789abcdef"};
 uint8_t badKey[16] = { "0123456789abcdef"};
@@ -151,7 +152,7 @@ int handle_scewl_recv(char* data, scewl_id_t src_id, uint16_t len) {
   struct tc_hmac_state_struct h;
   uint8_t digest[32];
   (void)memset(&h, 0x00, sizeof(h));
-  (void)tc_hmac_set_key(&h, DT_hmac_key, sizeof(DT_hmac_key));
+  (void)tc_hmac_set_key(&h, DT_recv_hmac_key, sizeof(DT_recv_hmac_key));
   (void)tc_hmac_init(&h);
   (void)tc_hmac_update(&h, (char *)encrypted, n);
   (void)tc_hmac_final(digest, 32, &h);
@@ -426,7 +427,8 @@ int sss_register() {
     BC_hmac_key[i] = msg2[20 + i]; //get HMAC key from server response
     iv[i] = msg2[36 + i]; //get initialization vector from server response
   }
-  DT_hmac_key[11] = (u_int8_t)(SCEWL_ID % 256); //personalize direct transmission key based on provisoned ID
+  memcpy(DT_recv_hmac_key, DT_hmac_key,16);
+  DT_recv_hmac_key[11] = (u_int8_t)(SCEWL_ID % 256); //personalize direct transmission key based on provisoned ID
   tenDigitSerial = DATA1; //set serial equal to provisioned registration number 
   while (tenDigitSerial < 1000000000) tenDigitSerial *= 2; //increment if less than 10 digits
 
@@ -458,12 +460,11 @@ int sss_deregister() {
   }
 
   //remove stored encryption keys on deregistration
-  for (int i = 0; i < 16; i++ ) { 
-    key[i] = badKey[i]; 
-    BC_hmac_key[i] = badKey[i]; 
-    DT_hmac_key[i] = badKey[i]; 
-    iv[i] = badKey[i]; 
-  }
+  memcpy(key,badKey,16);
+  memcpy(BC_hmac_key,badKey,16);
+  memcpy(DT_recv_hmac_key,badKey,16);
+  memcpy(DT_hmac_key,badKey,16);
+  memcpy(iv,badKey,16);
   tenDigitSerial = 0; // reset serial num
 
   // receive response
